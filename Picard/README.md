@@ -49,51 +49,51 @@ Every time you're done playing, or before every time you start...
 The Plan
 --------
 ThePlan
-1. Does a dat file exist?
-   No - gosub AuthPrompt
-2. Does dat file contain 'LastInaraSnapshotTimestamp'?
-   No - gosub InaraInit
-3. goto InaraUpdate
+ 1. Does a dat file exist?
+    No - gosub AuthPrompt
+ 2. Does dat file contain 'LastInaraSnapshotTimestamp'?
+    No - gosub InaraInit
+ 3. goto InaraUpdate
 
 AuthPrompt
-1. Show Welcome Message
-2. Prompt for Inara user/pass
-3. Log into Inara
-4. Login problems?
-   No - goto 7
-5. Show Error
-6. goto 1
-7. Write user credentials to dat file
-8. return
+ 1. Show Welcome Message
+ 2. Prompt for Inara user/pass
+ 3. Log into Inara
+ 4. Login problems?
+    No - goto 7
+ 5. Show Error
+ 6. goto 1
+ 7. Write user credentials to dat file
+ 8. return
 
 InaraInit
-1. Scrape data from inara.cz/cmdr-cargo/
-   EXCEPTION POSSIBLE - network bullshit
-2. Show data from inara.cz/cmdr-cargo/
-3. Refresh or Looks Good?
-   Refresh - goto 1
-4. Write Inara data and LastInaraSnapshotTimestamp to dat file
-   EXCEPTION POSSIBLE - filesystem bullshit
-5. Show a friendly message
-5. exit to OS
+ 1. Scrape data from inara.cz/cmdr-cargo/
+    EXCEPTION POSSIBLE - network bullshit
+ 2. Show data from inara.cz/cmdr-cargo/
+ 3. Refresh or Looks Good?
+    Refresh - goto 1
+ 4. Write Inara data and LastInaraSnapshotTimestamp to dat file
+    EXCEPTION POSSIBLE - filesystem bullshit
+ 5. Show a friendly message
+ 5. exit to OS
 
 InaraUpdate
-1. Scrape data from inara.cz/cmdr-cargo/
-   EXCEPTION POSSIBLE - network bullshit
-2. Load data from dat file
-   EXCEPTION POSSIBLE - filesystem bullshit
-3. Let data, diffs, update be gosub ParseLogsAndUpdateData(dat file data)
-4. Show data, diffs, update
-5. Refresh or Looks Good?
-   Refresh - goto 1
-6. POST update to inara.cz/cmdr-cargo/
-   EXCEPTION POSSIBLE - network bullshit
-7. Scrape data from inara.cz/cmdr-cargo/
-   EXCEPTION POSSIBLE - network bullshit
-8. Verify data - any good?
-   No - alert user "Something went horribly wrong" and exit to OS
-9. Update dat file with new Inara data, LastInaraSnapshotTimestamp set to now
-9. alert user "Looks like all is well" and exit to OS
+ 1. Scrape data from inara.cz/cmdr-cargo/
+    EXCEPTION POSSIBLE - network bullshit
+ 2. Load data from dat file
+    EXCEPTION POSSIBLE - filesystem bullshit
+ 3. Let data, diffs, update be gosub ParseLogsAndUpdateData(dat file data)
+ 4. Show data, diffs, update
+ 5. Refresh or Looks Good?
+    Refresh - goto 1
+ 6. POST update to inara.cz/cmdr-cargo/
+    EXCEPTION POSSIBLE - network bullshit
+ 7. Scrape data from inara.cz/cmdr-cargo/
+    EXCEPTION POSSIBLE - network bullshit
+ 8. Verify data - any good?
+    No - alert user "Something went horribly wrong" and exit to OS
+ 9. Update dat file with new Inara data, LastInaraSnapshotTimestamp set to now
+10. alert user "Looks like all is well" and exit to OS
 
 ParseLogsAndUpdateData
  1. Let LastLog be LastInaraSnapshotTimestamp from dat file
@@ -119,3 +119,7 @@ ParseLogsAndUpdateData
     - data from dat
     - the changes that were made
     - the update that will be pushed to Inara
+
+Useful Resources
+----------------
+(Parsing HTML with C#)[https://www.codeproject.com/tips/804660/how-to-parse-html-using-csharp]
