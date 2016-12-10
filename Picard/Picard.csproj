@@ -50,6 +50,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InaraApi.cs" />
+    <Compile Include="PicardContext.cs" />
+    <Compile Include="WelcomeLoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WelcomeLoginForm.Designer.cs">
+      <DependentUpon>WelcomeLoginForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MatInitialVerifyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,6 +78,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="WelcomeLoginForm.resx">
+      <DependentUpon>WelcomeLoginForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

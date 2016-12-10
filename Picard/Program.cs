@@ -16,7 +16,16 @@ namespace Picard
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MatInitialVerifyForm());
+
+            // TODO: Check for Data File
+
+            // Prompt for Authentication
+            Application.Run(new PicardContext());
+
+            // TODO: check for data file, prompt for Authentication
+            // TODO: check for LastInaraSnapshotTimestamp, do InaraInit, exit
+            
+            //Application.Run(new MatInitialVerifyForm());
         }
     }
 }

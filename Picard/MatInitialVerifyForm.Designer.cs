@@ -31,6 +31,9 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.okButton = new System.Windows.Forms.Button();
             this.refreshButton = new System.Windows.Forms.Button();
+            this.MatsView = new System.Windows.Forms.ListView();
+            this.MatName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.MatCount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -70,11 +73,35 @@
             this.refreshButton.UseVisualStyleBackColor = true;
             this.refreshButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.refreshButton_MouseClick);
             // 
+            // MatsView
+            // 
+            this.MatsView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.MatName,
+            this.MatCount});
+            this.MatsView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MatsView.GridLines = true;
+            this.MatsView.Location = new System.Drawing.Point(0, 0);
+            this.MatsView.MultiSelect = false;
+            this.MatsView.Name = "MatsView";
+            this.MatsView.Size = new System.Drawing.Size(521, 580);
+            this.MatsView.TabIndex = 1;
+            this.MatsView.UseCompatibleStateImageBehavior = false;
+            this.MatsView.View = System.Windows.Forms.View.Details;
+            // 
+            // MatName
+            // 
+            this.MatName.Text = "Material";
+            // 
+            // MatCount
+            // 
+            this.MatCount.Text = "Inventory";
+            // 
             // MatInitialVerifyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(521, 609);
+            this.Controls.Add(this.MatsView);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Name = "MatInitialVerifyForm";
             this.Text = "Verify Existing Materials";
@@ -90,6 +117,9 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button refreshButton;
+        private System.Windows.Forms.ListView MatsView;
+        private System.Windows.Forms.ColumnHeader MatName;
+        private System.Windows.Forms.ColumnHeader MatCount;
     }
 }
 
