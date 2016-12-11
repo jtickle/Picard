@@ -8,19 +8,15 @@ using Newtonsoft.Json;
 
 namespace Picard
 {
+    using IDeltas = IDictionary<string, int>;
+    using Deltas = Dictionary<string, int>;
+
     class PersistentState
     {
         protected string StateFile;
         protected JsonSerializer Serializer;
 
         public State CurrentState = null;
-        
-        // The operands of an individual update
-        public class Datum
-        {
-            public Dictionary<string, int> EliteDelta;
-            public Dictionary<string, int> Result;
-        }
 
         // General settings and info
         public class State
@@ -30,7 +26,12 @@ namespace Picard
             public string CmdrName;
             public string InaraU;
             public string InaraP;
-            public SortedDictionary<DateTime, Datum> History;
+            public IDictionary<DateTime, IDeltas> History;
+
+            public State()
+            {
+                History = new SortedDictionary<DateTime, IDeltas>();
+            }
         }
 
         public PersistentState()
@@ -45,6 +46,7 @@ namespace Picard
 
             // Set us up a serializer to use
             Serializer = new JsonSerializer();
+            Serializer.Formatting = Formatting.Indented;
 
             // Load Current State
             if(exists())
@@ -86,18 +88,42 @@ namespace Picard
             }
         }
 
-        public bool HasState()
+        public bool HasInaraCreds()
         {
-            return CurrentState != null;
+            return CurrentState.InaraU != "";
         }
 
-        public void UpdateInaraCreds(string user, string pass)
+        public bool HasHistory()
         {
-            if (user == CurrentState.InaraU && pass == CurrentState.InaraP)
+            return CurrentState.History.Count > 0;
+        }
+
+        public void UpdateInaraCreds(string user, string pass, string name)
+        {
+            if (user == CurrentState.InaraU
+                && pass == CurrentState.InaraP
+                && name == CurrentState.CmdrName)
                 return;
 
             CurrentState.InaraU = user;
             CurrentState.InaraP = pass;
+            CurrentState.CmdrName = name;
+            persist();
+        }
+
+        public IDeltas CreateDeltas()
+        {
+            return new Deltas();
+        }
+
+        public IDeltas CreateEmptyDelta()
+        {
+            return new Deltas();
+        }
+
+        public void AddHistory(IDeltas d)
+        {
+            CurrentState.History.Add(DateTime.Now, d);
             persist();
         }
     }

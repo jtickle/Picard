@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 
 namespace Picard
@@ -15,6 +16,8 @@ namespace Picard
         public string cmdrName { get; private set; }
         public string lastError { get; private set; }
         public CookieContainer cookies { get; private set; }
+
+        public IDictionary<string, int> MaterialInaraIDLookup;
 
         private HttpClient http;
 
@@ -32,6 +35,7 @@ namespace Picard
 
         public InaraApi()
         {
+            MaterialInaraIDLookup = new Dictionary<string, int>();
             cookies = new CookieContainer();
             var handler = new HttpClientHandler();
             handler.CookieContainer = cookies;
@@ -169,6 +173,32 @@ namespace Picard
                 if (found.ContainsKey(mat)) continue;
 
                 found.Add(mat, value);
+
+                try {
+                    var inputName = node.Descendants("input").First().GetAttributeValue("name", "playerinv[-1]");
+                    if (!inputName.StartsWith("playerinv["))
+                    {
+                        Console.WriteLine("DOM Error: " + inputName);
+                        continue;
+                    }
+                    var match = Regex.Match(inputName, @"playerinv\[(\w+)\]", RegexOptions.IgnoreCase);
+                    if(match.Groups.Count < 2)
+                    {
+                        Console.WriteLine("Regex Error:");
+                        Console.WriteLine(match.ToString());
+                        continue;
+                    }
+                    Console.WriteLine("Matched: " + match.Groups[1].Captures[0].ToString());
+                    var num = int.Parse(match.Groups[1].Captures[0].ToString());
+
+                    Console.WriteLine("Storing: Lookup[" + mat + "] = " + num);
+                    MaterialInaraIDLookup.Add(mat, num);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                    throw e;
+                }
             }
 
             return found;

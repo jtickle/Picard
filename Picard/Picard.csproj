@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InaraApi.cs" />
+    <Compile Include="IGetData.cs" />
     <Compile Include="PersistentState.cs" />
     <Compile Include="WelcomeLoginForm.cs">
       <SubType>Form</SubType>
