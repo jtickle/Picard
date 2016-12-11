@@ -17,15 +17,25 @@ namespace Picard
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // TODO: Check for Data File
+            InaraApi api = new InaraApi();
+            PersistentState state = new PersistentState();
 
-            // Prompt for Authentication
-            Application.Run(new PicardContext());
+            // Show Login Form and login automatically if we remember creds
+            WelcomeLoginForm loginFrm = new WelcomeLoginForm(api);
+            if (state.HasState())
+            {
+                loginFrm.loginWithCredentials(
+                    state.CurrentState.InaraU,
+                    state.CurrentState.InaraP);
+            }
+            loginFrm.ShowDialog();
 
-            // TODO: check for data file, prompt for Authentication
-            // TODO: check for LastInaraSnapshotTimestamp, do InaraInit, exit
-            
-            //Application.Run(new MatInitialVerifyForm());
+            if (api.isAuthenticated)
+            {
+                // Save Credentials
+                state.UpdateInaraCreds(loginFrm.user, loginFrm.pass);
+                Application.Run(new MatInitialVerifyForm(api));
+            }
         }
     }
 }

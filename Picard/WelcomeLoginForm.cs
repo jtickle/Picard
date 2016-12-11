@@ -14,6 +14,26 @@ namespace Picard
     {
         private InaraApi api;
 
+        private bool autoLogin;
+
+        public string user
+        {
+            get
+            {
+                return usernameBox.Text;
+            }
+            private set { }
+        }
+
+        public string pass
+        {
+            get
+            {
+                return passwordBox.Text;
+            }
+            private set { }
+        }
+
         private WelcomeLoginForm()
         {
         }
@@ -21,15 +41,18 @@ namespace Picard
         public WelcomeLoginForm(InaraApi api)
         {
             this.api = api;
+            autoLogin = false;
             InitializeComponent();
         }
 
-        private void WelcomeLoginForm_Load(object sender, EventArgs e)
+        public void loginWithCredentials(string user, string pass)
         {
-
+            usernameBox.Text = user;
+            passwordBox.Text = pass;
+            autoLogin = true;
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private async void doLogin()
         {
             LoginFormPanel.Hide();
             LoggingInPanel.Show();
@@ -48,6 +71,19 @@ namespace Picard
             else
             {
                 errorLabel.Text = api.lastError;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            doLogin();
+        }
+
+        private void WelcomeLoginForm_Load(object sender, EventArgs e)
+        {
+            if (autoLogin)
+            {
+                doLogin();
             }
         }
     }
