@@ -30,12 +30,16 @@ namespace Picard
             }
             loginFrm.ShowDialog();
 
-            if (api.isAuthenticated)
+            // If unauthenticated, that means they closed the login form
+            // Just exit without error
+            if (!api.isAuthenticated)
             {
-                // Save Credentials
-                state.UpdateInaraCreds(loginFrm.user, loginFrm.pass);
-                Application.Run(new MatInitialVerifyForm(api));
+                return;
             }
+
+            // Save Credentials
+            state.UpdateInaraCreds(loginFrm.user, loginFrm.pass);
+            Application.Run(new MatInitialVerifyForm(api));
         }
     }
 }
