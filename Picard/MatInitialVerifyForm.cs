@@ -14,9 +14,8 @@ namespace Picard
     {
         private InaraApi api;
 
-        public bool ShouldSave { get; protected set; }
-
-        public IDictionary<string, int> Deltas { get; protected set; }
+        private bool shouldSave;
+        private IDictionary<string, int> Deltas;
 
         public MatInitialVerifyForm(InaraApi api)
         {
@@ -27,7 +26,7 @@ namespace Picard
         private async void ReloadMats()
         {
             MatsView.Items.Clear();
-            ShouldSave = false;
+            shouldSave = false;
 
             Deltas = await api.GetMaterialsSheet();
 
@@ -73,13 +72,13 @@ namespace Picard
                 }
             }
 
-            ShouldSave = true;
+            shouldSave = true;
             Close();
         }
 
         private void MatInitialVerifyForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (ShouldSave) return;
+            if (shouldSave) return;
 
             var Deltas = MessageBox.Show(this,
                 "Picard will not be synchronized with your Inara and Elite data.",
@@ -90,6 +89,16 @@ namespace Picard
             {
                 e.Cancel = true;
             }
+        }
+
+        IDictionary<string, int> IGetData.GetDeltas()
+        {
+            return Deltas;
+        }
+
+        bool IGetData.ShouldSave()
+        {
+            return shouldSave;
         }
     }
 }

@@ -20,10 +20,12 @@ namespace Picard
             InaraApi api = new InaraApi();
             PersistentState state = new PersistentState();
 
-            // Show Login Form and login automatically if we remember creds
+            // Show Login Form
             WelcomeLoginForm loginFrm = new WelcomeLoginForm(api);
             if (state.HasInaraCreds())
             {
+                // Show but Login automatically if we remember creds from last time
+                // This should gracefully handle errors such as a changed password
                 loginFrm.loginWithCredentials(
                     state.CurrentState.InaraU,
                     state.CurrentState.InaraP);
@@ -31,7 +33,7 @@ namespace Picard
             loginFrm.ShowDialog();
 
             // If unauthenticated, that means they closed the login form
-            // Just exit without error
+            // Just exit without error, don't write anything
             if (!api.isAuthenticated)
                 return;
 
@@ -40,18 +42,26 @@ namespace Picard
 
             // Show Main Form if there is history; otherwise perform an
             // initial import and then exit
-            //IGetData matVerifyForm = state.HasHistory()
-            //    ? new MatUpdateForm(api)
-            //    : new MatInitialVerifyForm(api);
-            var matVerifyForm = new MatInitialVerifyForm(api);
-            Application.Run(matVerifyForm);
+            IGetData resultProvider;
+            if(state.HasHistory())
+            {
+                var form = new MatUpdateForm(api, state);
+                resultProvider = form;
+                Application.Run(form);
+            }
+            else
+            {
+                var form = new MatInitialVerifyForm(api);
+                resultProvider = form;
+                Application.Run(form);
+            }
 
             // If the user closed without saving, exit without error
-            if (!matVerifyForm.ShouldSave)
+            if (!resultProvider.ShouldSave())
                 return;
 
-            // Save the Deltas from today
-            state.AddHistory(matVerifyForm.Deltas);
+            // Save the DeltaSet from today
+            state.AddHistory(resultProvider.GetDeltas());
         }
     }
 }

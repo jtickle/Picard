@@ -1,38 +1,18 @@
-﻿using System;
-using System.IO;
+﻿using Newtonsoft.Json;
+using System;
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace Picard
 {
-    using IDeltas = IDictionary<string, int>;
-    using Deltas = Dictionary<string, int>;
-
-    class PersistentState
+    public class PersistentState
     {
         protected string StateFile;
         protected JsonSerializer Serializer;
 
         public State CurrentState = null;
-
-        // General settings and info
-        public class State
-        {
-            public DateTime LastInaraTimestamp;
-            public DateTime LastEliteTimestamp;
-            public string CmdrName;
-            public string InaraU;
-            public string InaraP;
-            public IDictionary<DateTime, IDeltas> History;
-
-            public State()
-            {
-                History = new SortedDictionary<DateTime, IDeltas>();
-            }
-        }
 
         public PersistentState()
         {
@@ -43,7 +23,7 @@ namespace Picard
                 Environment.SpecialFolder.LocalApplicationData);
             string file = @"TickleSoft\picard.state";
             StateFile = Path.Combine(local, file);
-
+       
             // Set us up a serializer to use
             Serializer = new JsonSerializer();
             Serializer.Formatting = Formatting.Indented;
@@ -88,6 +68,18 @@ namespace Picard
             }
         }
 
+        public IDictionary<string, int> CalculateCurrentInventory()
+        {
+            IDictionary<string, int> result = new Dictionary<string, int>();
+
+            foreach(var time in CurrentState.History)
+            {
+                result = DeltaTools.Add(result, time.Value);
+            }
+
+            return result;
+        }
+
         public bool HasInaraCreds()
         {
             return CurrentState.InaraU != "";
@@ -96,6 +88,11 @@ namespace Picard
         public bool HasHistory()
         {
             return CurrentState.History.Count > 0;
+        }
+
+        public DateTime GetLastUpdateTimestamp()
+        {
+            return CurrentState.History.First().Key;
         }
 
         public void UpdateInaraCreds(string user, string pass, string name)
@@ -111,19 +108,18 @@ namespace Picard
             persist();
         }
 
-        public IDeltas CreateDeltas()
-        {
-            return new Deltas();
-        }
-
-        public IDeltas CreateEmptyDelta()
-        {
-            return new Deltas();
-        }
-
-        public void AddHistory(IDeltas d)
+        public void AddHistory(IDictionary<string, int> d)
         {
             CurrentState.History.Add(DateTime.Now, d);
+
+            foreach(var entry in d)
+            {
+                Console.WriteLine("EliteMatsLookup.Add(\"" + 
+                    Regex.Replace(entry.Key.ToLower().ToString(), @"\s+", "") +
+                    "\", \"" + 
+                    entry.Key
+                    + "\");");
+            }
             persist();
         }
     }

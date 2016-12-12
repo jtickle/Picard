@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Picard
 {
-    interface IGetData
+    public interface IGetData
     {
-        IDictionary<string, int> Deltas
-        {
-            get;
-        }
+        IDictionary<string, int> GetDeltas();
+        bool ShouldSave();
     }
 }

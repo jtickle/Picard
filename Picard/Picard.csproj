@@ -54,9 +54,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeltaTools.cs" />
+    <Compile Include="EliteLogs.cs" />
     <Compile Include="InaraApi.cs" />
     <Compile Include="IGetData.cs" />
+    <Compile Include="MatUpdateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MatUpdateForm.Designer.cs">
+      <DependentUpon>MatUpdateForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="PersistentState.cs" />
+    <Compile Include="State.cs" />
     <Compile Include="WelcomeLoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,6 +83,9 @@
     <EmbeddedResource Include="MatInitialVerifyForm.resx">
       <DependentUpon>MatInitialVerifyForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MatUpdateForm.resx">
+      <DependentUpon>MatUpdateForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -86,6 +98,7 @@
     <EmbeddedResource Include="WelcomeLoginForm.resx">
       <DependentUpon>WelcomeLoginForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
