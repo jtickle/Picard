@@ -52,18 +52,15 @@ State File Specification
 Picard persistent state is stored in %APPDATA%\Local\TickleSoft\picard.state.
 It is in JSON format.
 
-```json
-{
-  "CmdrName": Your commander name on Inara for future reference
-  "InaraU":   Your Inara.cz username
-  "InaraP":   Your Inara.cz password.  They run insecure HTTP so I don't feel
+ * CmdrName:  Your commander name on Inara for future reference
+ * InaraU:    Your Inara.cz username
+ * InaraP:    Your Inara.cz password.  They run insecure HTTP so I don't feel
               bad about leaving it plaintext.
-  "History":  Array of changes since the original manual synchronization
-  {
-    Date: {Material: Delta, Material: Delta, ...}
-  }
-}
-```
+ * History:   Array of changes since the original manual synchronization
+   * Key:     DateTime of the synchronization event
+   * Value:   Materials Array
+     * Key:   Inara Material Name
+	 * Value: Material Count Change since Last Sync
 
 In the "update" stage, all of your history is read and added together, and then
 compared with current values on Inara.  If they don't match up, you will get
