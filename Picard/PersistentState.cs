@@ -110,7 +110,7 @@ namespace Picard
 
         public void AddHistory(IDictionary<string, int> d)
         {
-            CurrentState.History.Add(DateTime.Now, d);
+            CurrentState.History.Add(DateTime.UtcNow, d);
 
             foreach(var entry in d)
             {

@@ -202,6 +202,16 @@ namespace Picard
             return DateTime.ParseExact(eliteTS, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
         }
 
+        public string TranslateMat(string eliteMat)
+        {
+            if(EliteMatsLookup.ContainsKey(eliteMat))
+            {
+                return EliteMatsLookup[eliteMat];
+            }
+
+            return "unknown:" + eliteMat;
+        }
+
         public IDictionary<string, int> GetDeltasSince(DateTime since)
         {
             var entries = from logEntry in GetLogEntries(SortLogFiles(GetLogFiles()))
@@ -218,24 +228,32 @@ namespace Picard
                     continue;
                 }
 
-                if(entry["event"] == "MaterialCollected")
+                if((string)entry["event"] == "MaterialCollected")
                 {
                     // TODO: Category?
-                    DeltaTools.AddMat(result,
-                        (string)entry["Name"], int.Parse((string)entry["Count"]));
+                    var mat = TranslateMat((string)entry["Name"]);
+                    DeltaTools.AddMat(result, mat, (int)(long)entry["Count"]);
                 }
-                else if(entry["event"] == "MissionCompleted")
+                else if((string)entry["event"] == "MissionCompleted")
                 {
                     var mats = (IDictionary<string, string>)entry["Ingredients"];
                     foreach(var mat in mats)
                     {
-                        DeltaTools.AddMat(result,
-                            mat.Key, int.Parse(mat.Value));
+                        DeltaTools.AddMat(result, TranslateMat(mat.Key), int.Parse(mat.Value));
                     }
                 }
-                else if (entry["event"] == "EngineerCraft")
+                else if ((string)entry["event"] == "EngineerCraft")
                 {
-                    //Ingredients
+                    var mats = (IDictionary<string, string>)entry["Ingredients"];
+                    foreach(var mat in mats)
+                    {
+                        DeltaTools.AddMat(result, TranslateMat(mat.Key), 0 - int.Parse(mat.Value));
+                    }
+                }
+                else if ((string)entry["event"] == "MaterialDiscarded")
+                {
+                    var mat = TranslateMat((string)entry["name"]);
+                    DeltaTools.AddMat(result, mat, 0 - (int)(long)entry["Count"]);
                 }
             }
 
