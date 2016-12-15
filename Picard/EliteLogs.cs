@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Globalization;
 
 namespace Picard
@@ -172,7 +174,7 @@ namespace Picard
                    select logFile;
         }
 
-        public IEnumerable<IDictionary<string, object>> GetLogEntries(IEnumerable<string> logFiles)
+        public IEnumerable<JObject> GetLogEntries(IEnumerable<string> logFiles)
         {
             foreach (var file in logFiles)
             {
@@ -181,15 +183,7 @@ namespace Picard
                     using (var lineReader = new StringReader(line))
                     using (var jsonReader = new JsonTextReader(lineReader))
                     {
-                        var entry = Serializer.Deserialize
-                            <Dictionary<string, object>>
-                            (jsonReader);
-
-                        if (!entry.ContainsKey("timestamp"))
-                        {
-                            Console.WriteLine("Log entry in " + file + " has no timestamp");
-                            continue;
-                        }
+                        JObject entry = (JObject)JToken.ReadFrom(jsonReader);
 
                         yield return entry;
                     }
@@ -221,13 +215,7 @@ namespace Picard
 
             IDictionary < string, int> result = new Dictionary<string, int>();
             foreach(var entry in entries)
-            {
-                if (!entry.ContainsKey("event"))
-                {
-                    Console.WriteLine("Event at {0} has no 'event'");
-                    continue;
-                }
-                
+            {   
                 if ((string)entry["event"] == "MaterialCollected")
                 {
                     // Handle Collecting a Material in Space
@@ -238,37 +226,37 @@ namespace Picard
                 }
                 else if((string)entry["event"] == "MissionCompleted")
                 {
-                    if(entry.ContainsKey("Ingredients"))
+                    foreach(var prop in entry.Properties())
                     {
-                        // Handle gaining a material or data through completing a mission
-                        var mats = (IDictionary<string, string>)entry["Ingredients"];
-                        foreach (var mat in mats)
+                        if(prop.Name == "Ingredients")
                         {
-                            DeltaTools.AddMat(result, TranslateMat(mat.Key), int.Parse(mat.Value));
+                            // Handle gaining a material or data through completing a mission
+                            foreach(var mat in ((JObject)entry["Ingredients"]).Properties())
+                            {
+                                DeltaTools.AddMat(result, TranslateMat(mat.Name), int.Parse(mat.Value.ToString()));
+                            }
                         }
-                    }
-                    else if(entry.ContainsKey("CommodityReward"))
-                    {
-                        // Handle gaining a commodity through completing a mission
-
-                        var arr = (IList<IDictionary<string, string>>)entry["CommodityReward"];
-                        foreach(var mat in arr)
+                        else if (prop.Name == "CommodityReward")
                         {
-                            DeltaTools.AddMat(result, TranslateMat(mat["name"]), int.Parse(mat["value"]));
+                            // Handle gaining a commodity through completing a mission
+
+                            foreach(var mat in ((JObject)entry["CommodityReward"]).Properties())
+                            {
+                                DeltaTools.AddMat(result, TranslateMat(mat.Name), int.Parse(mat.Value.ToString()));
+                            }
                         }
                     }
                 }
                 else if ((string)entry["event"] == "EngineerCraft")
                 {
-                    var mats = (IDictionary<string, string>)entry["Ingredients"];
-                    foreach(var mat in mats)
+                    foreach(var mat in ((JObject)entry["Ingredients"]).Properties())
                     {
-                        DeltaTools.AddMat(result, TranslateMat(mat.Key), 0 - int.Parse(mat.Value));
+                        DeltaTools.AddMat(result, TranslateMat(mat.Name), 0 - int.Parse(mat.Value.ToString()));
                     }
                 }
                 else if ((string)entry["event"] == "MaterialDiscarded")
                 {
-                    var mat = TranslateMat((string)entry["name"]);
+                    var mat = TranslateMat((string)entry["Name"]);
                     DeltaTools.AddMat(result, mat, 0 - (int)(long)entry["Count"]);
                 }
             }
