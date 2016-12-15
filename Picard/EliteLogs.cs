@@ -227,8 +227,7 @@ namespace Picard
                     Console.WriteLine("Event at {0} has no 'event'");
                     continue;
                 }
-
-                IDictionary<string, string> mats;
+                
                 if ((string)entry["event"] == "MaterialCollected")
                 {
                     // Handle Collecting a Material in Space
@@ -242,7 +241,7 @@ namespace Picard
                     if(entry.ContainsKey("Ingredients"))
                     {
                         // Handle gaining a material or data through completing a mission
-                        mats = (IDictionary<string, string>)entry["Ingredients"];
+                        var mats = (IDictionary<string, string>)entry["Ingredients"];
                         foreach (var mat in mats)
                         {
                             DeltaTools.AddMat(result, TranslateMat(mat.Key), int.Parse(mat.Value));
@@ -255,7 +254,7 @@ namespace Picard
                         var arr = (IList<IDictionary<string, string>>)entry["CommodityReward"];
                         foreach(var mat in arr)
                         {
-                            DeltaTools.AddMat(result, TranslateMat(mat["name"]), int.Parse(mat.Values));
+                            DeltaTools.AddMat(result, TranslateMat(mat["name"]), int.Parse(mat["value"]));
                         }
                     }
                 }
