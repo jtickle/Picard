@@ -230,16 +230,27 @@ namespace Picard
 
                 if((string)entry["event"] == "MaterialCollected")
                 {
+                    // Handle Collecting a Material in Space
+
                     // TODO: Category?
                     var mat = TranslateMat((string)entry["Name"]);
                     DeltaTools.AddMat(result, mat, (int)(long)entry["Count"]);
                 }
                 else if((string)entry["event"] == "MissionCompleted")
                 {
-                    var mats = (IDictionary<string, string>)entry["Ingredients"];
-                    foreach(var mat in mats)
+                    if(entry.ContainsKey("Ingredients"))
                     {
-                        DeltaTools.AddMat(result, TranslateMat(mat.Key), int.Parse(mat.Value));
+                        // Handle gaining a material or data through completing a mission
+
+                        var mats = (IDictionary<string, string>)entry["Ingredients"];
+                        foreach (var mat in mats)
+                        {
+                            DeltaTools.AddMat(result, TranslateMat(mat.Key), int.Parse(mat.Value));
+                        }
+                    }
+                    else if(entry.ContainsKey("CommodityReward"))
+                    {
+                        // Handle gaining a commodity through completing a mission
                     }
                 }
                 else if ((string)entry["event"] == "EngineerCraft")
