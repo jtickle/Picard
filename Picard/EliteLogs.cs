@@ -444,8 +444,7 @@ namespace Picard
                     // Handle losing materials or commodities in unlocking an engineer
                     case "EngineerProgress":
 
-                        
-
+                        result = HandleEngineerProgress(entry, result);
                         break;
                 }
             }
