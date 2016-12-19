@@ -240,9 +240,9 @@ namespace Picard
                         {
                             // Handle gaining a commodity through completing a mission
 
-                            foreach(var mat in ((JObject)entry["CommodityReward"]).Properties())
+                            foreach(var mat in entry["CommodityReward"])
                             {
-                                DeltaTools.AddMat(result, TranslateMat(mat.Name), int.Parse(mat.Value.ToString()));
+                                DeltaTools.AddMat(result, TranslateMat(mat["Name"].ToString()), int.Parse(mat["Count"].ToString()));
                             }
                         }
                     }
