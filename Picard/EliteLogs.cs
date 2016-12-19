@@ -222,7 +222,7 @@ namespace Picard
             EngineerCostLookup.Add("Didi Vatermann", mats);
 
             mats = new Dictionary<string, int>();
-            mats.Add("Unknown Fragments", -25);
+            mats.Add("Unknown Fragment", -25);
             EngineerCostLookup.Add("Professor Palin", mats);
 
             mats = new Dictionary<string, int>();
@@ -276,6 +276,10 @@ namespace Picard
             return DateTime.ParseExact(eliteTS, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
         }
 
+        /**
+         * Uses internal lookup table to translate an Elite: Dangerous material
+         * name into a 
+         */
         public string TranslateMat(string eliteMat)
         {
             if(EliteMatsLookup.ContainsKey(eliteMat))
