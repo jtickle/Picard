@@ -17,6 +17,7 @@ namespace Picard
         protected JsonSerializer Serializer;
 
         protected Dictionary<string, string> EliteMatsLookup;
+        protected Dictionary<string, Dictionary<string, int>> EngineerCostLookup;
 
         public EliteLogs()
         {
@@ -27,6 +28,7 @@ namespace Picard
 
             Serializer = new JsonSerializer();
 
+            // Yay, Elite's mat names are inconsistent!
             EliteMatsLookup = new Dictionary<string, string>();
             EliteMatsLookup.Add("antimony", "Antimony");
             EliteMatsLookup.Add("arsenic", "Arsenic");
@@ -160,6 +162,84 @@ namespace Picard
             EliteMatsLookup.Add("reinforcedmountingplate", "Reinforced Mounting Plate");
             EliteMatsLookup.Add("samarium", "Samarium");
             EliteMatsLookup.Add("telemetrysuite", "Telemetry Suite");
+
+            // Logs do not reflect cost of unlocking an engineer, so we look that up
+            EngineerCostLookup = new Dictionary<string, Dictionary<string, int>>();
+
+            var mats = new Dictionary<string, int>();
+            mats.Add("Meta Alloys", -1);
+            EngineerCostLookup.Add("Felicity Farseer", mats);
+
+            mats = new Dictionary<string, int>();
+            mats.Add("Soontill Relics", -1);
+            EngineerCostLookup.Add("Elvira Martuuk", mats);
+
+            mats = new Dictionary<string, int>();
+            EngineerCostLookup.Add("The Dweller", mats);
+
+            mats = new Dictionary<string, int>();
+            mats.Add("Landmines", -200);
+            EngineerCostLookup.Add("Liz Ryder", mats);
+
+            mats = new Dictionary<string, int>();
+            EngineerCostLookup.Add("Tod McQuinn", mats);
+
+            mats = new Dictionary<string, int>();
+            mats.Add("Xihe Companions", -25);
+            EngineerCostLookup.Add("Zacariah Nemo", mats);
+
+            mats = new Dictionary<string, int>();
+            EngineerCostLookup.Add("Lei Cheung", mats);
+
+            mats = new Dictionary<string, int>();
+            mats.Add("Kamitra Cigars", -50);
+            EngineerCostLookup.Add("Hera Tani", mats);
+
+            mats = new Dictionary<string, int>();
+            EngineerCostLookup.Add("Juri Ishmaak", mats);
+
+            mats = new Dictionary<string, int>();
+            mats.Add("Painite", 10);
+            EngineerCostLookup.Add("Selene Jean", mats);
+
+            mats = new Dictionary<string, int>();
+            mats.Add("Modular Terminals", -25);
+            EngineerCostLookup.Add("Marco Qwent", mats);
+
+            mats = new Dictionary<string, int>();
+            mats.Add("Classified Scan Databanks", -50);
+            EngineerCostLookup.Add("Ram Tah", mats);
+
+            mats = new Dictionary<string, int>();
+            mats.Add("Fujin Tea", -50);
+            EngineerCostLookup.Add("Broo Tarquin", mats);
+
+            mats = new Dictionary<string, int>();
+            EngineerCostLookup.Add("Colonel Bris Dekker", mats);
+
+            mats = new Dictionary<string, int>();
+            mats.Add("Lavian Brandy", -50);
+            EngineerCostLookup.Add("Didi Vatermann", mats);
+
+            mats = new Dictionary<string, int>();
+            mats.Add("Unknown Fragments", -25);
+            EngineerCostLookup.Add("Professor Palin", mats);
+
+            mats = new Dictionary<string, int>();
+            mats.Add("Kongga Ale", -25);
+            EngineerCostLookup.Add("Lori Jameson", mats);
+
+            mats = new Dictionary<string, int>();
+            mats.Add("Decoded Emission Data", -50);
+            EngineerCostLookup.Add("Tiana Fortune", mats);
+
+            mats = new Dictionary<string, int>();
+            mats.Add("Aberrant Shield Pattern", -50);
+            EngineerCostLookup.Add("The Sarge", mats);
+
+            mats = new Dictionary<string, int>();
+            mats.Add("Bromelite", -50);
+            EngineerCostLookup.Add("Bill Turner", mats);
         }
 
         public IEnumerable<string> GetLogFiles()
@@ -206,58 +286,167 @@ namespace Picard
             return "unknown:" + eliteMat;
         }
 
+        public IDictionary<string, int> HandleMaterialCollected(JObject entry, IDictionary<string, int> orig)
+        {
+            // Straightforward, Name and Count are directly on the entry
+            DeltaTools.AddMat(
+                orig,
+                TranslateMat((string)entry["Name"]),
+                (int)(long)entry["Count"]);
+
+            return orig;
+        }
+
+        public IDictionary<string, int> HandleMissionCompleted(JObject entry, IDictionary<string, int> orig)
+        {
+            // Due to the way JObject works, we are basically seeing if
+            // these keys exist in the entry.
+            foreach (var prop in entry.Properties())
+            {
+                // If the property is called "Ingredients", it is materials and data.
+                if (prop.Name == "Ingredients")
+                {
+                    // Handle gaining a material or data through completing a mission
+                    foreach (var mat in ((JObject)entry["Ingredients"]).Properties())
+                    {
+                        // { event: "MissionCompleted", Ingredients: { mat: delta, ... } }
+                        DeltaTools.AddMat(
+                            orig,
+                            TranslateMat(mat.Name),
+                            int.Parse(mat.Value.ToString()));
+                    }
+                }
+                // If the property is called "CommodityReward", it is commodities and
+                // also formatted differently.
+                else if (prop.Name == "CommodityReward")
+                {
+                    // Handle gaining a commodity through completing a mission
+                    foreach (var mat in entry["CommodityReward"])
+                    {
+                        // { event: "MissionCompleted", CommodityReward: [ { Name: mat, Count: delta } ] }
+                        DeltaTools.AddMat(
+                            orig,
+                            TranslateMat(mat["Name"].ToString()),
+                            int.Parse(mat["Count"].ToString()));
+                    }
+                }
+            }
+
+            return orig;
+        }
+
+        public IDictionary<string, int> HandleEngineerCraft(JObject entry, IDictionary<string, int> orig)
+        {
+            // Loop over Ingredients
+            foreach (var mat in ((JObject)entry["Ingredients"]).Properties())
+            {
+                // { event: "EngineerCraft", Ingredients: { mat: delta, ... } }
+                DeltaTools.AddMat(
+                    orig,
+                    TranslateMat(mat.Name),
+                    0 - int.Parse(mat.Value.ToString()));
+            }
+
+            return orig;
+        }
+
+        public IDictionary<string, int> HandleMaterialDiscarded(JObject entry, IDictionary<string, int> orig)
+        {
+            // One mat gets destroyed at a time, just get its Name and Count
+            // { event: "MaterialDiscarded", Name: mat, Count: delta }
+            var mat = TranslateMat((string)entry["Name"]);
+            DeltaTools.AddMat(orig,
+                TranslateMat((string)entry["Name"]),
+                0 - (int)(long)entry["Count"]);
+
+            return orig;
+        }
+
+        public IDictionary<string, int> HandleEngineerProgress(JObject entry, IDictionary<string, int> orig)
+        {
+            // Only look for log entries with Progress=Unlocked and Rank=1
+            // we are only interested in the engineer's unlock event
+            bool progress = false, rank = false;
+            foreach (var key in entry.Properties())
+            {
+                if ((string)key == "Progress")
+                {
+                    if ((string)entry["Progress"] == "Unlocked")
+                        progress = true;
+                }
+                else if ((string)key == "Rank")
+                {
+                    if (int.Parse((string)entry["Rank"]) == 1)
+                        rank = false;
+                }
+            }
+            if (!progress || !rank) return orig;
+
+            // The logs do not provide the actual materials or commodities
+            // that are relieved of you buy the engineers.  We look these values
+            // up in a table.
+            string engineer = (string)entry["Engineer"];
+            if (!EngineerCostLookup.ContainsKey(engineer))
+            {
+                DeltaTools.AddMat(orig, "unknownEngineer:" + engineer, 0);
+            }
+            else
+            {
+                orig = DeltaTools.Add(orig, EngineerCostLookup[engineer]);
+            }
+
+            return orig;
+        }
+
         public IDictionary<string, int> GetDeltasSince(DateTime since)
         {
+            // Get all log entries from all log files, sorted, that are newer than "since"
             var entries = from logEntry in GetLogEntries(SortLogFiles(GetLogFiles()))
                           where (DateTime)logEntry["timestamp"] > since
                           orderby logEntry["timestamp"]
                           select logEntry;
 
-            IDictionary < string, int> result = new Dictionary<string, int>();
+            // We will be returning a dictionary of mats and deltas
+            IDictionary <string, int> result = new Dictionary<string, int>();
+
+            // Loop over all log entries
             foreach(var entry in entries)
-            {   
-                if ((string)entry["event"] == "MaterialCollected")
-                {
-                    // Handle Collecting a Material in Space
+            {
 
-                    // TODO: Category?
-                    var mat = TranslateMat((string)entry["Name"]);
-                    DeltaTools.AddMat(result, mat, (int)(long)entry["Count"]);
-                }
-                else if((string)entry["event"] == "MissionCompleted")
+                // Look for events we are interested in
+                switch ((string)entry["event"])
                 {
-                    foreach(var prop in entry.Properties())
-                    {
-                        if(prop.Name == "Ingredients")
-                        {
-                            // Handle gaining a material or data through completing a mission
-                            foreach(var mat in ((JObject)entry["Ingredients"]).Properties())
-                            {
-                                DeltaTools.AddMat(result, TranslateMat(mat.Name), int.Parse(mat.Value.ToString()));
-                            }
-                        }
-                        else if (prop.Name == "CommodityReward")
-                        {
-                            // Handle gaining a commodity through completing a mission
 
-                            foreach(var mat in entry["CommodityReward"])
-                            {
-                                DeltaTools.AddMat(result, TranslateMat(mat["Name"].ToString()), int.Parse(mat["Count"].ToString()));
-                            }
-                        }
-                    }
-                }
-                else if ((string)entry["event"] == "EngineerCraft")
-                {
-                    foreach(var mat in ((JObject)entry["Ingredients"]).Properties())
-                    {
-                        DeltaTools.AddMat(result, TranslateMat(mat.Name), 0 - int.Parse(mat.Value.ToString()));
-                    }
-                }
-                else if ((string)entry["event"] == "MaterialDiscarded")
-                {
-                    var mat = TranslateMat((string)entry["Name"]);
-                    DeltaTools.AddMat(result, mat, 0 - (int)(long)entry["Count"]);
+                    // Handle collecting a material in space
+                    case "MaterialCollected":
+
+                        result = HandleMaterialCollected(entry, result);
+                        break;
+
+                    // Handle collecting a material or commodity in completing a mission
+                    case "MissionCompleted":
+
+                        result = HandleMissionCompleted(entry, result);
+                        break;
+
+                    // Handle losing materials or commodities in buying engineer upgrades
+                    case "EngineerCraft":
+
+                        result = HandleEngineerCraft(entry, result);
+                        break;
+
+                    // Handle losing materials or commodities in dumping them overboard
+                    case "MaterialDiscarded":
+                        
+                        result = HandleMaterialDiscarded(entry, result);
+                        break;
+
+                    // Handle losing materials or commodities in unlocking an engineer
+                    case "EngineerProgress":
+
+                        
+
+                        break;
                 }
             }
 
