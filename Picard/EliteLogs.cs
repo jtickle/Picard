@@ -100,42 +100,42 @@ namespace Picard
             EliteMatsLookup.Add("thermicalloys", "Thermic Alloys");
             EliteMatsLookup.Add("tin", "Tin");
             EliteMatsLookup.Add("tungsten", "Tungsten");
-            EliteMatsLookup.Add("unknownfragment", "Unknown Fragment");
+            EliteMatsLookup.Add("unknownenergysource", "Unknown Fragment");
             EliteMatsLookup.Add("vanadium", "Vanadium");
             EliteMatsLookup.Add("wornshieldemitters", "Worn Shield Emitters");
             EliteMatsLookup.Add("yttrium", "Yttrium");
             EliteMatsLookup.Add("zinc", "Zinc");
             EliteMatsLookup.Add("zirconium", "Zirconium");
-            EliteMatsLookup.Add("aberrantshieldpatternanalysis", "Aberrant Shield Pattern Analysis");
+            EliteMatsLookup.Add("shieldpatternanalysis", "Aberrant Shield Pattern Analysis");
             EliteMatsLookup.Add("abnormalcompactemissiondata", "Abnormal Compact Emission Data");
             EliteMatsLookup.Add("adaptiveencryptorscapture", "Adaptive Encryptors Capture");
-            EliteMatsLookup.Add("anomalousbulkscandata", "Anomalous Bulk Scan Data");
-            EliteMatsLookup.Add("anomalousfsdtelemetry", "Anomalous FSD Telemetry");
-            EliteMatsLookup.Add("atypicaldisruptedwakeechoes", "Atypical Disrupted Wake Echoes");
+            EliteMatsLookup.Add("bulkscandata", "Anomalous Bulk Scan Data");
+            EliteMatsLookup.Add("fsdtelemetry", "Anomalous FSD Telemetry");
+            EliteMatsLookup.Add("disruptedwakeechoes", "Atypical Disrupted Wake Echoes");
             EliteMatsLookup.Add("atypicalencryptionarchives", "Atypical Encryption Archives");
-            EliteMatsLookup.Add("classifiedscandatabanks", "Classified Scan Databanks");
-            EliteMatsLookup.Add("classifiedscanfragment", "Classified Scan Fragment");
-            EliteMatsLookup.Add("crackedindustrialfirmware", "Cracked Industrial Firmware");
+            EliteMatsLookup.Add("classifiedscandata", "Classified Scan Databanks");
+            EliteMatsLookup.Add("scanfragment", "Classified Scan Fragment");
+            EliteMatsLookup.Add("industrialfirmware", "Cracked Industrial Firmware");
             EliteMatsLookup.Add("dataminedwakeexceptions", "Datamined Wake Exceptions");
             EliteMatsLookup.Add("decodedemissiondata", "Decoded Emission Data");
-            EliteMatsLookup.Add("distortedshieldcyclerecordings", "Distorted Shield Cycle Recordings");
+            EliteMatsLookup.Add("shieldcyclerecordings", "Distorted Shield Cycle Recordings");
             EliteMatsLookup.Add("divergentscandata", "Divergent Scan Data");
-            EliteMatsLookup.Add("eccentrichyperspacetrajectories", "Eccentric Hyperspace Trajectories");
-            EliteMatsLookup.Add("exceptionalscrambledemissiondata", "Exceptional Scrambled Emission Data");
+            EliteMatsLookup.Add("hyperspacetrajectories", "Eccentric Hyperspace Trajectories");
+            EliteMatsLookup.Add("scrambledemissiondata", "Exceptional Scrambled Emission Data");
             EliteMatsLookup.Add("inconsistentshieldsoakanalysis", "Inconsistent Shield Soak Analysis");
             EliteMatsLookup.Add("irregularemissiondata", "Irregular Emission Data");
-            EliteMatsLookup.Add("modifiedconsumerfirmware", "Modified Consumer Firmware");
-            EliteMatsLookup.Add("modifiedembeddedfirmware", "Modified Embedded Firmware");
-            EliteMatsLookup.Add("opensymmetrickeys", "Open Symmetric Keys");
+            EliteMatsLookup.Add("consumerfirmware", "Modified Consumer Firmware");
+            EliteMatsLookup.Add("embeddedfirmware", "Modified Embedded Firmware");
+            EliteMatsLookup.Add("symmetrickeys", "Open Symmetric Keys");
             EliteMatsLookup.Add("peculiarshieldfrequencydata", "Peculiar Shield Frequency Data");
-            EliteMatsLookup.Add("securityfirmwarepatch", "Security Firmware Patch");
-            EliteMatsLookup.Add("specialisedlegacyfirmware", "Specialised Legacy Firmware");
+            EliteMatsLookup.Add("securityfirmware", "Security Firmware Patch");
+            EliteMatsLookup.Add("legacyfirmware", "Specialised Legacy Firmware");
             EliteMatsLookup.Add("strangewakesolutions", "Strange Wake Solutions");
-            EliteMatsLookup.Add("taggedencryptioncodes", "Tagged Encryption Codes");
+            EliteMatsLookup.Add("encryptioncodes", "Tagged Encryption Codes");
             EliteMatsLookup.Add("unexpectedemissiondata", "Unexpected Emission Data");
-            EliteMatsLookup.Add("unidentifiedscanarchives", "Unidentified Scan Archives");
+            EliteMatsLookup.Add("scanarchives", "Unidentified Scan Archives");
             EliteMatsLookup.Add("untypicalshieldscans", "Untypical Shield Scans");
-            EliteMatsLookup.Add("unusualencryptedfiles", "Unusual Encrypted Files");
+            EliteMatsLookup.Add("encryptedfiles", "Unusual Encrypted Files");
             EliteMatsLookup.Add("articulationmotors", "Articulation Motors");
             EliteMatsLookup.Add("bromellite", "Bromellite");
             EliteMatsLookup.Add("cmmcomposite", "CMM Composite");
@@ -149,7 +149,7 @@ namespace Picard
             EliteMatsLookup.Add("iondistributor", "Ion Distributor");
             EliteMatsLookup.Add("magneticemittercoil", "Magnetic Emitter Coil");
             EliteMatsLookup.Add("microcontrollers", "Micro Controllers");
-            EliteMatsLookup.Add("micro-weavecoolinghoses", "Micro-Weave Cooling Hoses");
+            EliteMatsLookup.Add("coolinghoses", "Micro-Weave Cooling Hoses");
             EliteMatsLookup.Add("modularterminals", "Modular Terminals");
             EliteMatsLookup.Add("nanobreakers", "Nanobreakers");
             EliteMatsLookup.Add("neofabricinsulation", "Neofabric Insulation");
@@ -199,7 +199,7 @@ namespace Picard
             EngineerCostLookup.Add("Juri Ishmaak", mats);
 
             mats = new Dictionary<string, int>();
-            mats.Add("Painite", 10);
+            mats.Add("Painite", -10);
             EngineerCostLookup.Add("Selene Jean", mats);
 
             mats = new Dictionary<string, int>();
@@ -238,7 +238,7 @@ namespace Picard
             EngineerCostLookup.Add("The Sarge", mats);
 
             mats = new Dictionary<string, int>();
-            mats.Add("Bromelite", -50);
+            mats.Add("Bromellite", -50);
             EngineerCostLookup.Add("Bill Turner", mats);
         }
 
@@ -282,9 +282,9 @@ namespace Picard
          */
         public string TranslateMat(string eliteMat)
         {
-            if(EliteMatsLookup.ContainsKey(eliteMat))
+            if(EliteMatsLookup.ContainsKey(eliteMat.ToLower()))
             {
-                return EliteMatsLookup[eliteMat];
+                return EliteMatsLookup[eliteMat.ToLower()];
             }
 
             return "unknown:" + eliteMat;
@@ -381,7 +381,7 @@ namespace Picard
                 else if ((string)key == "Rank")
                 {
                     if (int.Parse((string)entry["Rank"]) == 1)
-                        rank = false;
+                        rank = true;
                 }
             }
             if (!progress || !rank) return orig;
