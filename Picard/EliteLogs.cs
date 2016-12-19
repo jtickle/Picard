@@ -113,7 +113,7 @@ namespace Picard
             EliteMatsLookup.Add("fsdtelemetry", "Anomalous FSD Telemetry");
             EliteMatsLookup.Add("disruptedwakeechoes", "Atypical Disrupted Wake Echoes");
             EliteMatsLookup.Add("atypicalencryptionarchives", "Atypical Encryption Archives");
-            EliteMatsLookup.Add("classifiedscandata", "Classified Scan Databanks");
+            EliteMatsLookup.Add("scandatabanks", "Classified Scan Databanks");
             EliteMatsLookup.Add("scanfragment", "Classified Scan Fragment");
             EliteMatsLookup.Add("industrialfirmware", "Cracked Industrial Firmware");
             EliteMatsLookup.Add("dataminedwakeexceptions", "Datamined Wake Exceptions");
