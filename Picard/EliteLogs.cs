@@ -13,19 +13,39 @@ namespace Picard
 {
     public class EliteLogs
     {
+        /// <summary>
+        /// The absolute path to the Elite log files
+        /// </summary>
         protected string LogFilePath;
+
+        /// <summary>
+        /// The JsonSerializer that will be used to read log entries
+        /// </summary>
         protected JsonSerializer Serializer;
 
+        /// <summary>
+        /// Translation table from Elite to Inara
+        /// </summary>
         protected Dictionary<string, string> EliteMatsLookup;
+
+        /// <summary>
+        /// Costs of unlocking the Engineers
+        /// </summary>
         protected Dictionary<string, Dictionary<string, int>> EngineerCostLookup;
 
         public EliteLogs()
         {
+            // Get User Profile Folder
             string profile = Environment.GetFolderPath(
                 Environment.SpecialFolder.UserProfile);
-            string eliteLogPath = @"Saved Games\Frontier Developments\Elite Dangerous";
-            LogFilePath = Path.Combine(profile, eliteLogPath);
 
+            // Elite Log Path relative to User Profile Folder
+            string eliteLogPath = @"Saved Games\Frontier Developments\Elite Dangerous";
+
+            // Combine to get the log file path
+            LogFilePath = Path.Combine(profile, eliteLogPath);
+            
+            // Initialize our serializer which can be reused
             Serializer = new JsonSerializer();
 
             // Yay, Elite's mat names are inconsistent!
@@ -241,25 +261,48 @@ namespace Picard
             mats.Add("Bromellite", -50);
             EngineerCostLookup.Add("Bill Turner", mats);
         }
-
+        /// <summary>
+        /// Get the absolute paths of all log files
+        /// </summary>
+        /// <returns>
+        /// An IEnumerable of all the absolute paths of all Elite log files
+        /// </returns>
         public IEnumerable<string> GetLogFiles()
         {
+            // Return all log files
             return Directory.EnumerateFiles(LogFilePath, "*.log");
         }
 
+        /// <summary>
+        /// Sorts log files by last modified time
+        /// </summary>
+        /// <param name="logFiles">An IEnumerable of strings of log file names</param>
+        /// <returns>The sorted set of log file names</returns>
         public IEnumerable<string> SortLogFiles(IEnumerable<string> logFiles)
         {
+            // Sort log files by write time
             return from logFile in logFiles
                    orderby File.GetLastWriteTime(logFile)
                    select logFile;
         }
 
+        /// <summary>
+        /// Extracts all entries from a list of absolute paths to log files
+        /// </summary>
+        /// <param name="logFiles">A list of absolute paths to log files</param>
+        /// <returns>A set of log entries represented as parsed JSON</returns>
         public IEnumerable<JObject> GetLogEntries(IEnumerable<string> logFiles)
         {
+
+            // Loop over all log files
             foreach (var file in logFiles)
             {
+
+                // Loop over all lines in the log file
                 foreach(var line in File.ReadAllLines(file))
                 {
+
+                    // Parse and read a line
                     using (var lineReader = new StringReader(line))
                     using (var jsonReader = new JsonTextReader(lineReader))
                     {
@@ -271,25 +314,33 @@ namespace Picard
             }
         }
 
-        public DateTime ParseEliteTS(string eliteTS)
-        {
-            return DateTime.ParseExact(eliteTS, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
-        }
-
-        /**
-         * Uses internal lookup table to translate an Elite: Dangerous material
-         * name into a 
-         */
+        /// <summary>
+        /// Uses internal lookup table to translate an Elite: Dangerous material
+        /// name into an Inara.cz material name
+        /// </summary>
+        /// <param name="eliteMat">The Elite material name</param>
+        /// <returns>The Inara.cz material name</returns>
         public string TranslateMat(string eliteMat)
         {
+            // Sometimes the case changes on these mat names in the log files,
+            // so just force them all to lower case and look them up in our
+            // look up table
             if(EliteMatsLookup.ContainsKey(eliteMat.ToLower()))
             {
                 return EliteMatsLookup[eliteMat.ToLower()];
             }
 
+            // TODO: This should prompt the user to enter the correct information and
+            // potentially send it on back to me for inclusion in the official list
             return "unknown:" + eliteMat;
         }
 
+        /// <summary>
+        /// Handle the case where a Material is Collected in Space
+        /// </summary>
+        /// <param name="entry">An Elite Log Entry as Parsed JSON</param>
+        /// <param name="orig">The materials dictionary to modify</param>
+        /// <returns>The modified materials dictionary</returns>
         public IDictionary<string, int> HandleMaterialCollected(JObject entry, IDictionary<string, int> orig)
         {
             // Straightforward, Name and Count are directly on the entry
@@ -301,6 +352,12 @@ namespace Picard
             return orig;
         }
 
+        /// <summary>
+        /// Handle the case where a Material is the reward of completing a mission
+        /// </summary>
+        /// <param name="entry">An Elite Log Entry as Parsed JSON</param>
+        /// <param name="orig">The materials dictionary to modify</param>
+        /// <returns>The modified materials dictionary</returns>
         public IDictionary<string, int> HandleMissionCompleted(JObject entry, IDictionary<string, int> orig)
         {
             // Due to the way JObject works, we are basically seeing if
@@ -339,6 +396,12 @@ namespace Picard
             return orig;
         }
 
+        /// <summary>
+        /// Handle the case where materials are removed due to an engineer upgrade
+        /// </summary>
+        /// <param name="entry">An Elite Log Entry as Parsed JSON</param>
+        /// <param name="orig">The materials dictionary to modify</param>
+        /// <returns>The modified materials dictionary</returns>
         public IDictionary<string, int> HandleEngineerCraft(JObject entry, IDictionary<string, int> orig)
         {
             // Loop over Ingredients
@@ -354,6 +417,12 @@ namespace Picard
             return orig;
         }
 
+        /// <summary>
+        /// Handle the case where a material is discarded by the player
+        /// </summary>
+        /// <param name="entry">An Elite Log Entry as Parsed JSON</param>
+        /// <param name="orig">The materials dictionary to modify</param>
+        /// <returns>The modified materials dictionary</returns>
         public IDictionary<string, int> HandleMaterialDiscarded(JObject entry, IDictionary<string, int> orig)
         {
             // One mat gets destroyed at a time, just get its Name and Count
@@ -366,6 +435,12 @@ namespace Picard
             return orig;
         }
 
+        /// <summary>
+        /// Handle the case where engineer progression costs you materials
+        /// </summary>
+        /// <param name="entry">An Elite Log Entry as Parsed JSON</param>
+        /// <param name="orig">The materials dictionary to modify</param>
+        /// <returns>The modified materials dictionary</returns>
         public IDictionary<string, int> HandleEngineerProgress(JObject entry, IDictionary<string, int> orig)
         {
             // Only look for log entries with Progress=Unlocked and Rank=1
@@ -402,6 +477,12 @@ namespace Picard
             return orig;
         }
 
+        /// <summary>
+        /// Gets all material deltas that have occurred since the "since" DateTime
+        /// and provides them as a materials dictionary
+        /// </summary>
+        /// <param name="since">All log entries will have taken place after this time</param>
+        /// <returns>A materials dictionary of material deltas</returns>
         public IDictionary<string, int> GetDeltasSince(DateTime since)
         {
             // Get all log entries from all log files, sorted, that are newer than "since"

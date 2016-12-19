@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Picard
 {
-    public partial class MatInitialVerifyForm : Form, IGetData
+    public sealed partial class MatInitialVerifyForm : Form, IGetData
     {
         private InaraApi api;
 

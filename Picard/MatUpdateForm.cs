@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Picard
 {
-    public partial class MatUpdateForm : Form, IGetData
+    public sealed partial class MatUpdateForm : Form, IGetData
     {
         private InaraApi api;
         private PersistentState state;

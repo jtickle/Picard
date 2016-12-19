@@ -10,42 +10,121 @@ using HtmlAgilityPack;
 
 namespace Picard
 {
-    public class InaraApi
+    /// <summary>
+    /// Convenience functions for working with Inara.cz.  It's mostly HTTP form posts.
+    /// </summary>
+    public class InaraApi : IDisposable
     {
+        /// <summary>
+        /// Are we currently logged into Inara?
+        /// </summary>
         public bool isAuthenticated { get; private set; }
+
+        /// <summary>
+        /// What is the commander's name according to Inara?
+        /// </summary>
         public string cmdrName { get; private set; }
+
+        /// <summary>
+        /// What was the last error seen?
+        /// </summary>
         public string lastError { get; private set; }
+
+        /// <summary>
+        /// The sesison cookies used to maintain Inara authentication
+        /// </summary>
         public CookieContainer cookies { get; private set; }
 
+        /// <summary>
+        /// A lookup table of material names to Inara IDs
+        /// </summary>
         public IDictionary<string, int> MaterialInaraIDLookup;
 
+        /// <summary>
+        /// The HTTPClient instance used to speak with Inara
+        /// </summary>
         private HttpClient http;
 
+        /// <summary>
+        /// The location to which to post Authentication credentials
+        /// </summary>
         private const string AuthURL = "http://inara.cz/login";
+
+        /// <summary>
+        /// The name of the username field
+        /// </summary>
         private const string UserField = "loginid";
+
+        /// <summary>
+        /// The name of the password field
+        /// </summary>
         private const string PassField = "loginpass";
+
+        /// <summary>
+        /// The action to post, in this case, login
+        /// </summary>
         private const string AuthAction = "ENT_LOGIN";
+
+        /// <summary>
+        /// The location to redirect to after logging in
+        /// </summary>
         private const string AuthLocation = "intro";
 
+        /// <summary>
+        /// The location to get the materials sheet
+        /// </summary>
         private const string MatsSheetURL = "http://inara.cz/cmdr-cargo/";
 
+        /// <summary>
+        /// The Inara Cookie URI
+        /// </summary>
         private const string CookieUri = "http://inara.cz/";
+
+        /// <summary>
+        /// The standard Inara form aciton field
+        /// </summary>
         private const string ActField = "formact";
+        
+        /// <summary>
+        /// The standard Inara form location redirect field
+        /// </summary>
         private const string LocField = "location";
 
         public InaraApi()
         {
+            // Mostly initialize stuff that will be used later
             MaterialInaraIDLookup = new Dictionary<string, int>();
+            lastError = "";
+            cmdrName = "CMDR GUEST";
+
+            // Create HTTP Client and tell it to notify us if there are cookies
             cookies = new CookieContainer();
             var handler = new HttpClientHandler();
             handler.CookieContainer = cookies;
             http = new HttpClient(handler);
             isAuthenticated = false;
-            lastError = "";
-            cmdrName = "CMDR GUEST";
-            // TODO: Make MSHTML
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool nativeOnly)
+        {
+            if(!nativeOnly)
+            {
+                http.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Make a Form Post on Inara.cz
+        /// </summary>
+        /// <param name="URL">The URL to post form data to</param>
+        /// <param name="values">A dictionary of keys and values to post</param>
+        /// <returns>Asynchronously, the HTTP Response</returns>
         public async Task<HttpResponseMessage> FormPost(string URL, Dictionary<string,string> values)
         {
             // Make the Requests
@@ -57,6 +136,11 @@ namespace Picard
             return response;
         }
 
+        /// <summary>
+        /// Makes an HTTP GET on Inara.cz
+        /// </summary>
+        /// <param name="URL">The URL to GET</param>
+        /// <returns>Asynchronously, the HTTP Response</returns>
         public async Task<HttpResponseMessage> DoGet(string URL)
         {
             var response = await http.GetAsync(URL);
@@ -66,6 +150,11 @@ namespace Picard
             return response;
         }
 
+        /// <summary>
+        /// Parses an HTML document using our HTML parser instance
+        /// </summary>
+        /// <param name="response">An HTTP response to parse</param>
+        /// <returns>Asynchronously, an instance of the parsed HTML DOM</returns>
         public async Task<HtmlDocument> ParseHtml(HttpResponseMessage response)
         {
             // Decode Response String
@@ -80,22 +169,34 @@ namespace Picard
             return result;
         }
 
+        /// <summary>
+        /// Finds the first instance of a DOM node that contains an attribute value
+        /// </summary>
+        /// <param name="dom">The parsed HTML DOM object</param>
+        /// <param name="key">The attribute to look for</param>
+        /// <param name="value">The value that the attribute should have</param>
+        /// <returns>The first HTML node that matches</returns>
         public HtmlNode findFirstNodeByAttributeValue(HtmlDocument dom, string key, string value)
         {
-            foreach(var node in dom.DocumentNode.DescendantsAndSelf())
-            {
-                foreach (var attr in node.Attributes.AttributesWithName(key))
-                {
-                    if (attr.Value.Contains(value))
-                    {
-                        return node;
-                    }
-                }
-            }
+            var ret = findAllNodeByAttributeValue(dom, key, value);
 
-            return null;
+            if(ret.Count() > 0)
+            {
+                return ret.First();
+            }
+            else
+            {
+                return null;
+            }
         }
 
+        /// <summary>
+        /// Finds all DOm nodes that contain an attribute value
+        /// </summary>
+        /// <param name="dom">The parsed HTML DOM object</param>
+        /// <param name="key">The attribute to look for</param>
+        /// <param name="value">The value that the attribute should have</param>
+        /// <returns>All HTML nodes that match</returns>
         public IEnumerable<HtmlNode> findAllNodeByAttributeValue(HtmlDocument dom, string key, string value)
         {
             return dom.DocumentNode.DescendantsAndSelf().Where(node =>
@@ -111,8 +212,15 @@ namespace Picard
             });
         }
 
+        /// <summary>
+        /// Perform authentication at Inara.cz
+        /// </summary>
+        /// <param name="user">The User's Username</param>
+        /// <param name="pass">The User's Password</param>
+        /// <returns>A bookean representing the success of the authentication</returns>
         public async Task<bool> Authenticate(string user, string pass)
         {
+            // The values we are going to pass
             var values = new Dictionary<string, string>
             {
                 { UserField, user },
@@ -121,16 +229,19 @@ namespace Picard
                 { LocField, AuthLocation }
             };
 
+            // POST the Form
             var response = await FormPost(AuthURL, values);
 
+            // Parse the DOM
             var dom = await (ParseHtml(response));
 
+            // Look for the Commander's Name
             var nameNode = findFirstNodeByAttributeValue(dom, "class", "menuappend");
             cmdrName = nameNode.InnerText;
 
-            // If 'CMDR Guest' still logged in, probably invalid creds
             if (cmdrName == "CMDR Guest")
             {
+                // If 'CMDR Guest' still logged in, probably invalid creds
                 var errorNode = findFirstNodeByAttributeValue(dom, "class", "loginformbottom");
                 lastError = errorNode.InnerText;
                 isAuthenticated = false;
@@ -138,11 +249,17 @@ namespace Picard
             }
             else
             {
+                // Otherwise, we're logged in!
                 isAuthenticated = true;
                 return true;
             }
         }
 
+        /// <summary>
+        /// Finds a cookie within cookies
+        /// </summary>
+        /// <param name="name">The name of the cookie</param>
+        /// <returns>The value of the cookie</returns>
         public string FindCookie(string name)
         {
             var cookieJar = cookies.GetCookies(new Uri(CookieUri)).Cast<Cookie>();
@@ -157,24 +274,39 @@ namespace Picard
             return null;
         }
 
+        /// <summary>
+        /// Loads the Materials Sheet from Inara.cz
+        /// </summary>
+        /// <returns>A dictionary of materials and counts</returns>
         public async Task<IDictionary<string, int>> GetMaterialsSheet()
         {
             var found = new Dictionary<string, int>();
 
+            // Perform the GET to retrieve the materisl page
             var response = await DoGet(MatsSheetURL + GetEliteSheet());
 
+            // Parse the HTML
             var dom = await ParseHtml(response);
 
+            // Look for all nodes with class inventorymaterial
             foreach(var node in findAllNodeByAttributeValue(dom, "class", "inventorymaterial"))
             {
+                // The name is in the span
                 var mat = node.Descendants("span").First().InnerText;
+
+                // The count is in a form input
                 var value = node.Descendants("input").First().GetAttributeValue("value", 0);
 
+                // If we have already found this, ignore
                 if (found.ContainsKey(mat)) continue;
 
+                // Add the material to be returned
                 found.Add(mat, value);
 
                 try {
+                    // Add the material and its ID to the Material ID lookup for later use
+                    // We do this on every page load because no reason not to, and if they
+                    // change their IDs for some reason, shouldn't hurt us
                     var inputName = node.Descendants("input").First().GetAttributeValue("name", "playerinv[-1]");
                     if (!inputName.StartsWith("playerinv["))
                     {
@@ -204,11 +336,23 @@ namespace Picard
             return found;
         }
 
+        /// <summary>
+        /// Return the cookie value of the user's internal ID in Inara.cz
+        /// </summary>
+        /// <returns>
+        /// The user's internail Inara ID
+        /// </returns>
         public string GetEliteSheet()
         {
             return FindCookie("elitesheet");
         }
 
+        /// <summary>
+        /// Gets the user's session ID in Inara.cz
+        /// </summary>
+        /// <returns>
+        /// The user's Inara.cz session ID
+        /// </returns>
         public string GetESID()
         {
             return FindCookie("esid");

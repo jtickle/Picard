@@ -9,44 +9,65 @@ namespace Picard
     using DeltaDict = Dictionary<string, int>;
     using IDeltaDict = IDictionary<string, int>;
 
+    /// <summary>
+    /// Tools for operating upon a dictionary of materials and deltas.
+    /// </summary>
     public static class DeltaTools
     {
+        /// <summary>
+        /// Creates a new, empty delta dictionary
+        /// </summary>
+        /// <returns>
+        /// A new, empty delta dictionary
+        /// </returns>
         public static IDeltaDict Create()
         {
             return new DeltaDict();
         }
 
+        /// <summary>
+        /// Adds together two delta dictionaries
+        /// </summary>
+        /// <param name="l">The first dict to add</param>
+        /// <param name="r">The second dict to add</param>
+        /// <returns>A dictionary containing the strings from l and r and the sum of their counts</returns>
         public static IDeltaDict Add(IDeltaDict l, IDeltaDict r)
         {
             var Result = Create();
 
-            var allKeys = l.Keys.Union(r.Keys);
-            foreach(var key in allKeys)
+            // Join together the set of keys from both and loop over them
+            foreach(var key in l.Keys.Union(r.Keys))
             {
                 var iHave = l.ContainsKey(key);
                 var uHave = r.ContainsKey(key);
 
                 if(iHave && uHave)
                 {
-                    Result.Add(key, l[key] + r[key]);
+                    AddMat(Result, key, l[key] + r[key]);
                 }
                 else if(iHave && !uHave)
                 {
-                    Result.Add(key, l[key]);
+                    AddMat(Result, key, l[key]);
                 }
                 else if(!iHave && uHave)
                 {
-                    Result.Add(key, r[key]);
+                    AddMat(Result, key, r[key]);
                 }
                 else
                 {
-                    Result.Add(key, 0);
+                    AddMat(Result, key, 0);
                 }
             }
 
             return Result;
         }
 
+        /// <summary>
+        /// Adds a material to a delta dictionary
+        /// </summary>
+        /// <param name="d">The dictionary to which to add</param>
+        /// <param name="mat">The Inara.cz material name</param>
+        /// <param name="qty">The quantity</param>
         internal static void AddMat(IDeltaDict d, string mat, int qty)
         {
             if(d.ContainsKey(mat))
