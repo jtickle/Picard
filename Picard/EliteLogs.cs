@@ -150,7 +150,7 @@ namespace Picard
             EliteMatsLookup.Add("magneticemittercoil", "Magnetic Emitter Coil");
             EliteMatsLookup.Add("microcontrollers", "Micro Controllers");
             EliteMatsLookup.Add("micro-weavecoolinghoses", "Micro-Weave Cooling Hoses");
-            EliteMatsLookup.Add("ModularTerminals", "Modular Terminals");
+            EliteMatsLookup.Add("modularterminals", "Modular Terminals");
             EliteMatsLookup.Add("nanobreakers", "Nanobreakers");
             EliteMatsLookup.Add("neofabricinsulation", "Neofabric Insulation");
             EliteMatsLookup.Add("osmium", "Osmium");
