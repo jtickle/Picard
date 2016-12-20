@@ -135,7 +135,7 @@ namespace Picard
         /// </returns>
         public DateTime GetLastUpdateTimestamp()
         {
-            return CurrentState.History.First().Key;
+            return CurrentState.History.Last().Key;
         }
 
         /// <summary>
