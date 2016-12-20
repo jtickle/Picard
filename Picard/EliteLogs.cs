@@ -580,6 +580,13 @@ namespace Picard
                         result = HandleMaterialCollected(entry, result);
                         break;
 
+                    // Handle collecting a commodity as part of a mission
+
+                    case "MissionAccepted":
+
+                        result = HandleMissionAccepted(entry, result);
+                        break;
+
                     // Handle collecting a material or commodity in completing a mission
                     case "MissionCompleted":
 
