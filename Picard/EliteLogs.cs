@@ -451,7 +451,8 @@ namespace Picard
                             int.Parse(mat["Count"].ToString()));
                     }
                 }
-                else if (prop.Name == "Commodity_Localised")
+
+                if (prop.Name == "Commodity_Localised")
                 {
                     // Handle losing a commodity as the result of completing a mission
                     DeltaTools.AddMat(
