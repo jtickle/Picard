@@ -134,7 +134,7 @@ namespace Picard
             EliteMatsLookup.Add("disruptedwakeechoes", "Atypical Disrupted Wake Echoes");
             EliteMatsLookup.Add("atypicalencryptionarchives", "Atypical Encryption Archives");
             EliteMatsLookup.Add("scandatabanks", "Classified Scan Databanks");
-            EliteMatsLookup.Add("scanfragment", "Classified Scan Fragment");
+            EliteMatsLookup.Add("classifiedscandata", "Classified Scan Fragment");
             EliteMatsLookup.Add("industrialfirmware", "Cracked Industrial Firmware");
             EliteMatsLookup.Add("dataminedwakeexceptions", "Datamined Wake Exceptions");
             EliteMatsLookup.Add("decodedemissiondata", "Decoded Emission Data");
@@ -143,7 +143,7 @@ namespace Picard
             EliteMatsLookup.Add("hyperspacetrajectories", "Eccentric Hyperspace Trajectories");
             EliteMatsLookup.Add("scrambledemissiondata", "Exceptional Scrambled Emission Data");
             EliteMatsLookup.Add("inconsistentshieldsoakanalysis", "Inconsistent Shield Soak Analysis");
-            EliteMatsLookup.Add("irregularemissiondata", "Irregular Emission Data");
+            EliteMatsLookup.Add("archivedemissiondata", "Irregular Emission Data");
             EliteMatsLookup.Add("consumerfirmware", "Modified Consumer Firmware");
             EliteMatsLookup.Add("embeddedfirmware", "Modified Embedded Firmware");
             EliteMatsLookup.Add("symmetrickeys", "Open Symmetric Keys");
@@ -297,18 +297,22 @@ namespace Picard
             // Loop over all log files
             foreach (var file in logFiles)
             {
-
-                // Loop over all lines in the log file
-                foreach(var line in File.ReadAllLines(file))
+                using(var fileReader = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var streamReader = new StreamReader(fileReader))
                 {
-
-                    // Parse and read a line
-                    using (var lineReader = new StringReader(line))
-                    using (var jsonReader = new JsonTextReader(lineReader))
+                    // Loop over all lines in the log file
+                    while (!streamReader.EndOfStream)
                     {
-                        JObject entry = (JObject)JToken.ReadFrom(jsonReader);
+                        var line = streamReader.ReadLine();
 
-                        yield return entry;
+                        // Parse and read a line
+                        using (var lineReader = new StringReader(line))
+                        using (var jsonReader = new JsonTextReader(lineReader))
+                        {
+                            JObject entry = (JObject)JToken.ReadFrom(jsonReader);
+
+                            yield return entry;
+                        }
                     }
                 }
             }
