@@ -391,6 +391,8 @@ namespace Picard
 
         /// <summary>
         /// Handle the case where a Material is the reward of completing a mission
+        /// Also, handle the very annoying case where a Commodity is consumed in the
+        /// completion of a mission
         /// </summary>
         /// <param name="entry">An Elite Log Entry as Parsed JSON</param>
         /// <param name="orig">The materials dictionary to modify</param>
@@ -427,6 +429,14 @@ namespace Picard
                             TranslateMat(mat["Name"].ToString()),
                             int.Parse(mat["Count"].ToString()));
                     }
+                }
+                else if (prop.Name == "Commodity_Localised")
+                {
+                    // Handle losing a commodity as the result of completing a mission
+                    DeltaTools.AddMat(
+                        orig,
+                        entry["Commodity_Localised"].ToString(),
+                        0 - int.Parse(entry["Count"].ToString()));
                 }
             }
 
