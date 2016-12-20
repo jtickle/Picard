@@ -396,6 +396,9 @@ namespace Picard
         /// <returns>Mats Dictionary Plus Stuff</returns>
         public IDictionary<string, int> HandleMissionAccepted(JObject entry, IDictionary<string, int> orig)
         {
+            if (!entry["Name"].ToString().StartsWith("Mission_Delivery"))
+                return orig;
+
             foreach (var prop in entry.Properties())
             {
                 if(prop.Name == "Commodity_Localised")
