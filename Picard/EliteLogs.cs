@@ -152,7 +152,7 @@ namespace Picard
             EliteMatsLookup.Add("legacyfirmware", "Specialised Legacy Firmware");
             EliteMatsLookup.Add("strangewakesolutions", "Strange Wake Solutions");
             EliteMatsLookup.Add("encryptioncodes", "Tagged Encryption Codes");
-            EliteMatsLookup.Add("unknownemissiondata", "Unexpected Emission Data");
+            EliteMatsLookup.Add("emissiondata", "Unexpected Emission Data");
             EliteMatsLookup.Add("scanarchives", "Unidentified Scan Archives");
             EliteMatsLookup.Add("untypicalshieldscans", "Untypical Shield Scans");
             EliteMatsLookup.Add("encryptedfiles", "Unusual Encrypted Files");
@@ -364,7 +364,7 @@ namespace Picard
             DeltaTools.AddMat(
                 orig,
                 TranslateMat((string)entry["Type"]),
-                int.Parse((string)entry["Count"]));
+                0 - int.Parse((string)entry["Count"]));
 
             return orig;
         }
@@ -381,7 +381,7 @@ namespace Picard
                         DeltaTools.AddMat(
                             orig,
                             TranslateMat(mat.Name),
-                            int.Parse(mat.Value.ToString()));
+                            0 - int.Parse(mat.Value.ToString()));
                     }
                 }
             }
