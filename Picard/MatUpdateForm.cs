@@ -36,6 +36,7 @@ namespace Picard
 
             last = state.CalculateCurrentInventory();
             deltas = logs.GetDeltasSince(state.GetLastUpdateTimestamp());
+            
             result = DeltaTools.Add(last, deltas);
 
             foreach(var r in result)

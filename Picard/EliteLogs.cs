@@ -552,6 +552,23 @@ namespace Picard
             return orig;
         }
 
+        public IDictionary<string, int> FilterOnlyInaraMats(IDictionary<string, int> deltas)
+        {
+            // TODO: This should really be looking at the data just pulled
+            // from Inara
+            var ret = new Dictionary<string, int>();
+
+            foreach(var mat in EliteMatsLookup.Values)
+            {
+                if(deltas.ContainsKey(mat))
+                {
+                    ret.Add(mat, deltas[mat]);
+                }
+            }
+
+            return ret;
+        }
+
         /// <summary>
         /// Gets all material deltas that have occurred since the "since" DateTime
         /// and provides them as a materials dictionary
@@ -636,7 +653,7 @@ namespace Picard
                 }
             }
 
-            return result;
+            return FilterOnlyInaraMats(result);
         }
     }
 }

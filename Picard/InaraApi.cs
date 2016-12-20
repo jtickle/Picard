@@ -70,6 +70,10 @@ namespace Picard
         /// </summary>
         private const string AuthLocation = "intro";
 
+        private const string PostLocation = "cmdr-cargo";
+
+        private const string PostAction = "USER_CARGOMATERIAL_SET";
+
         /// <summary>
         /// The location to get the materials sheet
         /// </summary>
@@ -212,6 +216,30 @@ namespace Picard
             });
         }
 
+        protected async Task<bool> parseMaterialsSheet(HttpResponseMessage response)
+        {
+            var dom = await ParseHtml(response);
+
+            // Look for the Commander's Name
+            var nameNode = findFirstNodeByAttributeValue(dom, "class", "menuappend");
+            cmdrName = nameNode.InnerText;
+
+            if (cmdrName == "CMDR Guest")
+            {
+                // If 'CMDR Guest' still logged in, probably invalid creds
+                var errorNode = findFirstNodeByAttributeValue(dom, "class", "loginformbottom");
+                lastError = errorNode.InnerText;
+                isAuthenticated = false;
+                return false;
+            }
+            else
+            {
+                // Otherwise, we're logged in!
+                isAuthenticated = true;
+                return true;
+            }
+        }
+
         /// <summary>
         /// Perform authentication at Inara.cz
         /// </summary>
@@ -233,26 +261,7 @@ namespace Picard
             var response = await FormPost(AuthURL, values);
 
             // Parse the DOM
-            var dom = await (ParseHtml(response));
-
-            // Look for the Commander's Name
-            var nameNode = findFirstNodeByAttributeValue(dom, "class", "menuappend");
-            cmdrName = nameNode.InnerText;
-
-            if (cmdrName == "CMDR Guest")
-            {
-                // If 'CMDR Guest' still logged in, probably invalid creds
-                var errorNode = findFirstNodeByAttributeValue(dom, "class", "loginformbottom");
-                lastError = errorNode.InnerText;
-                isAuthenticated = false;
-                return false;
-            }
-            else
-            {
-                // Otherwise, we're logged in!
-                isAuthenticated = true;
-                return true;
-            }
+            return await parseMaterialsSheet(response);
         }
 
         /// <summary>
@@ -334,6 +343,30 @@ namespace Picard
             }
 
             return found;
+        }
+
+        public async Task<bool> PostMaterialsSheet(IDictionary<string, int> totals)
+        {
+            var postData = new Dictionary<string, string>();
+
+            foreach(var mat in totals.Keys)
+            {
+                if(!MaterialInaraIDLookup.Keys.Contains(mat))
+                {
+                    throw new Exception("Material '" + mat + "' does not exist on Inara");
+                }
+
+                postData.Add("playerinv[" + MaterialInaraIDLookup[mat] + "]", totals[mat].ToString());
+            }
+
+            postData.Add(LocField, PostLocation);
+            postData.Add(ActField, PostAction);
+
+            // POST the form
+            var response = await FormPost(MatsSheetURL + GetEliteSheet(), postData);
+
+            // Parse the DOM
+            return await parseMaterialsSheet(response);
         }
 
         /// <summary>
