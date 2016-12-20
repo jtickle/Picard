@@ -388,6 +388,27 @@ namespace Picard
 
             return orig;
         }
+        /// <summary>
+        /// Boy this has become quite the project...
+        /// </summary>
+        /// <param name="entry">Log Entry</param>
+        /// <param name="orig">Mats Dictionary</param>
+        /// <returns>Mats Dictionary Plus Stuff</returns>
+        public IDictionary<string, int> HandleMissionAccepted(JObject entry, IDictionary<string, int> orig)
+        {
+            foreach (var prop in entry.Properties())
+            {
+                if(prop.Name == "Commodity_Localized")
+                {
+                    DeltaTools.AddMat(
+                        orig,
+                        entry["Commodity_Localized"].ToString(),
+                        int.Parse(entry["Count"].ToString()));
+                }
+            }
+
+            return orig;
+        }
 
         /// <summary>
         /// Handle the case where a Material is the reward of completing a mission
@@ -599,6 +620,8 @@ namespace Picard
 
                         result = HandleEngineerProgress(entry, result);
                         break;
+
+                    // Handle 
                 }
             }
 
