@@ -139,7 +139,7 @@ namespace Picard
             EliteMatsLookup.Add("dataminedwakeexceptions", "Datamined Wake Exceptions");
             EliteMatsLookup.Add("decodedemissiondata", "Decoded Emission Data");
             EliteMatsLookup.Add("shieldcyclerecordings", "Distorted Shield Cycle Recordings");
-            EliteMatsLookup.Add("divergentscandata", "Divergent Scan Data");
+            EliteMatsLookup.Add("encodedscandata", "Divergent Scan Data");
             EliteMatsLookup.Add("hyperspacetrajectories", "Eccentric Hyperspace Trajectories");
             EliteMatsLookup.Add("scrambledemissiondata", "Exceptional Scrambled Emission Data");
             EliteMatsLookup.Add("inconsistentshieldsoakanalysis", "Inconsistent Shield Soak Analysis");
@@ -152,7 +152,7 @@ namespace Picard
             EliteMatsLookup.Add("legacyfirmware", "Specialised Legacy Firmware");
             EliteMatsLookup.Add("strangewakesolutions", "Strange Wake Solutions");
             EliteMatsLookup.Add("encryptioncodes", "Tagged Encryption Codes");
-            EliteMatsLookup.Add("unexpectedemissiondata", "Unexpected Emission Data");
+            EliteMatsLookup.Add("unknownemissiondata", "Unexpected Emission Data");
             EliteMatsLookup.Add("scanarchives", "Unidentified Scan Archives");
             EliteMatsLookup.Add("untypicalshieldscans", "Untypical Shield Scans");
             EliteMatsLookup.Add("encryptedfiles", "Unusual Encrypted Files");
@@ -187,39 +187,33 @@ namespace Picard
             EngineerCostLookup = new Dictionary<string, Dictionary<string, int>>();
 
             var mats = new Dictionary<string, int>();
-            mats.Add("Meta Alloys", -1);
             EngineerCostLookup.Add("Felicity Farseer", mats);
 
             mats = new Dictionary<string, int>();
-            mats.Add("Soontill Relics", -1);
             EngineerCostLookup.Add("Elvira Martuuk", mats);
 
             mats = new Dictionary<string, int>();
             EngineerCostLookup.Add("The Dweller", mats);
 
             mats = new Dictionary<string, int>();
-            mats.Add("Landmines", -200);
             EngineerCostLookup.Add("Liz Ryder", mats);
 
             mats = new Dictionary<string, int>();
             EngineerCostLookup.Add("Tod McQuinn", mats);
 
             mats = new Dictionary<string, int>();
-            mats.Add("Xihe Companions", -25);
             EngineerCostLookup.Add("Zacariah Nemo", mats);
 
             mats = new Dictionary<string, int>();
             EngineerCostLookup.Add("Lei Cheung", mats);
 
             mats = new Dictionary<string, int>();
-            mats.Add("Kamitra Cigars", -50);
             EngineerCostLookup.Add("Hera Tani", mats);
 
             mats = new Dictionary<string, int>();
             EngineerCostLookup.Add("Juri Ishmaak", mats);
 
             mats = new Dictionary<string, int>();
-            mats.Add("Painite", -10);
             EngineerCostLookup.Add("Selene Jean", mats);
 
             mats = new Dictionary<string, int>();
@@ -231,14 +225,12 @@ namespace Picard
             EngineerCostLookup.Add("Ram Tah", mats);
 
             mats = new Dictionary<string, int>();
-            mats.Add("Fujin Tea", -50);
             EngineerCostLookup.Add("Broo Tarquin", mats);
 
             mats = new Dictionary<string, int>();
             EngineerCostLookup.Add("Colonel Bris Dekker", mats);
 
             mats = new Dictionary<string, int>();
-            mats.Add("Lavian Brandy", -50);
             EngineerCostLookup.Add("Didi Vatermann", mats);
 
             mats = new Dictionary<string, int>();
@@ -246,7 +238,6 @@ namespace Picard
             EngineerCostLookup.Add("Professor Palin", mats);
 
             mats = new Dictionary<string, int>();
-            mats.Add("Kongga Ale", -25);
             EngineerCostLookup.Add("Lori Jameson", mats);
 
             mats = new Dictionary<string, int>();
@@ -351,7 +342,49 @@ namespace Picard
             DeltaTools.AddMat(
                 orig,
                 TranslateMat((string)entry["Name"]),
-                (int)(long)entry["Count"]);
+                int.Parse((string)entry["Count"]));
+
+            return orig;
+        }
+
+        public IDictionary<string, int> HandleMarketBuy(JObject entry, IDictionary<string, int> orig)
+        {
+            // Straightforward, Name and Count are directly on the entry
+            DeltaTools.AddMat(
+                orig,
+                TranslateMat((string)entry["Type"]),
+                int.Parse((string)entry["Count"]));
+
+            return orig;
+        }
+
+        public IDictionary<string, int> HandleMarketSell(JObject entry, IDictionary<string, int> orig)
+        {
+            // Straightforward, Name and Count are directly on the entry
+            DeltaTools.AddMat(
+                orig,
+                TranslateMat((string)entry["Type"]),
+                int.Parse((string)entry["Count"]));
+
+            return orig;
+        }
+
+        public IDictionary<string, int> HandleSynthesis(JObject entry, IDictionary<string, int> orig)
+        {
+            // List of material key : material count in set under key Materials
+            foreach(var prop in entry.Properties())
+            {
+                if(prop.Name == "Materials")
+                {
+                    foreach(var mat in ((JObject) entry["Materials"]).Properties())
+                    {
+                        DeltaTools.AddMat(
+                            orig,
+                            TranslateMat(mat.Name),
+                            int.Parse(mat.Value.ToString()));
+                    }
+                }
+            }
 
             return orig;
         }
@@ -452,18 +485,21 @@ namespace Picard
             bool progress = false, rank = false;
             foreach (var key in entry.Properties())
             {
-                if ((string)key == "Progress")
+                if (key.Name == "Progress")
                 {
-                    if ((string)entry["Progress"] == "Unlocked")
+                    if (key.Value.ToString() == "Unlocked")
                         progress = true;
                 }
-                else if ((string)key == "Rank")
+                else if (key.Name == "Rank")
                 {
-                    if (int.Parse((string)entry["Rank"]) == 1)
+                    if (int.Parse(key.Value.ToString()) == 1)
                         rank = true;
                 }
             }
-            if (!progress || !rank) return orig;
+            if (!progress || !rank)
+            {
+                return orig;
+            }
 
             // The logs do not provide the actual materials or commodities
             // that are relieved of you buy the engineers.  We look these values
@@ -516,6 +552,24 @@ namespace Picard
                     case "MissionCompleted":
 
                         result = HandleMissionCompleted(entry, result);
+                        break;
+
+                    // Handle collecting a commodity through a market buy
+                    case "MarketBuy":
+
+                        result = HandleMarketBuy(entry, result);
+                        break;
+
+                    // Handle losing a commodity through a market sell
+                    case "MarketSell":
+
+                        result = HandleMarketSell(entry, result);
+                        break;
+
+                    // Handle losing a mat through synthesis
+                    case "Synthesis":
+
+                        result = HandleSynthesis(entry, result);
                         break;
 
                     // Handle losing materials or commodities in buying engineer upgrades
