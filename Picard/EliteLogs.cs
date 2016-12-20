@@ -398,11 +398,11 @@ namespace Picard
         {
             foreach (var prop in entry.Properties())
             {
-                if(prop.Name == "Commodity_Localized")
+                if(prop.Name == "Commodity_Localised")
                 {
                     DeltaTools.AddMat(
                         orig,
-                        entry["Commodity_Localized"].ToString(),
+                        entry["Commodity_Localised"].ToString(),
                         int.Parse(entry["Count"].ToString()));
                 }
             }
