@@ -216,28 +216,66 @@ namespace Picard
             });
         }
 
-        protected async Task<bool> parseMaterialsSheet(HttpResponseMessage response)
+        protected async Task<IDictionary<string, int>> parseMaterialsSheet(HttpResponseMessage response)
         {
+            var found = new Dictionary<string, int>();
+
             var dom = await ParseHtml(response);
 
-            // Look for the Commander's Name
-            var nameNode = findFirstNodeByAttributeValue(dom, "class", "menuappend");
-            cmdrName = nameNode.InnerText;
+            // Look for all nodes with class inventorymaterial
+            foreach (var node in findAllNodeByAttributeValue(dom, "class", "inventorymaterial"))
+            {
+                // The name is in the span
+                var mat = node.Descendants("span").First().InnerText;
 
-            if (cmdrName == "CMDR Guest")
-            {
-                // If 'CMDR Guest' still logged in, probably invalid creds
-                var errorNode = findFirstNodeByAttributeValue(dom, "class", "loginformbottom");
-                lastError = errorNode.InnerText;
-                isAuthenticated = false;
-                return false;
+                // If we have already found this, ignore
+                if (found.ContainsKey(mat)) continue;
+
+                // The count is in a form input
+                var value = node.Descendants("input").First().GetAttributeValue("value", 0);
+                
+                // Add the material to be returned
+                found.Add(mat, value);
+
+                try
+                {
+                    // Add the material and its ID to the Material ID lookup for later use
+                    // We do this on every page load because no reason not to, and if they
+                    // change their IDs for some reason, shouldn't hurt us
+                    var inputName = node.Descendants("input").First().GetAttributeValue("name", "playerinv[-1]");
+                    if (!inputName.StartsWith("playerinv["))
+                    {
+                        Console.WriteLine("DOM Error: " + inputName);
+                        continue;
+                    }
+                    var match = Regex.Match(inputName, @"playerinv\[(\w+)\]", RegexOptions.IgnoreCase);
+                    if (match.Groups.Count < 2)
+                    {
+                        Console.WriteLine("Regex Error:");
+                        Console.WriteLine(match.ToString());
+                        continue;
+                    }
+                    Console.WriteLine("Matched: " + match.Groups[1].Captures[0].ToString());
+                    var num = int.Parse(match.Groups[1].Captures[0].ToString());
+
+                    Console.WriteLine("Storing: Lookup[" + mat + "] = " + num);
+                    if(MaterialInaraIDLookup.ContainsKey(mat))
+                    {
+                        MaterialInaraIDLookup[mat] = num;
+                    }
+                    else
+                    {
+                        MaterialInaraIDLookup.Add(mat, num);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                    throw e;
+                }
             }
-            else
-            {
-                // Otherwise, we're logged in!
-                isAuthenticated = true;
-                return true;
-            }
+            
+            return found;
         }
 
         /// <summary>
@@ -260,8 +298,27 @@ namespace Picard
             // POST the Form
             var response = await FormPost(AuthURL, values);
 
-            // Parse the DOM
-            return await parseMaterialsSheet(response);
+            // Parse the Response
+            var dom = await ParseHtml(response);
+
+            // Look for the Commander's Name
+            var nameNode = findFirstNodeByAttributeValue(dom, "class", "menuappend");
+            cmdrName = nameNode.InnerText;
+
+            if (cmdrName == "CMDR Guest")
+            {
+                // If 'CMDR Guest' still logged in, probably invalid creds
+                var errorNode = findFirstNodeByAttributeValue(dom, "class", "loginformbottom");
+                lastError = errorNode.InnerText;
+                isAuthenticated = false;
+                return false;
+            }
+            else
+            {
+                // Otherwise, we're logged in!
+                isAuthenticated = true;
+                return true;
+            }
         }
 
         /// <summary>
@@ -289,67 +346,20 @@ namespace Picard
         /// <returns>A dictionary of materials and counts</returns>
         public async Task<IDictionary<string, int>> GetMaterialsSheet()
         {
-            var found = new Dictionary<string, int>();
-
             // Perform the GET to retrieve the materisl page
             var response = await DoGet(MatsSheetURL + GetEliteSheet());
 
             // Parse the HTML
-            var dom = await ParseHtml(response);
-
-            // Look for all nodes with class inventorymaterial
-            foreach(var node in findAllNodeByAttributeValue(dom, "class", "inventorymaterial"))
-            {
-                // The name is in the span
-                var mat = node.Descendants("span").First().InnerText;
-
-                // The count is in a form input
-                var value = node.Descendants("input").First().GetAttributeValue("value", 0);
-
-                // If we have already found this, ignore
-                if (found.ContainsKey(mat)) continue;
-
-                // Add the material to be returned
-                found.Add(mat, value);
-
-                try {
-                    // Add the material and its ID to the Material ID lookup for later use
-                    // We do this on every page load because no reason not to, and if they
-                    // change their IDs for some reason, shouldn't hurt us
-                    var inputName = node.Descendants("input").First().GetAttributeValue("name", "playerinv[-1]");
-                    if (!inputName.StartsWith("playerinv["))
-                    {
-                        Console.WriteLine("DOM Error: " + inputName);
-                        continue;
-                    }
-                    var match = Regex.Match(inputName, @"playerinv\[(\w+)\]", RegexOptions.IgnoreCase);
-                    if(match.Groups.Count < 2)
-                    {
-                        Console.WriteLine("Regex Error:");
-                        Console.WriteLine(match.ToString());
-                        continue;
-                    }
-                    Console.WriteLine("Matched: " + match.Groups[1].Captures[0].ToString());
-                    var num = int.Parse(match.Groups[1].Captures[0].ToString());
-
-                    Console.WriteLine("Storing: Lookup[" + mat + "] = " + num);
-                    MaterialInaraIDLookup.Add(mat, num);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                    throw e;
-                }
-            }
-
-            return found;
+            return await parseMaterialsSheet(response);
         }
 
-        public async Task<bool> PostMaterialsSheet(IDictionary<string, int> totals)
+        public async Task<IDictionary<string, int>> PostMaterialsSheet(IDictionary<string, int> totals)
         {
             var postData = new Dictionary<string, string>();
+            
+            await GetMaterialsSheet();
 
-            foreach(var mat in totals.Keys)
+            foreach (var mat in totals.Keys)
             {
                 if(!MaterialInaraIDLookup.Keys.Contains(mat))
                 {
@@ -361,6 +371,11 @@ namespace Picard
 
             postData.Add(LocField, PostLocation);
             postData.Add(ActField, PostAction);
+
+            foreach(var entry in postData)
+            {
+                Console.Write("Would POST:\t" + entry.Key + "\t" + entry.Value + "\n");
+            }
 
             // POST the form
             var response = await FormPost(MatsSheetURL + GetEliteSheet(), postData);

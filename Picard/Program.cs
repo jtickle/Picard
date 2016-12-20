@@ -59,7 +59,7 @@ namespace Picard
             // If the user closed without saving, exit without error
             if (!resultProvider.ShouldSave())
                 return;
-
+            
             // Save the DeltaSet from today
             state.AddHistory(resultProvider.GetDeltas());
         }

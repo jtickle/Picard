@@ -20,6 +20,8 @@ namespace Picard
         /// </returns>
         IDictionary<string, int> GetDeltas();
 
+        IDictionary<string, int> GetTotals();
+
         /// <summary>
         /// Determine if the State should be Saved
         /// </summary>

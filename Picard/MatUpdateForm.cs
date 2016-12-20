@@ -72,6 +72,11 @@ namespace Picard
             return this.deltas;
         }
 
+        IDictionary<string, int> IGetData.GetTotals()
+        {
+            return this.result;
+        }
+
         bool IGetData.ShouldSave()
         {
             return this.shouldSave;
@@ -85,6 +90,13 @@ namespace Picard
         private void refreshButton_Click(object sender, EventArgs e)
         {
             ReloadMats();
+        }
+
+        private async void okButton_Click(object sender, EventArgs e)
+        {
+            await api.PostMaterialsSheet(result);
+            shouldSave = true;
+            Close();
         }
     }
 }

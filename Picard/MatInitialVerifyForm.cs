@@ -96,6 +96,11 @@ namespace Picard
             return Deltas;
         }
 
+        IDictionary<string, int> IGetData.GetTotals()
+        {
+            return Deltas;
+        }
+
         bool IGetData.ShouldSave()
         {
             return shouldSave;
