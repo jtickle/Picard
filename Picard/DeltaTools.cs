@@ -68,7 +68,7 @@ namespace Picard
         /// <param name="d">The dictionary to which to add</param>
         /// <param name="mat">The Inara.cz material name</param>
         /// <param name="qty">The quantity</param>
-        internal static void AddMat(IDeltaDict d, string mat, int qty)
+        public static void AddMat(IDeltaDict d, string mat, int qty)
         {
             if(d.ContainsKey(mat))
             {
@@ -78,6 +78,28 @@ namespace Picard
             {
                 d.Add(mat, qty);
             }
+        }
+
+        public static bool IsZero(IDeltaDict d)
+        {
+            foreach(var val in d.Values)
+            {
+                if(val != 0)
+                    return false;
+            }
+
+            return true;
+        }
+
+        public static bool IsNegative(IDeltaDict d)
+        {
+            foreach(var val in d.Values)
+            {
+                if (val < 0)
+                    return true;
+            }
+
+            return false;
         }
     }
 }

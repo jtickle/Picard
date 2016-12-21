@@ -33,6 +33,8 @@ namespace Picard
         {
             MatsView.Items.Clear();
             shouldSave = false;
+            okButton.Enabled = false;
+            refreshButton.Enabled = false;
 
             last = state.CalculateCurrentInventory();
             deltas = logs.GetDeltasSince(state.GetLastUpdateTimestamp());
@@ -65,6 +67,11 @@ namespace Picard
 
                 MatsView.Items.Add(i);
             }
+
+            refreshButton.Enabled = true;
+
+            // Only enable okButton if there are changes to save.
+            okButton.Enabled = !DeltaTools.IsZero(deltas);
         }
 
         IDictionary<string, int> IGetData.GetDeltas()
@@ -94,6 +101,15 @@ namespace Picard
 
         private async void okButton_Click(object sender, EventArgs e)
         {
+            if(DeltaTools.IsNegative(result))
+            {
+                // TODO: all of this, better logging, reporting, etc
+                MessageBox.Show("Oh no.  Your Material count has gone into the negative," +
+                               "which means something went wrong.  You will need to manually" +
+                               "re-synchronize with Inara and reset your Picard State file.",
+                               "Very Unfortunate Error");
+                return;
+            }
             await api.PostMaterialsSheet(result);
             shouldSave = true;
             Close();
