@@ -59,6 +59,7 @@
             // 
             this.okButton.AccessibleDescription = "The data looks good.";
             this.okButton.AccessibleName = "Looks Good";
+            this.okButton.AutoSize = true;
             this.okButton.Location = new System.Drawing.Point(477, 3);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
@@ -69,6 +70,7 @@
             // 
             // refreshButton
             // 
+            this.refreshButton.AutoSize = true;
             this.refreshButton.ForeColor = System.Drawing.SystemColors.ControlText;
             this.refreshButton.Location = new System.Drawing.Point(396, 3);
             this.refreshButton.Name = "refreshButton";
@@ -117,18 +119,21 @@
             // MatName
             // 
             this.MatName.Text = "Material";
+            this.MatName.Width = 270;
             // 
             // MatLast
             // 
-            this.MatLast.Text = "Inara.cz";
+            this.MatLast.Text = "Inara";
             // 
             // MatDelta
             // 
-            this.MatDelta.Text = "Changes Since Sync";
+            this.MatDelta.Text = "Delta";
+            this.MatDelta.Width = 117;
             // 
             // MatResult
             // 
-            this.MatResult.Text = "Current Inventory";
+            this.MatResult.Text = "Elite";
+            this.MatResult.Width = 117;
             // 
             // MatUpdateForm
             // 
@@ -142,6 +147,7 @@
             this.Text = "MatUpdateForm";
             this.Load += new System.EventHandler(this.MatUpdateForm_Load);
             this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);

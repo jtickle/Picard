@@ -80,6 +80,12 @@
       <DependentUpon>MatUpdateForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PersistentState.cs" />
+    <Compile Include="PostForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PostForm.Designer.cs">
+      <DependentUpon>PostForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="State.cs" />
     <Compile Include="WelcomeLoginForm.cs">
       <SubType>Form</SubType>
@@ -100,6 +106,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MatUpdateForm.resx">
       <DependentUpon>MatUpdateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PostForm.resx">
+      <DependentUpon>PostForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
