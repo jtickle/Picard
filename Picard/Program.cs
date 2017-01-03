@@ -49,6 +49,8 @@ namespace Picard
                 resultProvider = form;
                 Application.Run(form);
 
+                if (!resultProvider.ShouldSave()) return;
+
                 // Show post status form and do the post
                 var post = new PostForm(api, state, resultProvider.GetTotals());
                 Application.Run(post);
