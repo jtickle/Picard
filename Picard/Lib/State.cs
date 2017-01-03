@@ -11,9 +11,9 @@ namespace Picard
 
     public class State
     {
-        public string CmdrName;
-        public string InaraU;
-        public string InaraP;
+        public string CmdrName = "";
+        public string InaraU = "";
+        public string InaraP = "";
         public IHistorySet History;
 
         public State()

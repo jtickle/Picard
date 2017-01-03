@@ -317,7 +317,21 @@ namespace Picard
             {
                 // If 'CMDR Guest' still logged in, probably invalid creds
                 var errorNode = findFirstNodeByAttributeValue(dom, "class", "loginformbottom");
-                lastError = errorNode.InnerText;
+                if (errorNode == null)
+                {
+                    if (pass == "")
+                    {
+                        lastError = "No Password Specified";
+                    }
+                    else
+                    {
+                        lastError = "Unknown";
+                    }
+                }
+                else
+                {
+                    lastError = errorNode.InnerText;
+                }
                 isAuthenticated = false;
                 return false;
             }

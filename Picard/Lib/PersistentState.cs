@@ -65,12 +65,9 @@ namespace Picard
         /// </summary>
         protected void load()
         {
-            using (StreamReader sr = new StreamReader(StateFile))
+            using (JsonReader reader = new JsonTextReader(new StreamReader(StateFile)))
             {
-                using (JsonReader reader = new JsonTextReader(sr))
-                {
-                    CurrentState = Serializer.Deserialize<State>(reader);
-                }
+                CurrentState = Serializer.Deserialize<State>(reader);
             }
         }
 
@@ -79,12 +76,9 @@ namespace Picard
         /// </summary>
         protected void persist()
         {
-            using (StreamWriter sw = new StreamWriter(StateFile))
+            using (JsonWriter writer = new JsonTextWriter(new StreamWriter(StateFile)))
             {
-                using (JsonWriter writer = new JsonTextWriter(sw))
-                {
-                    Serializer.Serialize(writer, CurrentState);
-                }
+                Serializer.Serialize(writer, CurrentState);
             }
         }
 

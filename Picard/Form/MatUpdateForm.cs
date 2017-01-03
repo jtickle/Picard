@@ -17,7 +17,6 @@ namespace Picard
         private EliteLogs logs;
 
         private bool shouldSave;
-        private bool correctionApplied = false;
         private IDictionary<string, int> inaraCorrection;
         private IDictionary<string, int> last;
         private IDictionary<string, int> deltas;

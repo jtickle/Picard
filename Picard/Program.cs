@@ -20,25 +20,12 @@ namespace Picard
             InaraApi api = new InaraApi();
             PersistentState state = new PersistentState();
 
-            // Show Login Form
-            WelcomeLoginForm loginFrm = new WelcomeLoginForm(api);
-            if (state.HasInaraCreds())
-            {
-                // Show but Login automatically if we remember creds from last time
-                // This should gracefully handle errors such as a changed password
-                loginFrm.loginWithCredentials(
-                    state.CurrentState.InaraU,
-                    state.CurrentState.InaraP);
-            }
-            loginFrm.ShowDialog();
+            DoAuthentication(api, state);
 
             // If unauthenticated, that means they closed the login form
             // Just exit without error, don't write anything
             if (!api.isAuthenticated)
                 return;
-
-            // Save Credentials
-            state.UpdateInaraCreds(loginFrm.user, loginFrm.pass, api.cmdrName);
 
             // Show Main Form if there is history; otherwise perform an
             // initial import and then exit
@@ -55,6 +42,9 @@ namespace Picard
                     return;
                 }
 
+                // Save changes to history
+                state.AddHistory(resultProvider.GetDeltas());
+
                 // Show post status form and do the post
                 var post = new PostForm(api, state, resultProvider.GetTotals());
                 Application.Run(post);
@@ -64,17 +54,59 @@ namespace Picard
                 var form = new MatInitialVerifyForm(api);
                 resultProvider = form;
                 Application.Run(form);
-            }
 
-            // If the user closed without saving, exit without error
-            if (!resultProvider.ShouldSave())
+                if (!resultProvider.ShouldSave())
+                {
+                    MessageBox.Show("Picard exited without saving history.", "Picard");
+                    return;
+                }
+
+                // Save changes to history
+                state.AddHistory(resultProvider.GetDeltas());
+            }
+        }
+
+        /// <summary>
+        /// Show and handle operation of the login form for the
+        /// authentication portion of the execution
+        /// </summary>
+        /// <param name="api">The InaraApi instance to use for authentication</param>
+        /// <param name="state">The PersistentState to use for saved authentication data</param>
+        static void DoAuthentication(InaraApi api, PersistentState state)
+        {
+            // Show Login Form
+            WelcomeLoginForm loginFrm = new WelcomeLoginForm();
+
+            // Register Login Event
+            loginFrm.TryAuthentication += async (object sender, EventArgs e) =>
             {
-                MessageBox.Show("Picard exited without updating Inara.cz.", "Picard");
-                return;
+                loginFrm.SetLoginState();
+
+                if(await api.Authenticate(loginFrm.User, loginFrm.Pass))
+                {
+                    state.UpdateInaraCreds(
+                        loginFrm.User,
+                        loginFrm.Pass,
+                        api.cmdrName);
+                    loginFrm.Close();
+                }
+                else
+                {
+                    loginFrm.ErrorLabel = api.lastError;
+                    loginFrm.SetUserInputState();
+                }
+            };
+
+            if (state.HasInaraCreds())
+            {
+                // Load the form up with saved credentials and tell it to
+                // automatically try a login when shown.
+                loginFrm.User = state.CurrentState.InaraU;
+                loginFrm.Pass = state.CurrentState.InaraP;
+                loginFrm.AutoLogin = true;
             }
 
-            // Save changes to history
-            state.AddHistory(resultProvider.GetDeltas());
+            loginFrm.ShowDialog();
         }
     }
 }
