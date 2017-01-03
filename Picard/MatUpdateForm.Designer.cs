@@ -38,6 +38,7 @@
             this.MatLast = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.MatDelta = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.MatResult = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.MatCorrection = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.flowLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -104,6 +105,7 @@
             this.MatsView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.MatName,
             this.MatLast,
+            this.MatCorrection,
             this.MatDelta,
             this.MatResult});
             this.MatsView.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -123,17 +125,19 @@
             // 
             // MatLast
             // 
-            this.MatLast.Text = "Inara";
+            this.MatLast.Text = "Current";
             // 
             // MatDelta
             // 
             this.MatDelta.Text = "Delta";
-            this.MatDelta.Width = 117;
             // 
             // MatResult
             // 
             this.MatResult.Text = "Elite";
-            this.MatResult.Width = 117;
+            // 
+            // MatCorrection
+            // 
+            this.MatCorrection.Text = "Correction";
             // 
             // MatUpdateForm
             // 
@@ -167,5 +171,6 @@
         private System.Windows.Forms.ColumnHeader MatLast;
         private System.Windows.Forms.ColumnHeader MatDelta;
         private System.Windows.Forms.ColumnHeader MatResult;
+        private System.Windows.Forms.ColumnHeader MatCorrection;
     }
 }

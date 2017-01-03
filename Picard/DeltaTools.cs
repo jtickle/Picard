@@ -62,6 +62,21 @@ namespace Picard
             return Result;
         }
 
+        public static IDeltaDict ZeroMinus(IDeltaDict d)
+        {
+            var Result = Create();
+            foreach (var v in d)
+            {
+                Result.Add(v.Key, -v.Value);
+            }
+            return Result;
+        }
+
+        public static IDeltaDict Subtract(IDeltaDict l, IDeltaDict r)
+        {
+            return Add(l, ZeroMinus(r));
+        }
+
         /// <summary>
         /// Adds a material to a delta dictionary
         /// </summary>

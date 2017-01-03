@@ -49,7 +49,11 @@ namespace Picard
                 resultProvider = form;
                 Application.Run(form);
 
-                if (!resultProvider.ShouldSave()) return;
+                if (!resultProvider.ShouldSave())
+                {
+                    MessageBox.Show("Picard exited without saving state or updating Inara.cz.", "Picard");
+                    return;
+                }
 
                 // Show post status form and do the post
                 var post = new PostForm(api, state, resultProvider.GetTotals());
@@ -64,8 +68,11 @@ namespace Picard
 
             // If the user closed without saving, exit without error
             if (!resultProvider.ShouldSave())
+            {
+                MessageBox.Show("Picard exited without saving state or updating Inara.cz.", "Picard");
                 return;
-            
+            }
+
             // Save changes to history
             state.AddHistory(resultProvider.GetDeltas());
         }

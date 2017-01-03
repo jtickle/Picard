@@ -41,6 +41,12 @@ namespace Picard
         public IDictionary<string, int> MaterialInaraIDLookup;
 
         /// <summary>
+        /// There are some places where it is convenient to get the Materials without
+        /// making unnecessary requests, and we will store them here.
+        /// </summary>
+        public IDictionary<string, int> MaterialsCache;
+
+        /// <summary>
         /// The HTTPClient instance used to speak with Inara
         /// </summary>
         private HttpClient http;
@@ -274,6 +280,8 @@ namespace Picard
                     throw e;
                 }
             }
+
+            MaterialsCache = found;
             
             return found;
         }
@@ -292,7 +300,7 @@ namespace Picard
                 { UserField, user },
                 { PassField, pass },
                 { ActField, AuthAction },
-                { LocField, AuthLocation }
+                { LocField, PostLocation }
             };
 
             // POST the Form
@@ -317,6 +325,7 @@ namespace Picard
             {
                 // Otherwise, we're logged in!
                 isAuthenticated = true;
+                await parseMaterialsSheet(response);
                 return true;
             }
         }
@@ -346,6 +355,11 @@ namespace Picard
         /// <returns>A dictionary of materials and counts</returns>
         public async Task<IDictionary<string, int>> GetMaterialsSheet()
         {
+            // If this is cached, return it
+            if(MaterialsCache != null)
+            {
+                return MaterialsCache;
+            }
             // Perform the GET to retrieve the materisl page
             var response = await DoGet(MatsSheetURL + GetEliteSheet());
 
@@ -355,6 +369,9 @@ namespace Picard
 
         public async Task<IDictionary<string, int>> PostMaterialsSheet(IDictionary<string, int> totals)
         {
+            // Invalidate the Cache
+            MaterialsCache = null;
+
             var postData = new Dictionary<string, string>();
             
             await GetMaterialsSheet();
