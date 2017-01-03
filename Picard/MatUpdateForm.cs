@@ -20,6 +20,7 @@ namespace Picard
         private IDictionary<string, int> last;
         private IDictionary<string, int> deltas;
         private IDictionary<string, int> result;
+        private IDictionary<string, int> unknown;
 
         private IDictionary<string, int> totalsLast;
         private IDictionary<string, int> totalsDeltas;
@@ -190,8 +191,11 @@ namespace Picard
             okButton.Enabled = false;
             refreshButton.Enabled = false;
 
+            unknown = new Dictionary<string, int>();
+
             last = state.CalculateCurrentInventory();
             deltas = logs.GetDeltasSince(state.GetLastUpdateTimestamp());
+            deltas = logs.FilterOnlyInaraMats(deltas, unknown);
             
             result = DeltaTools.Add(last, deltas);
 
@@ -205,7 +209,7 @@ namespace Picard
             totalsDeltas["Materials"] = 0;
             totalsDeltas["Data"] = 0;
             totalsDeltas["Commodities"] = 0;
-            totalsDeltas["DebugUnknown"] = 0;
+            totalsDeltas["DebugUnknown"] = unknown.Count;
             totalsDeltas["Grand"] = 0;
             totalsResult  = new Dictionary<string, int>();
             totalsResult["Materials"] = 0;
@@ -334,6 +338,13 @@ namespace Picard
                                "which means something went wrong.  You will need to manually" +
                                "re-synchronize with Inara and reset your Picard State file.",
                                "Very Unfortunate Error");
+                return;
+            }
+
+            if(unknown.Count > 0)
+            {
+                UnrecognizedMaterials m = new UnrecognizedMaterials(unknown);
+                m.ShowDialog();
                 return;
             }
 

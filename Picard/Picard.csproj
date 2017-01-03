@@ -87,6 +87,12 @@
       <DependentUpon>PostForm.cs</DependentUpon>
     </Compile>
     <Compile Include="State.cs" />
+    <Compile Include="UnrecognizedMaterials.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UnrecognizedMaterials.Designer.cs">
+      <DependentUpon>UnrecognizedMaterials.cs</DependentUpon>
+    </Compile>
     <Compile Include="WelcomeLoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,6 +125,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UnrecognizedMaterials.resx">
+      <DependentUpon>UnrecognizedMaterials.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="WelcomeLoginForm.resx">
       <DependentUpon>WelcomeLoginForm.cs</DependentUpon>
     </EmbeddedResource>

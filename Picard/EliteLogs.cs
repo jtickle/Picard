@@ -29,6 +29,11 @@ namespace Picard
         protected Dictionary<string, string> EliteMatsLookup;
 
         /// <summary>
+        /// Commodities that we know are not materials
+        /// </summary>
+        protected List<string> IgnoreCommodities;
+
+        /// <summary>
         /// Costs of unlocking the Engineers
         /// </summary>
         protected Dictionary<string, Dictionary<string, int>> EngineerCostLookup;
@@ -47,6 +52,11 @@ namespace Picard
             
             // Initialize our serializer which can be reused
             Serializer = new JsonSerializer();
+
+            // Keep a list of commodities that we would like to ignore
+            IgnoreCommodities = new List<string>();
+            IgnoreCommodities.Add("Domestic Appliances");
+
 
             // Yay, Elite's mat names are inconsistent!
             EliteMatsLookup = new Dictionary<string, string>();
@@ -136,7 +146,7 @@ namespace Picard
             EliteMatsLookup.Add("scandatabanks", "Classified Scan Databanks");
             EliteMatsLookup.Add("classifiedscandata", "Classified Scan Fragment");
             EliteMatsLookup.Add("industrialfirmware", "Cracked Industrial Firmware");
-            EliteMatsLookup.Add("dataminedwakeexceptions", "Datamined Wake Exceptions");
+            EliteMatsLookup.Add("dataminedwake", "Datamined Wake Exceptions");
             EliteMatsLookup.Add("decodedemissiondata", "Decoded Emission Data");
             EliteMatsLookup.Add("shieldcyclerecordings", "Distorted Shield Cycle Recordings");
             EliteMatsLookup.Add("encodedscandata", "Divergent Scan Data");
@@ -150,17 +160,17 @@ namespace Picard
             EliteMatsLookup.Add("peculiarshieldfrequencydata", "Peculiar Shield Frequency Data");
             EliteMatsLookup.Add("securityfirmware", "Security Firmware Patch");
             EliteMatsLookup.Add("legacyfirmware", "Specialised Legacy Firmware");
-            EliteMatsLookup.Add("strangewakesolutions", "Strange Wake Solutions");
+            EliteMatsLookup.Add("wakesolutions", "Strange Wake Solutions");
             EliteMatsLookup.Add("encryptioncodes", "Tagged Encryption Codes");
             EliteMatsLookup.Add("emissiondata", "Unexpected Emission Data");
             EliteMatsLookup.Add("scanarchives", "Unidentified Scan Archives");
-            EliteMatsLookup.Add("untypicalshieldscans", "Untypical Shield Scans");
+            EliteMatsLookup.Add("shielddensityreports", "Untypical Shield Scans");
             EliteMatsLookup.Add("encryptedfiles", "Unusual Encrypted Files");
             EliteMatsLookup.Add("articulationmotors", "Articulation Motors");
             EliteMatsLookup.Add("bromellite", "Bromellite");
             EliteMatsLookup.Add("cmmcomposite", "CMM Composite");
             EliteMatsLookup.Add("emergencypowercells", "Emergency Power Cells");
-            EliteMatsLookup.Add("energygridassembly", "Energy Grid Assembly");
+            EliteMatsLookup.Add("powergridassembly", "Energy Grid Assembly");
             EliteMatsLookup.Add("exhaustmanifold", "Exhaust Manifold");
             EliteMatsLookup.Add("hardwarediagnosticsensor", "Hardware Diagnostic Sensor");
             EliteMatsLookup.Add("heatsinkinterlink", "Heatsink Interlink");
@@ -552,17 +562,20 @@ namespace Picard
             return orig;
         }
 
-        public IDictionary<string, int> FilterOnlyInaraMats(IDictionary<string, int> deltas)
+        public IDictionary<string, int> FilterOnlyInaraMats(IDictionary<string, int> deltas, IDictionary<string, int> removed)
         {
             // TODO: This should really be looking at the data just pulled
             // from Inara
             var ret = new Dictionary<string, int>();
 
-            foreach(var mat in EliteMatsLookup.Values)
+            foreach(var mat in deltas)
             {
-                if(deltas.ContainsKey(mat))
+                if(EliteMatsLookup.ContainsValue(mat.Key))
                 {
-                    ret.Add(mat, deltas[mat]);
+                    ret.Add(mat.Key, mat.Value);
+                } else if(!IgnoreCommodities.Contains(mat.Key))
+                {
+                    removed.Add(mat.Key, mat.Value);
                 }
             }
 
@@ -653,7 +666,7 @@ namespace Picard
                 }
             }
 
-            return FilterOnlyInaraMats(result);
+            return result;
         }
     }
 }
