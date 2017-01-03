@@ -29,6 +29,7 @@ namespace Picard
             {
                 i = new ListViewItem(u.Key);
                 i.SubItems.Add(u.Value.ToString());
+                listView1.Items.Add(i);
 
                 clipboard = clipboard + "IgnoreCommodities.Add(\"" + u.Key + "\");\n";
             }

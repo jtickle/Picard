@@ -16,7 +16,7 @@ namespace Picard
         /// <summary>
         /// The absolute path to the Elite log files
         /// </summary>
-        protected string LogFilePath;
+        public string LogFilePath { get; protected set; }
 
         /// <summary>
         /// The JsonSerializer that will be used to read log entries

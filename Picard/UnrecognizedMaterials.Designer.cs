@@ -31,10 +31,10 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.button1 = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label1 = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -72,6 +72,27 @@
             this.listView1.Size = new System.Drawing.Size(432, 469);
             this.listView1.TabIndex = 2;
             this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Elite Material";
+            this.columnHeader1.Width = 300;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Count";
+            // 
+            // label1
+            // 
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(432, 40);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Uh oh.  Found some mats we don\'t recognize.These have been copied to your clipboa" +
+    "rd for easy creation of a Github issue.  Or just paste directly into EliteLogs.c" +
+    "s around line 80.";
             // 
             // panel1
             // 
@@ -82,24 +103,6 @@
             this.panel1.Size = new System.Drawing.Size(432, 40);
             this.panel1.TabIndex = 3;
             // 
-            // label1
-            // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(432, 40);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Uh oh.  Found some mats we don\'t recognize.These have been copied to your clipboa" +
-    "rd for easy creation of a Github issue.";
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "Elite Material";
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Count";
-            // 
             // UnrecognizedMaterials
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -109,7 +112,7 @@
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.panel1);
             this.Name = "UnrecognizedMaterials";
-            this.Text = "UnrecognizedMaterials";
+            this.Text = "Unrecognized Materials/Commodities";
             this.Load += new System.EventHandler(this.UnrecognizedMaterials_Load);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
@@ -123,9 +126,9 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel panel1;
     }
 }

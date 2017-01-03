@@ -144,7 +144,7 @@
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.panel1);
             this.Name = "MatUpdateForm";
-            this.Text = "MatUpdateForm";
+            this.Text = "Update Inara.cz From Elite Logs";
             this.Load += new System.EventHandler(this.MatUpdateForm_Load);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();

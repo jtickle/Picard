@@ -9,7 +9,7 @@ namespace Picard
 {
     public class PersistentState
     {
-        protected string StateFile;
+        public string StateFile { get; protected set; }
         protected JsonSerializer Serializer;
 
         public State CurrentState = null;

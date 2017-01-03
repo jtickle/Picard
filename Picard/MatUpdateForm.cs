@@ -341,9 +341,10 @@ namespace Picard
             if (DeltaTools.IsNegative(result))
             {
                 // TODO: all of this, better logging, reporting, etc
-                MessageBox.Show("Oh no.  Your Material count has gone into the negative," +
-                               "which means something went wrong.  You will need to manually" +
-                               "re-synchronize with Inara and reset your Picard State file.",
+                MessageBox.Show("Oh no.  Your Material count has gone into the negative, " +
+                               "which means something went wrong.  You will need to manually " +
+                               "re-synchronize with Inara and reset your Picard State file " +
+                               "by deleting " + state.StateFile,
                                "Very Unfortunate Error");
                 return;
             }
