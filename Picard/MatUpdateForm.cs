@@ -331,20 +331,20 @@ namespace Picard
 
         private void okButton_Click(object sender, EventArgs e)
         {
-            if(DeltaTools.IsNegative(result))
+            if (unknown.Count > 0)
+            {
+                UnrecognizedMaterials m = new UnrecognizedMaterials(unknown);
+                m.ShowDialog();
+                return;
+            }
+
+            if (DeltaTools.IsNegative(result))
             {
                 // TODO: all of this, better logging, reporting, etc
                 MessageBox.Show("Oh no.  Your Material count has gone into the negative," +
                                "which means something went wrong.  You will need to manually" +
                                "re-synchronize with Inara and reset your Picard State file.",
                                "Very Unfortunate Error");
-                return;
-            }
-
-            if(unknown.Count > 0)
-            {
-                UnrecognizedMaterials m = new UnrecognizedMaterials(unknown);
-                m.ShowDialog();
                 return;
             }
 

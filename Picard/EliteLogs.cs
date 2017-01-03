@@ -56,7 +56,30 @@ namespace Picard
             // Keep a list of commodities that we would like to ignore
             IgnoreCommodities = new List<string>();
             IgnoreCommodities.Add("Domestic Appliances");
-
+            IgnoreCommodities.Add("Reactive Armour");
+            IgnoreCommodities.Add("Tobacco");
+            IgnoreCommodities.Add("Consumer Technology");
+            IgnoreCommodities.Add("Meta-Alloys");
+            IgnoreCommodities.Add("Fish");
+            IgnoreCommodities.Add("Clothing");
+            IgnoreCommodities.Add("Animal Meat");
+            IgnoreCommodities.Add("Progenitor Cells");
+            IgnoreCommodities.Add("metaalloys");
+            IgnoreCommodities.Add("Food Cartridges");
+            IgnoreCommodities.Add("Basic Medicines");
+            IgnoreCommodities.Add("Narcotics");
+            IgnoreCommodities.Add("Survival Equipment");
+            IgnoreCommodities.Add("Tea");
+            IgnoreCommodities.Add("cryolite");
+            IgnoreCommodities.Add("Black Box");
+            IgnoreCommodities.Add("Advanced Medicines");
+            IgnoreCommodities.Add("Non-Lethal Weapons");
+            IgnoreCommodities.Add("Performance Enhancers");
+            IgnoreCommodities.Add("Grain");
+            IgnoreCommodities.Add("Beer");
+            IgnoreCommodities.Add("Hydrogen Fuel");
+            IgnoreCommodities.Add("Fruit and Vegetables");
+            IgnoreCommodities.Add("Coffee");
 
             // Yay, Elite's mat names are inconsistent!
             EliteMatsLookup = new Dictionary<string, string>();
@@ -337,7 +360,7 @@ namespace Picard
 
             // TODO: This should prompt the user to enter the correct information and
             // potentially send it on back to me for inclusion in the official list
-            return "unknown:" + eliteMat;
+            return eliteMat;
         }
 
         /// <summary>
