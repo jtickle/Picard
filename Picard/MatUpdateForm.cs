@@ -240,7 +240,7 @@ namespace Picard
             switch (result)
             {
                 case DialogResult.Abort:
-                    MessageBox.Show("Picard exited without saving state or updating Inara.cz.", "Picard");
+                    MessageBox.Show("Picard exited without updating Inara.cz.", "Picard");
                     Application.Exit();
                     return false;
 

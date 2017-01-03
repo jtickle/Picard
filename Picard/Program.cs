@@ -51,7 +51,7 @@ namespace Picard
 
                 if (!resultProvider.ShouldSave())
                 {
-                    MessageBox.Show("Picard exited without saving state or updating Inara.cz.", "Picard");
+                    MessageBox.Show("Picard exited without updating Inara.cz.", "Picard");
                     return;
                 }
 
@@ -69,7 +69,7 @@ namespace Picard
             // If the user closed without saving, exit without error
             if (!resultProvider.ShouldSave())
             {
-                MessageBox.Show("Picard exited without saving state or updating Inara.cz.", "Picard");
+                MessageBox.Show("Picard exited without updating Inara.cz.", "Picard");
                 return;
             }
 
