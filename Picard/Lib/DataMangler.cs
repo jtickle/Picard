@@ -149,7 +149,7 @@ namespace Picard.Lib
             EliteMatsLookup.Add("zinc", "Zinc");
             EliteMatsLookup.Add("zirconium", "Zirconium");
             EliteMatsLookup.Add("shieldpatternanalysis", "Aberrant Shield Pattern Analysis");
-            EliteMatsLookup.Add("compactemissiondata", "Abnormal Compact Emission Data");
+            EliteMatsLookup.Add("compactemissionsdata", "Abnormal Compact Emission Data");
             EliteMatsLookup.Add("adaptiveencryptorscapture", "Adaptive Encryptors Capture");
             EliteMatsLookup.Add("bulkscandata", "Anomalous Bulk Scan Data");
             EliteMatsLookup.Add("fsdtelemetry", "Anomalous FSD Telemetry");
