@@ -169,7 +169,7 @@ namespace Picard.Lib
             EliteMatsLookup.Add("consumerfirmware", "Modified Consumer Firmware");
             EliteMatsLookup.Add("embeddedfirmware", "Modified Embedded Firmware");
             EliteMatsLookup.Add("symmetrickeys", "Open Symmetric Keys");
-            EliteMatsLookup.Add("peculiarshieldfrequencydata", "Peculiar Shield Frequency Data");
+            EliteMatsLookup.Add("shieldfrequencydata", "Peculiar Shield Frequency Data");
             EliteMatsLookup.Add("securityfirmware", "Security Firmware Patch");
             EliteMatsLookup.Add("legacyfirmware", "Specialised Legacy Firmware");
             EliteMatsLookup.Add("wakesolutions", "Strange Wake Solutions");
