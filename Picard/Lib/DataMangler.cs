@@ -41,7 +41,6 @@ namespace Picard.Lib
             MaterialTypes.Add("Materials");
             MaterialTypes.Add("Data");
             MaterialTypes.Add("Commodities");
-            MaterialTypes.Add("DebugUnknown");
 
             // Ignored Commodities
             IgnoreCommodities.Add("Domestic Appliances");
