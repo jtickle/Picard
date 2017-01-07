@@ -221,33 +221,32 @@ namespace Picard.NormalRun
                 !DeltaTools.IsZero(deltas) || inaraCorrection != null);
         }
 
-        protected async void SaveDataAndClose()
+        protected void SaveDataAndClose()
         {
             // Show post status form to indicate we are doing something
             var post = new PostForm();
             post.Loading = true;
-            post.Show();
-
-            // If there was an Inara Correction, save that to history first
-            if (inaraCorrection != null)
+            post.Load += async (object sender, EventArgs args) =>
             {
-                state.AddHistory(inaraCorrection);
-            }
+                // If there was an Inara Correction, save that to history first
+                if (inaraCorrection != null)
+                {
+                    state.AddHistory(inaraCorrection);
+                }
 
-            // If there were updates to post to Inara, post them
-            if (!DeltaTools.IsZero(deltas))
-            {
-                await api.PostMaterialsSheet(result);
-            }
+                // If there were updates to post to Inara, post them
+                if (!DeltaTools.IsZero(deltas))
+                {
+                    await api.PostMaterialsSheet(result);
+                }
 
-            // Save to History
-            state.AddHistory(deltas);
+                // Save to History
+                state.AddHistory(deltas);
 
-            // Update post status form to indicate we are finished
-            post.Loading = false;
+                // Update post status form to indicate we are finished
+                post.Loading = false;
+            };
 
-            // Await user response.
-            post.Hide();
             post.ShowDialog();
         }
 
