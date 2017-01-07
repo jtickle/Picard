@@ -70,6 +70,7 @@ namespace Picard.Lib
             IgnoreCommodities.Add("Fruit and Vegetables");
             IgnoreCommodities.Add("Coffee");
             IgnoreCommodities.Add("Agri-Medicines");
+            IgnoreCommodities.Add("occupiedcryopod");
             IgnoreCommodities.Add("Silver");
 
             // Elite Log Material Name Lookup
