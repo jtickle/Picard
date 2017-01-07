@@ -172,6 +172,8 @@ namespace Picard.NormalRun
 
         protected void UpdateFormWithCurrentTotals()
         {
+            totalsDeltas["DebugUnknown"] = unknown.Count;
+
             foreach (var type in MaterialTypes)
             {
                 form.AddMaterial(type + " Total",
