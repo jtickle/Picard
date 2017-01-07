@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Picard
+namespace Picard.Authentication
 {
     public partial class WelcomeLoginForm : Form
     {
@@ -25,6 +18,9 @@ namespace Picard
         /// </summary>
         public bool AutoLogin = false;
 
+        /// <summary>
+        /// Username field for Inara authentication
+        /// </summary>
         public string User
         {
             get
@@ -37,6 +33,9 @@ namespace Picard
             }
         }
 
+        /// <summary>
+        /// Password field for Inara authentication
+        /// </summary>
         public string Pass
         {
             get
@@ -49,6 +48,9 @@ namespace Picard
             }
         }
 
+        /// <summary>
+        /// Bright red text indicating what went wrong
+        /// </summary>
         public string ErrorLabel
         {
             get
@@ -68,6 +70,9 @@ namespace Picard
             Pass = "";
         }
 
+        /// <summary>
+        /// Hide inputs and indicate that the program is doing something
+        /// </summary>
         public void SetLoginState()
         {
             LoginFormPanel.Hide();
@@ -75,17 +80,31 @@ namespace Picard
             StatusLabel.Text = "Logging Into Inara.cz...";
         }
 
+        /// <summary>
+        /// Show inputs
+        /// </summary>
         public void SetUserInputState()
         {
             LoginFormPanel.Show();
             LoggingInPanel.Hide();
         }
 
+        /// <summary>
+        /// The user indicates that they wish to attempt authentication
+        /// </summary>
+        /// <param name="sender">Ignored</param>
+        /// <param name="e">Ignored</param>
         private void button1_Click(object sender, EventArgs e)
         {
             TryAuthentication(this, new EventArgs());
         }
 
+        /// <summary>
+        /// If AutoLogin has been set to true, we presume that so has User and
+        /// Pass, and attempt a login as soon as the form is visible.
+        /// </summary>
+        /// <param name="sender">Ignored</param>
+        /// <param name="e">Ignored</param>
         private void WelcomeLoginForm_Load(object sender, EventArgs e)
         {
             if (AutoLogin)

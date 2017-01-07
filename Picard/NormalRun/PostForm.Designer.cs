@@ -1,4 +1,4 @@
-﻿namespace Picard
+﻿namespace Picard.NormalRun
 {
     partial class PostForm
     {
@@ -75,7 +75,6 @@
             this.Controls.Add(this.flowLayoutPanel1);
             this.Name = "PostForm";
             this.Text = "Updating Inara.cz...";
-            this.Load += new System.EventHandler(this.PostForm_Load);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);

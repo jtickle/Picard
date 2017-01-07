@@ -1,4 +1,4 @@
-﻿namespace Picard
+﻿namespace Picard.FirstRun
 {
     partial class MatInitialVerifyForm
     {

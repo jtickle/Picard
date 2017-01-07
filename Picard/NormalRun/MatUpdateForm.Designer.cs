@@ -1,4 +1,4 @@
-﻿namespace Picard
+﻿namespace Picard.NormalRun
 {
     partial class MatUpdateForm
     {
@@ -36,9 +36,9 @@
             this.MatsView = new System.Windows.Forms.ListView();
             this.MatName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.MatLast = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.MatCorrection = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.MatDelta = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.MatResult = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.MatCorrection = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.flowLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -127,6 +127,10 @@
             // 
             this.MatLast.Text = "Current";
             // 
+            // MatCorrection
+            // 
+            this.MatCorrection.Text = "Correction";
+            // 
             // MatDelta
             // 
             this.MatDelta.Text = "Delta";
@@ -134,10 +138,6 @@
             // MatResult
             // 
             this.MatResult.Text = "Elite";
-            // 
-            // MatCorrection
-            // 
-            this.MatCorrection.Text = "Correction";
             // 
             // MatUpdateForm
             // 
@@ -149,6 +149,7 @@
             this.Controls.Add(this.panel1);
             this.Name = "MatUpdateForm";
             this.Text = "Update Inara.cz From Elite Logs";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MatUpdateForm_FormClosing);
             this.Load += new System.EventHandler(this.MatUpdateForm_Load);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();

@@ -1,4 +1,4 @@
-﻿namespace Picard
+﻿namespace Picard.NormalRun
 {
     partial class UnrecognizedMaterials
     {

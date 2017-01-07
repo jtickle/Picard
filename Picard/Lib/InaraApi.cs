@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 
-namespace Picard
+namespace Picard.Lib
 {
     /// <summary>
     /// Convenience functions for working with Inara.cz.  It's mostly HTTP form posts.
@@ -379,6 +379,15 @@ namespace Picard
 
             // Parse the HTML
             return await parseMaterialsSheet(response);
+        }
+
+        /// <summary>
+        /// Clear the materials cache so that on the next call to
+        /// GetMaterialsSheet, it will go fetch from Inara
+        /// </summary>
+        public void ClearMaterialsCache()
+        {
+            MaterialsCache = null;
         }
 
         public async Task<IDictionary<string, int>> PostMaterialsSheet(IDictionary<string, int> totals)

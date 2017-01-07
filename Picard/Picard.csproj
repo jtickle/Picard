@@ -69,51 +69,54 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\AuthenticationController.cs" />
+    <Compile Include="FirstRun\FirstRunController.cs" />
+    <Compile Include="Lib\DataMangler.cs" />
     <Compile Include="Lib\DeltaTools.cs" />
     <Compile Include="Lib\EliteLogs.cs" />
     <Compile Include="Lib\InaraApi.cs" />
-    <Compile Include="Form\IGetData.cs" />
-    <Compile Include="Form\MatUpdateForm.cs">
+    <Compile Include="NormalRun\MatUpdateForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\MatUpdateForm.Designer.cs">
+    <Compile Include="NormalRun\MatUpdateForm.Designer.cs">
       <DependentUpon>MatUpdateForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Lib\PersistentState.cs" />
-    <Compile Include="Form\PostForm.cs">
+    <Compile Include="NormalRun\NormalRunController.cs" />
+    <Compile Include="NormalRun\PostForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\PostForm.Designer.cs">
+    <Compile Include="NormalRun\PostForm.Designer.cs">
       <DependentUpon>PostForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Lib\State.cs" />
-    <Compile Include="Form\UnrecognizedMaterials.cs">
+    <Compile Include="NormalRun\UnrecognizedMaterials.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\UnrecognizedMaterials.Designer.cs">
+    <Compile Include="NormalRun\UnrecognizedMaterials.Designer.cs">
       <DependentUpon>UnrecognizedMaterials.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\WelcomeLoginForm.cs">
+    <Compile Include="Authentication\WelcomeLoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\WelcomeLoginForm.Designer.cs">
+    <Compile Include="Authentication\WelcomeLoginForm.Designer.cs">
       <DependentUpon>WelcomeLoginForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\MatInitialVerifyForm.cs">
+    <Compile Include="FirstRun\MatInitialVerifyForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\MatInitialVerifyForm.Designer.cs">
+    <Compile Include="FirstRun\MatInitialVerifyForm.Designer.cs">
       <DependentUpon>MatInitialVerifyForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form\MatInitialVerifyForm.resx">
+    <EmbeddedResource Include="FirstRun\MatInitialVerifyForm.resx">
       <DependentUpon>MatInitialVerifyForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\MatUpdateForm.resx">
+    <EmbeddedResource Include="NormalRun\MatUpdateForm.resx">
       <DependentUpon>MatUpdateForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\PostForm.resx">
+    <EmbeddedResource Include="NormalRun\PostForm.resx">
       <DependentUpon>PostForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -125,10 +128,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Form\UnrecognizedMaterials.resx">
+    <EmbeddedResource Include="NormalRun\UnrecognizedMaterials.resx">
       <DependentUpon>UnrecognizedMaterials.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\WelcomeLoginForm.resx">
+    <EmbeddedResource Include="Authentication\WelcomeLoginForm.resx">
       <DependentUpon>WelcomeLoginForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />

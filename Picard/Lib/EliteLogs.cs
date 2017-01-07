@@ -2,14 +2,11 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Globalization;
 
-namespace Picard
+namespace Picard.Lib
 {
     public class EliteLogs
     {
@@ -80,6 +77,8 @@ namespace Picard
             IgnoreCommodities.Add("Hydrogen Fuel");
             IgnoreCommodities.Add("Fruit and Vegetables");
             IgnoreCommodities.Add("Coffee");
+            IgnoreCommodities.Add("Agri-Medicines");
+
 
             // Yay, Elite's mat names are inconsistent!
             EliteMatsLookup = new Dictionary<string, string>();
@@ -175,7 +174,7 @@ namespace Picard
             EliteMatsLookup.Add("encodedscandata", "Divergent Scan Data");
             EliteMatsLookup.Add("hyperspacetrajectories", "Eccentric Hyperspace Trajectories");
             EliteMatsLookup.Add("scrambledemissiondata", "Exceptional Scrambled Emission Data");
-            EliteMatsLookup.Add("inconsistentshieldsoakanalysis", "Inconsistent Shield Soak Analysis");
+            EliteMatsLookup.Add("shieldsoakanalysis", "Inconsistent Shield Soak Analysis");
             EliteMatsLookup.Add("archivedemissiondata", "Irregular Emission Data");
             EliteMatsLookup.Add("consumerfirmware", "Modified Consumer Firmware");
             EliteMatsLookup.Add("embeddedfirmware", "Modified Embedded Firmware");

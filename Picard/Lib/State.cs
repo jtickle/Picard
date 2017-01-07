@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Picard
+namespace Picard.Lib
 {
     using HistorySet = Dictionary<DateTime, IDictionary<string, int>>;
     using IHistorySet = IDictionary<DateTime, IDictionary<string, int>>;

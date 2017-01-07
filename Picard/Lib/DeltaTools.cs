@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Picard
+namespace Picard.Lib
 {
     using DeltaDict = Dictionary<string, int>;
     using IDeltaDict = IDictionary<string, int>;
@@ -115,6 +112,31 @@ namespace Picard
             }
 
             return false;
+        }
+
+        public static bool IsExactlyEqual(IDeltaDict a, IDeltaDict b)
+        {
+            bool currentMatch = true;
+
+            foreach (var key in a.Keys.Union(b.Keys))
+            {
+                // No match if either set is missing the key
+                if (!a.Keys.Contains(key))
+                {
+                    currentMatch = false;
+                }
+                else if (!b.Keys.Contains(key))
+                {
+                    currentMatch = false;
+                }
+                // And no match if they are both set but the values are different
+                else if (a[key] != b[key])
+                {
+                    currentMatch = false;
+                }
+            }
+
+            return currentMatch;
         }
     }
 }

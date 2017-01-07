@@ -1,4 +1,4 @@
-﻿namespace Picard
+﻿namespace Picard.Authentication
 {
     partial class WelcomeLoginForm
     {
