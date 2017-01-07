@@ -28,152 +28,30 @@ namespace Picard.NormalRun
         /// <summary>
         /// The type of each material, for accounting
         /// </summary>
-        public IDictionary<string, string> MatType;
+        public IDictionary<string, string> MaterialTypeLookup;
 
-        public NormalRunController(InaraApi api, PersistentState state, EliteLogs logs)
+        public IList<string> MaterialTypes;
+
+        public NormalRunController(
+            InaraApi api,
+            PersistentState state,
+            EliteLogs logs,
+            IDictionary<string, string> MaterialTypeLookup,
+            IList<string> MaterialTypes)
         {
             this.api = api;
             this.state = state;
             this.logs = logs;
+            this.MaterialTypeLookup = MaterialTypeLookup;
+            this.MaterialTypes = new List<string>(MaterialTypes);
+
+            this.MaterialTypes.Add("DebugUnknown");
+            this.MaterialTypes.Add("Grand");
 
             form = new MatUpdateForm();
             form.ReloadMats += OnReloadMats;
             form.PostAndSave += OnPostAndSave;
             form.CloseWithoutSave += OnCloseWithoutSave;
-
-            MatType = new Dictionary<string, string>();
-            MatType.Add("Antimony", "Materials");
-            MatType.Add("Arsenic", "Materials");
-            MatType.Add("Basic Conductors", "Materials");
-            MatType.Add("Biotech Conductors", "Materials");
-            MatType.Add("Cadmium", "Materials");
-            MatType.Add("Carbon", "Materials");
-            MatType.Add("Chemical Distillery", "Materials");
-            MatType.Add("Chemical Manipulators", "Materials");
-            MatType.Add("Chemical Processors", "Materials");
-            MatType.Add("Chemical Storage Units", "Materials");
-            MatType.Add("Chromium", "Materials");
-            MatType.Add("Compact Composites", "Materials");
-            MatType.Add("Compound Shielding", "Materials");
-            MatType.Add("Conductive Ceramics", "Materials");
-            MatType.Add("Conductive Components", "Materials");
-            MatType.Add("Conductive Polymers", "Materials");
-            MatType.Add("Configurable Components", "Materials");
-            MatType.Add("Core Dynamics Composites", "Materials");
-            MatType.Add("Crystal Shards", "Materials");
-            MatType.Add("Electrochemical Arrays", "Materials");
-            MatType.Add("Exquisite Focus Crystals", "Materials");
-            MatType.Add("Filament Composites", "Materials");
-            MatType.Add("Flawed Focus Crystals", "Materials");
-            MatType.Add("Focus Crystals", "Materials");
-            MatType.Add("Galvanising Alloys", "Materials");
-            MatType.Add("Germanium", "Materials");
-            MatType.Add("Grid Resistors", "Materials");
-            MatType.Add("Heat Conduction Wiring", "Materials");
-            MatType.Add("Heat Dispersion Plate", "Materials");
-            MatType.Add("Heat Exchangers", "Materials");
-            MatType.Add("Heat Resistant Ceramics", "Materials");
-            MatType.Add("Heat Vanes", "Materials");
-            MatType.Add("High Density Composites", "Materials");
-            MatType.Add("Hybrid Capacitors", "Materials");
-            MatType.Add("Imperial Shielding", "Materials");
-            MatType.Add("Improvised Components", "Materials");
-            MatType.Add("Iron", "Materials");
-            MatType.Add("Manganese", "Materials");
-            MatType.Add("Mechanical Components", "Materials");
-            MatType.Add("Mechanical Equipment", "Materials");
-            MatType.Add("Mechanical Scrap", "Materials");
-            MatType.Add("Mercury", "Materials");
-            MatType.Add("Military Grade Alloys", "Materials");
-            MatType.Add("Military Supercapacitors", "Materials");
-            MatType.Add("Molybdenum", "Materials");
-            MatType.Add("Nickel", "Materials");
-            MatType.Add("Niobium", "Materials");
-            MatType.Add("Pharmaceutical Isolators", "Materials");
-            MatType.Add("Phase Alloys", "Materials");
-            MatType.Add("Phosphorus", "Materials");
-            MatType.Add("Polonium", "Materials");
-            MatType.Add("Polymer Capacitors", "Materials");
-            MatType.Add("Precipitated Alloys", "Materials");
-            MatType.Add("Proprietary Composites", "Materials");
-            MatType.Add("Proto Heat Radiators", "Materials");
-            MatType.Add("Proto Light Alloys", "Materials");
-            MatType.Add("Proto Radiolic Alloys", "Materials");
-            MatType.Add("Refined Focus Crystals", "Materials");
-            MatType.Add("Ruthenium", "Materials");
-            MatType.Add("Salvaged Alloys", "Materials");
-            MatType.Add("Selenium", "Materials");
-            MatType.Add("Shield Emitters", "Materials");
-            MatType.Add("Shielding Sensors", "Materials");
-            MatType.Add("Sulphur", "Materials");
-            MatType.Add("Technetium", "Materials");
-            MatType.Add("Tellurium", "Materials");
-            MatType.Add("Tempered Alloys", "Materials");
-            MatType.Add("Thermic Alloys", "Materials");
-            MatType.Add("Tin", "Materials");
-            MatType.Add("Tungsten", "Materials");
-            MatType.Add("Unknown Fragment", "Materials");
-            MatType.Add("Vanadium", "Materials");
-            MatType.Add("Worn Shield Emitters", "Materials");
-            MatType.Add("Yttrium", "Materials");
-            MatType.Add("Zinc", "Materials");
-            MatType.Add("Zirconium", "Materials");
-            MatType.Add("Aberrant Shield Pattern Analysis", "Data");
-            MatType.Add("Abnormal Compact Emission Data", "Data");
-            MatType.Add("Adaptive Encryptors Capture", "Data");
-            MatType.Add("Anomalous Bulk Scan Data", "Data");
-            MatType.Add("Anomalous FSD Telemetry", "Data");
-            MatType.Add("Atypical Disrupted Wake Echoes", "Data");
-            MatType.Add("Atypical Encryption Archives", "Data");
-            MatType.Add("Classified Scan Databanks", "Data");
-            MatType.Add("Classified Scan Fragment", "Data");
-            MatType.Add("Cracked Industrial Firmware", "Data");
-            MatType.Add("Datamined Wake Exceptions", "Data");
-            MatType.Add("Decoded Emission Data", "Data");
-            MatType.Add("Distorted Shield Cycle Recordings", "Data");
-            MatType.Add("Divergent Scan Data", "Data");
-            MatType.Add("Eccentric Hyperspace Trajectories", "Data");
-            MatType.Add("Exceptional Scrambled Emission Data", "Data");
-            MatType.Add("Inconsistent Shield Soak Analysis", "Data");
-            MatType.Add("Irregular Emission Data", "Data");
-            MatType.Add("Modified Consumer Firmware", "Data");
-            MatType.Add("Modified Embedded Firmware", "Data");
-            MatType.Add("Open Symmetric Keys", "Data");
-            MatType.Add("Peculiar Shield Frequency Data", "Data");
-            MatType.Add("Security Firmware Patch", "Data");
-            MatType.Add("Specialised Legacy Firmware", "Data");
-            MatType.Add("Strange Wake Solutions", "Data");
-            MatType.Add("Tagged Encryption Codes", "Data");
-            MatType.Add("Unexpected Emission Data", "Data");
-            MatType.Add("Unidentified Scan Archives", "Data");
-            MatType.Add("Untypical Shield Scans", "Data");
-            MatType.Add("Unusual Encrypted Files", "Data");
-            MatType.Add("Articulation Motors", "Commodities");
-            MatType.Add("Bromellite", "Commodities");
-            MatType.Add("CMM Composite", "Commodities");
-            MatType.Add("Emergency Power Cells", "Commodities");
-            MatType.Add("Energy Grid Assembly", "Commodities");
-            MatType.Add("Exhaust Manifold", "Commodities");
-            MatType.Add("Hardware Diagnostic Sensor", "Commodities");
-            MatType.Add("Heatsink Interlink", "Commodities");
-            MatType.Add("HN Shock Mount", "Commodities");
-            MatType.Add("Insulating Membrane", "Commodities");
-            MatType.Add("Ion Distributor", "Commodities");
-            MatType.Add("Magnetic Emitter Coil", "Commodities");
-            MatType.Add("Micro Controllers", "Commodities");
-            MatType.Add("Micro-Weave Cooling Hoses", "Commodities");
-            MatType.Add("Modular Terminals", "Commodities");
-            MatType.Add("Nanobreakers", "Commodities");
-            MatType.Add("Neofabric Insulation", "Commodities");
-            MatType.Add("Osmium", "Commodities");
-            MatType.Add("Platinum", "Commodities");
-            MatType.Add("Power Converter", "Commodities");
-            MatType.Add("Power Transfer Bus", "Commodities");
-            MatType.Add("Praseodymium", "Commodities");
-            MatType.Add("Radiation Baffle", "Commodities");
-            MatType.Add("Reinforced Mounting Plate", "Commodities");
-            MatType.Add("Samarium", "Commodities");
-            MatType.Add("Telemetry Suite", "Commodities");
         }
 
         private async Task<IDictionary<string, int>> FigureOutInaraCorrection()
@@ -202,11 +80,10 @@ namespace Picard.NormalRun
         protected IDictionary<string, int> ReinitializeTotal()
         {
             var totals = new Dictionary<string, int>();
-            totals["Materials"] = 0;
-            totals["Data"] = 0;
-            totals["Commodities"] = 0;
-            totals["DebugUnknown"] = 0;
-            totals["Grand"] = 0;
+            foreach(var type in MaterialTypes)
+            {
+                totals[type] = 0;
+            }
             return totals;
         }
 
@@ -233,8 +110,8 @@ namespace Picard.NormalRun
 
         private void AddToTotal(IDictionary<string, int> totes, string key, int delta)
         {
-            var t = MatType.ContainsKey(key)
-                ? MatType[key]
+            var t = MaterialTypeLookup.ContainsKey(key)
+                ? MaterialTypeLookup[key]
                 : "DebugUnknown";
 
             totes["Grand"] += delta;
@@ -295,14 +172,7 @@ namespace Picard.NormalRun
 
         protected void UpdateFormWithCurrentTotals()
         {
-            var types = new List<string>();
-            types.Add("Materials");
-            types.Add("Data");
-            types.Add("Commodities");
-            types.Add("DebugUnknown");
-            types.Add("Grand");
-
-            foreach (var type in types)
+            foreach (var type in MaterialTypes)
             {
                 form.AddMaterial(type + " Total",
                     totalsLast[type],

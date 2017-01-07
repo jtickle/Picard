@@ -19,15 +19,21 @@ namespace Picard
             // these next two codes.
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            // Picard Persistent State
+            PersistentState state = new PersistentState();
+
+            // Internal Constants
+            DataMangler dm = new DataMangler();
             
             // Inara.cz API
             InaraApi api = new InaraApi();
 
             // Elite: Dangerous Gameplay Logs
-            EliteLogs logs = new EliteLogs();
-
-            // Picard Persistent State
-            PersistentState state = new PersistentState();
+            EliteLogs logs = new EliteLogs(
+                dm.EliteMatsLookup,
+                dm.IgnoreCommodities,
+                dm.EngineerCostLookup);
 
             // Show a login dialog box and handle user authentication with Inara
             AuthenticationController authCtrl = new AuthenticationController(api, state);
@@ -42,13 +48,17 @@ namespace Picard
             {
                 // If there is no stored history, perform an initial
                 // import and then exit
-                FirstRunController firstRunCtrl = new FirstRunController(api, state);
+                FirstRunController firstRunCtrl = new FirstRunController(
+                    api, state);
                 firstRunCtrl.Run();
             }
             else
             {
                 // If there is stored history, run the main program.
-                NormalRunController normalRunCtrl = new NormalRunController(api, state, logs);
+                NormalRunController normalRunCtrl = new NormalRunController(
+                    api, state, logs,
+                    dm.MaterialTypeLookup,
+                    dm.MaterialTypes);
                 normalRunCtrl.Run();
             }
         }
