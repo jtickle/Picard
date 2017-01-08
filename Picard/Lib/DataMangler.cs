@@ -79,6 +79,7 @@ namespace Picard.Lib
             IgnoreCommodities.Add("gallium");
             IgnoreCommodities.Add("beryllium");
             IgnoreCommodities.Add("computercomponents");
+            IgnoreCommodities.Add("Cobalt");
 
             // Elite Log Material Name Lookup
             EliteMatsLookup.Add("antimony", "Antimony");
@@ -159,7 +160,7 @@ namespace Picard.Lib
             EliteMatsLookup.Add("zirconium", "Zirconium");
             EliteMatsLookup.Add("shieldpatternanalysis", "Aberrant Shield Pattern Analysis");
             EliteMatsLookup.Add("compactemissionsdata", "Abnormal Compact Emission Data");
-            EliteMatsLookup.Add("adaptiveencryptorscapture", "Adaptive Encryptors Capture");
+            EliteMatsLookup.Add("adaptiveencryptors", "Adaptive Encryptors Capture");
             EliteMatsLookup.Add("bulkscandata", "Anomalous Bulk Scan Data");
             EliteMatsLookup.Add("fsdtelemetry", "Anomalous FSD Telemetry");
             EliteMatsLookup.Add("disruptedwakeechoes", "Atypical Disrupted Wake Echoes");
