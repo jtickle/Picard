@@ -80,6 +80,13 @@ namespace Picard.Lib
             IgnoreCommodities.Add("beryllium");
             IgnoreCommodities.Add("computercomponents");
             IgnoreCommodities.Add("Cobalt");
+            IgnoreCommodities.Add("Bertrandite");
+            IgnoreCommodities.Add("Gallite");
+            IgnoreCommodities.Add("Mineral Extractors");
+            IgnoreCommodities.Add("nerveagents");
+            IgnoreCommodities.Add("syntheticreagents");
+            IgnoreCommodities.Add("bootlegliquor");
+            IgnoreCommodities.Add("powergenerators");
 
             // Elite Log Material Name Lookup
             EliteMatsLookup.Add("antimony", "Antimony");
