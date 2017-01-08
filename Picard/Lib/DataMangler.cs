@@ -71,7 +71,14 @@ namespace Picard.Lib
             IgnoreCommodities.Add("Agri-Medicines");
             IgnoreCommodities.Add("occupiedcryopod");
             IgnoreCommodities.Add("Silver");
-            IgnoreCommodities.Add("Cobalt");
+            IgnoreCommodities.Add("Palladium");
+            IgnoreCommodities.Add("polymers");
+            IgnoreCommodities.Add("semiconductors");
+            IgnoreCommodities.Add("skimercomponents");
+            IgnoreCommodities.Add("gold");
+            IgnoreCommodities.Add("gallium");
+            IgnoreCommodities.Add("beryllium");
+            IgnoreCommodities.Add("computercomponents");
 
             // Elite Log Material Name Lookup
             EliteMatsLookup.Add("antimony", "Antimony");
