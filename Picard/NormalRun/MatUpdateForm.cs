@@ -131,7 +131,6 @@ namespace Picard.NormalRun
             switch (result)
             {
                 case DialogResult.Abort:
-                    MessageBox.Show("Picard exited without updating Inara.cz.", "Picard");
                     Application.Exit();
                     return false;
 
@@ -144,6 +143,18 @@ namespace Picard.NormalRun
                     // Just use Picard's values and proceed
                     return false;
             }
+        }
+
+        public void NewInaraMaterialsNotification()
+        {
+            MessageBox.Show(
+                "Good news: seems there was a game update!\n" +
+                "Bad news: you will need to upgrade Picard.\n\n" +
+                "A new version will be available soon from\n" +
+                "https://jtickle.github.com/picard\n\n" +
+                "In the mean time, Picard will quit without saving " +
+                "in order to avoid risk to your data.",
+                "Time to Upgrade!");
         }
 
         public void ShowNegativeValueBadNews(string StateFile)

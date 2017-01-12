@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -65,6 +66,15 @@ namespace Picard.NormalRun
                 return null;
             }
 
+            var inaraChange = new HashSet<string>(inaraMats.Keys);
+            inaraChange.ExceptWith(new HashSet<string>(last.Keys));
+
+            if (inaraChange.Count > 0)
+            {
+                form.NewInaraMaterialsNotification();
+                Application.Exit();
+            }
+            
             if(form.DoesUserWantInaraCorrection())
             {
                 // Apply a correction to Picard's values
