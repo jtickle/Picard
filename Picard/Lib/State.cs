@@ -11,6 +11,7 @@ namespace Picard.Lib
         public string CmdrName = "";
         public string InaraU = "";
         public string InaraP = "";
+        public int DataVersion = 0;
         public IHistorySet History;
 
         public State()

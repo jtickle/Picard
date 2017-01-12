@@ -118,31 +118,18 @@ namespace Picard.NormalRun
         /// </summary>
         public bool DoesUserWantInaraCorrection()
         {
-            var result = MessageBox.Show("There is a disagreement between Picard and Inara " +
-                                         "regarding your current material counts.\n\n" +
-                                         "If you have NOT recently manually updated Inara, click Abort and report a bug.\n" +
-                                         "If you have recently manually updated Inara, click Retry.\n" +
-                                         "If you know what is going on and just want to use Picard's values, click Ignore.\n\n\n\n" +
-                                         "Abort, Retry, Ignore.  Troll programmer is troll.",
-                                         "Why are these two sci-fi characters even speaking to each other?",
-                                         MessageBoxButtons.AbortRetryIgnore,
-                                         MessageBoxIcon.Error,
-                                         MessageBoxDefaultButton.Button1);
-            switch (result)
-            {
-                case DialogResult.Abort:
-                    Application.Exit();
-                    return false;
+            var result = MessageBox.Show(
+                "There is a disagreement between Picard and Inara " +
+                "regarding your current material counts.\n\n" +
+                "If you recently MANUALLY updated Inara and want " +
+                "to synchronize, click OK.\n\n" +
+                "If you want to quit without saving, click Cancel.",
+                "Why are these two characters even speaking to each other?",
+                MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Error,
+                MessageBoxDefaultButton.Button2);
 
-                case DialogResult.Retry:
-                default:
-                    // Get data from Inara and apply a correction
-                    return true;
-
-                case DialogResult.Ignore:
-                    // Just use Picard's values and proceed
-                    return false;
-            }
+            return result == DialogResult.OK;
         }
 
         public void NewInaraMaterialsNotification()

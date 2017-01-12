@@ -24,7 +24,7 @@ namespace Picard
             PersistentState state = new PersistentState();
 
             // Internal Constants
-            DataMangler dm = new DataMangler();
+            DataMangler dm = DataMangler.GetInstance();
             
             // Inara.cz API
             InaraApi api = new InaraApi();

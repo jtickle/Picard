@@ -90,9 +90,9 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(432, 40);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Uh oh.  Fund some mats we don\'t recognize.These have been copied to your clipboar" +
-    "d for easy creation of a Github issue.  Or just paste directly into DataMangler." +
-    "cs around line 70.";
+            this.label1.Text = "Uh oh.  Found some mats we don\'t recognize.These have been copied to your clipboa" +
+    "rd for easy creation of a Github issue.";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // panel1
             // 

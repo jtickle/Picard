@@ -25,7 +25,7 @@ namespace Picard.NormalRun
                 i.SubItems.Add(u.Value.ToString());
                 listView1.Items.Add(i);
 
-                clipboard = clipboard + "IgnoreCommodities.Add(\"" + u.Key + "\");\n";
+                clipboard +=  u.Key + "\n";
             }
 
             Clipboard.SetDataObject(clipboard, true);
@@ -34,6 +34,11 @@ namespace Picard.NormalRun
         private void button1_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

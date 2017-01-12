@@ -71,6 +71,12 @@ namespace Picard.NormalRun
 
             if (inaraChange.Count > 0)
             {
+                foreach(var mat in inaraMats.Keys)
+                {
+                    if(!last.ContainsKey(mat))
+                        Console.WriteLine("EliteMatsLookup.Add(\"\", \"" + mat +
+                            "\");");
+                }
                 form.NewInaraMaterialsNotification();
                 Application.Exit();
             }
@@ -82,7 +88,8 @@ namespace Picard.NormalRun
             }
             else
             {
-                // Do not apply a correction to Picard's values (probably bad)
+                // Quit without saving
+                Application.Exit();
                 return null;
             }
         }

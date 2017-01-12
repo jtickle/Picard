@@ -83,6 +83,7 @@ namespace Picard.Lib
 
         /// <summary>
         /// Gets the current inventory from the perspective of the Picard state file
+        /// As a side-effect, adds any updates available from DataMangler
         /// </summary>
         /// <returns>
         /// A dictionary of all the materials and changes that have been recorded
@@ -92,12 +93,36 @@ namespace Picard.Lib
         {
             IDictionary<string, int> result = new Dictionary<string, int>();
 
+            // Doing updates first prevents values from being blown away
+            // and hurts nothing
+
+            ApplyUpdates(result);
+
             foreach(var time in CurrentState.History)
             {
                 result = DeltaTools.Add(result, time.Value);
             }
 
             return result;
+        }
+
+        public void ApplyUpdates(IDictionary<string, int> result)
+        {
+            var dm = DataMangler.GetInstance();
+
+            IDictionary<string, int> patch = new Dictionary<string, int>();
+            foreach (var update in dm.GetUpdates(result,
+                CurrentState.DataVersion))
+            {
+                result[update] = 0;
+                patch[update] = 0;
+            }
+
+            if (patch.Count == 0)
+                return;
+
+            CurrentState.DataVersion = dm.DataVersion;
+            AddHistory(patch);
         }
 
         /// <summary>
