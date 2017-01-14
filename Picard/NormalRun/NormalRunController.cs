@@ -12,6 +12,7 @@ namespace Picard.NormalRun
         protected InaraApi api;
         protected PersistentState state;
         protected EliteLogs logs;
+        protected DataMangler dm;
 
         protected MatUpdateForm form;
 
@@ -37,17 +38,18 @@ namespace Picard.NormalRun
             InaraApi api,
             PersistentState state,
             EliteLogs logs,
-            IDictionary<string, string> MaterialTypeLookup,
-            IList<string> MaterialTypes)
+            DataMangler dm)
         {
             this.api = api;
             this.state = state;
             this.logs = logs;
-            this.MaterialTypeLookup = MaterialTypeLookup;
-            this.MaterialTypes = new List<string>(MaterialTypes);
+            this.dm = dm;
 
-            this.MaterialTypes.Add("DebugUnknown");
-            this.MaterialTypes.Add("Grand");
+            MaterialTypeLookup = dm.MaterialTypeLookup;
+            MaterialTypes = new List<string>(dm.MaterialTypes);
+            MaterialTypes.Add("DebugUnknown");
+            MaterialTypes.Add("Grand");
+
 
             form = new MatUpdateForm();
             form.ReloadMats += OnReloadMats;
@@ -217,10 +219,15 @@ namespace Picard.NormalRun
 
             // Parse logs and get the changes to material counts
             // The filtering function adds unrecognized materials to unknown list
-            deltas =
-                logs.FilterOnlyInaraMats(
-                    logs.GetDeltasSince(state.GetLastUpdateTimestamp()),
-                    unknown);
+            var matHandler = new EliteLogMaterialHandler(
+                dm.EliteMatsLookup, dm.IgnoreCommodities,
+                dm.EngineerCostLookup);
+            foreach (var entry in logs.GetLogEntries())
+            {
+                matHandler.Handle(entry);
+            }
+            deltas = matHandler.FilterOnlyInaraMats(matHandler.Deltas,
+                unknown);
 
             // Apply changes to material counts
             result = DeltaTools.Add(last, deltas);

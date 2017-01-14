@@ -16,13 +16,13 @@ namespace Picard.Lib
             MaterialTypes;
         public List<string>
             IgnoreCommodities;
-        public Dictionary<string, int>
+        public IDictionary<string, int>
             VersionAdded;
-        public Dictionary<string, string>
+        public IDictionary<string, string>
             EliteMatsLookup;
-        public Dictionary<string, string>
+        public IDictionary<string, string>
             MaterialTypeLookup;
-        public Dictionary<string, Dictionary<string, int>>
+        public IDictionary<string, IDictionary<string, int>>
             EngineerCostLookup;
 
         private static DataMangler INSTANCE = null;
@@ -43,7 +43,7 @@ namespace Picard.Lib
             IgnoreCommodities = new List<string>();
             EliteMatsLookup = new Dictionary<string, string>();
             MaterialTypeLookup = new Dictionary<string, string>();
-            EngineerCostLookup = new Dictionary<string, Dictionary<string, int>>();
+            EngineerCostLookup = new Dictionary<string, IDictionary<string, int>>();
             VersionAdded = new Dictionary<string, int>();
 
             // Possible Material Types

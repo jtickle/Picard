@@ -73,8 +73,21 @@
     <Compile Include="FirstRun\FirstRunController.cs" />
     <Compile Include="Lib\DataMangler.cs" />
     <Compile Include="Lib\DeltaTools.cs" />
+    <Compile Include="Lib\EliteLogMaterialHandler.cs" />
     <Compile Include="Lib\EliteLogs.cs" />
     <Compile Include="Lib\InaraApi.cs" />
+    <Compile Include="Lib\JournalEntry\EliteJournalEntry.cs" />
+    <Compile Include="Lib\JournalEntry\EngineerCraft.cs" />
+    <Compile Include="Lib\JournalEntry\EngineerProgress.cs" />
+    <Compile Include="Lib\JournalEntry\MarketBuy.cs" />
+    <Compile Include="Lib\JournalEntry\MarketSell.cs" />
+    <Compile Include="Lib\JournalEntry\MaterialCollected.cs" />
+    <Compile Include="Lib\JournalEntry\MaterialDiscarded.cs" />
+    <Compile Include="Lib\JournalEntry\MissionAccepted.cs" />
+    <Compile Include="Lib\JournalEntry\MissionCompleted.cs" />
+    <Compile Include="Lib\JournalEntry\Synthesis.cs" />
+    <Compile Include="Lib\EliteJournalEntryConverter.cs" />
+    <Compile Include="Lib\JsonCreationConverter.cs" />
     <Compile Include="NormalRun\MatUpdateForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -30,10 +30,7 @@ namespace Picard
             InaraApi api = new InaraApi();
 
             // Elite: Dangerous Gameplay Logs
-            EliteLogs logs = new EliteLogs(
-                dm.EliteMatsLookup,
-                dm.IgnoreCommodities,
-                dm.EngineerCostLookup);
+            EliteLogs logs = new EliteLogs();
 
             // Show a login dialog box and handle user authentication with Inara
             AuthenticationController authCtrl = new AuthenticationController(api, state);
@@ -56,9 +53,7 @@ namespace Picard
             {
                 // If there is stored history, run the main program.
                 NormalRunController normalRunCtrl = new NormalRunController(
-                    api, state, logs,
-                    dm.MaterialTypeLookup,
-                    dm.MaterialTypes);
+                    api, state, logs, dm);
                 normalRunCtrl.Run();
             }
         }
