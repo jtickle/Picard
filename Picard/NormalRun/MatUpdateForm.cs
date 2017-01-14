@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Picard.NormalRun
 {
@@ -40,9 +42,11 @@ namespace Picard.NormalRun
             }
         }
 
-        public MatUpdateForm()
+        public MatUpdateForm(IList<string> MaterialOrder)
         {
             InitializeComponent();
+
+            MatsView.ListViewItemSorter = new MatSorter(MaterialOrder);
         }
 
         /// <summary>
@@ -110,6 +114,7 @@ namespace Picard.NormalRun
             }
 
             MatsView.Items.Add(i);
+            MatsView.Sort();
         }
 
         /// <summary>
@@ -185,6 +190,39 @@ namespace Picard.NormalRun
         private void MatUpdateForm_FormClosing(object sender, CancelEventArgs e)
         {
             CloseWithoutSave(sender, e);
+        }
+
+        private class MatSorter : IComparer
+        {
+            internal IList<string> MaterialOrder;
+
+            internal MatSorter(IList<string> materialOrder)
+            {
+                MaterialOrder = materialOrder;
+            }
+
+            public int Compare(object x, object y)
+            {
+                ListViewItem a = x as ListViewItem;
+                ListViewItem b = y as ListViewItem;
+
+                if (a != null)
+                {
+                    if (b != null)
+                    {
+                        return MaterialOrder.IndexOf(a.Text) -
+                            MaterialOrder.IndexOf(b.Text);
+                    }
+
+                    return 1;
+                }
+                else if (b != null)
+                {
+                    return -1;
+                }
+
+                return 0;
+            }
         }
     }
 }

@@ -86,6 +86,12 @@ namespace Picard.FirstRun
 
             // Either mats are not empty or the user is OK with it... save!
             state.AddHistory(InitialMats);
+
+            // Update Post Timestamp
+            state.UpdateLastPostToCurrent();
+
+            // Persist the State
+            state.Persist();
         }
 
         /// <summary>

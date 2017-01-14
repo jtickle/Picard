@@ -120,6 +120,7 @@ Tagged Encryption Codes                  Data                   encryptioncodes 
 Unexpected Emission Data                 Data                   emissiondata                   0
 Unidentified Scan Archives               Data                   scanarchives                   0
 Unknown Ship Signature                   Data                   unknownshipsignature           1
+Unknown Wake Data                        Data                   unknownwakedata                2
 Untypical Shield Scans                   Data                   shielddensityreports           0
 Unusual Encrypted Files                  Data                   encryptedfiles                 0
 Articulation Motors                      Commodities              articulationmotors             0

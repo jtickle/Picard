@@ -13,6 +13,7 @@ namespace Picard.Lib
         public string InaraP = "";
         public int DataVersion = 0;
         public IHistorySet History;
+        public DateTime LastPost;
 
         public State()
         {

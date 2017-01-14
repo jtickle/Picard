@@ -12,6 +12,7 @@ namespace Picard.NormalRun
         protected InaraApi api;
         protected PersistentState state;
         protected EliteLogs logs;
+        protected DataMangler dm;
 
         protected MatUpdateForm form;
 
@@ -33,23 +34,32 @@ namespace Picard.NormalRun
 
         public IList<string> MaterialTypes;
 
+        public IList<string> MaterialOrder;
+
         public NormalRunController(
             InaraApi api,
             PersistentState state,
             EliteLogs logs,
-            IDictionary<string, string> MaterialTypeLookup,
-            IList<string> MaterialTypes)
+            DataMangler dm)
         {
             this.api = api;
             this.state = state;
             this.logs = logs;
-            this.MaterialTypeLookup = MaterialTypeLookup;
-            this.MaterialTypes = new List<string>(MaterialTypes);
+            this.dm = dm;
 
-            this.MaterialTypes.Add("DebugUnknown");
-            this.MaterialTypes.Add("Grand");
+            MaterialTypeLookup = dm.MaterialTypeLookup;
 
-            form = new MatUpdateForm();
+            MaterialTypes = new List<string>(dm.MaterialTypes);
+            MaterialTypes.Add("DebugUnknown");
+            MaterialTypes.Add("Grand");
+
+            MaterialOrder = new List<string>(dm.MaterialOrder);
+            foreach (var type in MaterialTypes)
+            {
+                MaterialOrder.Add(type + " Total");
+            }
+
+            form = new MatUpdateForm(MaterialOrder);
             form.ReloadMats += OnReloadMats;
             form.PostAndSave += OnPostAndSave;
             form.CloseWithoutSave += OnCloseWithoutSave;
@@ -66,19 +76,18 @@ namespace Picard.NormalRun
                 return null;
             }
 
+            // Look for new stuff on Inara
             var inaraChange = new HashSet<string>(inaraMats.Keys);
             inaraChange.ExceptWith(new HashSet<string>(last.Keys));
 
+            // If Inara has new mats, cheat until we can get an update out
             if (inaraChange.Count > 0)
             {
                 foreach(var mat in inaraMats.Keys)
                 {
-                    if(!last.ContainsKey(mat))
-                        Console.WriteLine("EliteMatsLookup.Add(\"\", \"" + mat +
-                            "\");");
+                    dm.EliteMatsLookup[mat.Replace(" ", "").ToLower()] = mat;
+                    dm.MaterialTypeLookup[mat] = "Material";
                 }
-                form.NewInaraMaterialsNotification();
-                Application.Exit();
             }
             
             if(form.DoesUserWantInaraCorrection())
@@ -212,6 +221,9 @@ namespace Picard.NormalRun
             // Get last run materials from Picard State
             last = state.CalculateCurrentInventory();
 
+            // Apply and store any updates to the data format
+            state.ApplyUpdates(last);
+
             // Get Inara corrections, if any
             inaraCorrection = await FigureOutInaraCorrection();
 
@@ -219,7 +231,7 @@ namespace Picard.NormalRun
             // The filtering function adds unrecognized materials to unknown list
             deltas =
                 logs.FilterOnlyInaraMats(
-                    logs.GetDeltasSince(state.GetLastUpdateTimestamp()),
+                    logs.GetDeltasSince(state.CurrentState.LastPost),
                     unknown);
 
             // Apply changes to material counts
@@ -261,6 +273,12 @@ namespace Picard.NormalRun
 
                 // Save to History
                 state.AddHistory(deltas);
+
+                // Update Post Timestamp
+                state.UpdateLastPostToCurrent();
+
+                // Persist the state
+                state.Persist();
 
                 // Update post status form to indicate we are finished
                 post.Loading = false;

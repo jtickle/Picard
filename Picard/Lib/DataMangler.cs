@@ -15,6 +15,8 @@ namespace Picard.Lib
         public List<string>
             MaterialTypes;
         public List<string>
+            MaterialOrder;
+        public List<string>
             IgnoreCommodities;
         public Dictionary<string, int>
             VersionAdded;
@@ -40,6 +42,7 @@ namespace Picard.Lib
         private DataMangler()
         {
             MaterialTypes = new List<string>();
+            MaterialOrder = new List<string>();
             IgnoreCommodities = new List<string>();
             EliteMatsLookup = new Dictionary<string, string>();
             MaterialTypeLookup = new Dictionary<string, string>();
@@ -103,6 +106,7 @@ namespace Picard.Lib
                     }
                     else
                     {
+                        MaterialOrder.Add(name);
                         EliteMatsLookup.Add(journal, name);
                         MaterialTypeLookup.Add(name, type);
                         VersionAdded.Add(name, version);

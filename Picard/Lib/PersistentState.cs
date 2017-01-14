@@ -36,6 +36,23 @@ namespace Picard.Lib
             {
                 create();
             }
+
+            // Fix Last Post Timestamp if necessary
+            if (CurrentState.History.Count > 0)
+            {
+                // If null and has history, set to last update
+                if(CurrentState.LastPost == DateTime.MinValue)
+                {
+                    CurrentState.LastPost = GetLastUpdateTimestamp();
+                }
+
+                // If not null and has history, leave it alone
+            }
+            else
+            {
+                // Otherwise, set it to the minimum DateTime
+                CurrentState.LastPost = DateTime.MinValue;
+            }
         }
 
         /// <summary>
@@ -73,7 +90,7 @@ namespace Picard.Lib
         /// <summary>
         /// Save State data to the State file
         /// </summary>
-        protected void persist()
+        public void Persist()
         {
             using (JsonWriter writer = new JsonTextWriter(new StreamWriter(StateFile)))
             {
@@ -83,7 +100,6 @@ namespace Picard.Lib
 
         /// <summary>
         /// Gets the current inventory from the perspective of the Picard state file
-        /// As a side-effect, adds any updates available from DataMangler
         /// </summary>
         /// <returns>
         /// A dictionary of all the materials and changes that have been recorded
@@ -92,11 +108,6 @@ namespace Picard.Lib
         public IDictionary<string, int> CalculateCurrentInventory()
         {
             IDictionary<string, int> result = new Dictionary<string, int>();
-
-            // Doing updates first prevents values from being blown away
-            // and hurts nothing
-
-            ApplyUpdates(result);
 
             foreach(var time in CurrentState.History)
             {
@@ -110,19 +121,24 @@ namespace Picard.Lib
         {
             var dm = DataMangler.GetInstance();
 
-            IDictionary<string, int> patch = new Dictionary<string, int>();
+            var cshk = CurrentState.History.Keys;
+
+            IDictionary<string, int> patch =
+                CurrentState.History[cshk.Max()];
+
             foreach (var update in dm.GetUpdates(result,
                 CurrentState.DataVersion))
             {
-                result[update] = 0;
-                patch[update] = 0;
+                if(!result.ContainsKey(update))
+                    result[update] = 0;
+                if(!patch.ContainsKey(update))
+                    patch[update] = 0;
             }
 
             if (patch.Count == 0)
                 return;
 
             CurrentState.DataVersion = dm.DataVersion;
-            AddHistory(patch);
         }
 
         /// <summary>
@@ -156,6 +172,14 @@ namespace Picard.Lib
             return CurrentState.History.Last().Key;
         }
 
+        public void UpdateLastPostToCurrent()
+        {
+            if (CurrentState.History.Keys.Count > 0) {
+                CurrentState.LastPost =
+                    CurrentState.History.Keys.Last();
+            }
+        }
+
         /// <summary>
         /// Updates the Inara credentials stored in the state
         /// </summary>
@@ -172,7 +196,6 @@ namespace Picard.Lib
             CurrentState.InaraU = user;
             CurrentState.InaraP = pass;
             CurrentState.CmdrName = name;
-            persist();
         }
 
         /// <summary>
@@ -184,7 +207,6 @@ namespace Picard.Lib
         public void AddHistory(IDictionary<string, int> d)
         {
             CurrentState.History.Add(DateTime.UtcNow, d);
-            persist();
         }
     }
 }

@@ -56,9 +56,7 @@ namespace Picard
             {
                 // If there is stored history, run the main program.
                 NormalRunController normalRunCtrl = new NormalRunController(
-                    api, state, logs,
-                    dm.MaterialTypeLookup,
-                    dm.MaterialTypes);
+                    api, state, logs, dm);
                 normalRunCtrl.Run();
             }
         }
