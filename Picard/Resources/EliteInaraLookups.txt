@@ -193,3 +193,4 @@ nerveagents                              Irrelevant Commodity                   
 syntheticreagents                        Irrelevant Commodity                                  0
 bootlegliquor                            Irrelevant Commodity                                  0
 powergenerators                          Irrelevant Commodity                                  0
+Biowaste                                 Irrelevant Commodity                                  0
