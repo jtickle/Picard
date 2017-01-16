@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
 namespace Picard.Lib.JournalEntry
@@ -18,5 +19,10 @@ namespace Picard.Lib.JournalEntry
         public IDictionary<string, int> CommodityReward { get; internal set; }
 
         public MissionCompleted(JObject json) : base(json) { }
+
+        public override void Accept(EliteJournalHandler handler)
+        {
+            handler.Handle(this);
+        }
     }
 }

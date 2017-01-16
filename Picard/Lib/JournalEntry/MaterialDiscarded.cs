@@ -9,5 +9,10 @@ namespace Picard.Lib.JournalEntry
         public int Count { get; internal set; }
 
         public MaterialDiscarded(JObject json) : base(json) { }
+
+        public override void Accept(EliteJournalHandler handler)
+        {
+            handler.Handle(this);
+        }
     }
 }

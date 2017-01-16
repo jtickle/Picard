@@ -9,5 +9,10 @@ namespace Picard.Lib.JournalEntry
         public int Rank { get; internal set; }
 
         public EngineerProgress(JObject json) : base(json) { }
+
+        public override void Accept(EliteJournalHandler handler)
+        {
+            handler.Handle(this);
+        }
     }
 }

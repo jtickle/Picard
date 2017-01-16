@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Picard.Lib.JournalEntry;
 
 namespace Picard.Lib
 {
-    public class EliteLogMaterialHandler
+    public class EliteJournalMaterialHandler : EliteJournalHandler
     {
         public IDictionary<string, int> Deltas { get; protected set; }
 
@@ -22,7 +23,7 @@ namespace Picard.Lib
         /// </summary>
         protected IDictionary<string, IDictionary<string, int>> EngineerCostLookup;
 
-        public EliteLogMaterialHandler(
+        public EliteJournalMaterialHandler(
             IDictionary<string, string> EliteMatsLookup,
             IList<string> IgnoreCommodities,
             IDictionary<string, IDictionary<string, int>> EngineerCostLookup)
@@ -33,7 +34,7 @@ namespace Picard.Lib
             this.EngineerCostLookup = EngineerCostLookup;
         }
 
-        public EliteLogMaterialHandler(
+        public EliteJournalMaterialHandler(
             IDictionary<string, int> deltas,
             IDictionary<string, string> EliteMatsLookup,
             IList<string> IgnoreCommodities,
@@ -87,7 +88,7 @@ namespace Picard.Lib
         /// <summary>
         /// Handle the case where materials are removed due to an engineer upgrade
         /// </summary>
-        public void Handle(EngineerCraft e)
+        public override void Handle(EngineerCraft e)
         {
             foreach (var mat in e.Ingredients)
             {
@@ -95,7 +96,7 @@ namespace Picard.Lib
             }
         }
 
-        public void Handle(EngineerProgress e)
+        public override void Handle(EngineerProgress e)
         {
             // We are only interested in the engineer's unlock event which
             // is signified by Progress=Unlocked and Rank=1.
@@ -115,12 +116,12 @@ namespace Picard.Lib
             // TODO: Log something if there is a new engineer
         }
 
-        public void Handle(MarketBuy e)
+        public override void Handle(MarketBuy e)
         {
             DeltaTools.AddMat(Deltas, TranslateMat(e.Type), e.Count);
         }
 
-        public void Handle(MarketSell e)
+        public override void Handle(MarketSell e)
         {
             DeltaTools.AddMat(Deltas, TranslateMat(e.Type), -e.Count);
         }
@@ -128,7 +129,7 @@ namespace Picard.Lib
         /// <summary>
         /// Handle the case where a Material is Collected in Space
         /// </summary>
-        public void Handle(MaterialCollected e)
+        public override void Handle(MaterialCollected e)
         {
             DeltaTools.AddMat(Deltas, TranslateMat(e.Name), e.Count);
         }
@@ -136,12 +137,12 @@ namespace Picard.Lib
         /// <summary>
         /// Handle the case where a material is discarded by the player
         /// </summary>
-        public void Handle(MaterialDiscarded e)
+        public override void Handle(MaterialDiscarded e)
         {
             DeltaTools.AddMat(Deltas, TranslateMat(e.Name), -e.Count);
         }
 
-        public void Handle(MissionAccepted e)
+        public override void Handle(MissionAccepted e)
         {
             if (e.Name.StartsWith("Mission_Delivery"))
                 return;
@@ -158,7 +159,7 @@ namespace Picard.Lib
         /// completion of a mission
         /// </summary>
         /// <param name="e"></param>
-        public void Handle(MissionCompleted e)
+        public override void Handle(MissionCompleted e)
         {
             // If an "Ingredients" property is set, it is materials or data
             if (e.Ingredients != null)
@@ -187,7 +188,7 @@ namespace Picard.Lib
             }
         }
 
-        public void Handle(Synthesis e)
+        public override void Handle(Synthesis e)
         {
             if (e.Materials == null) return;
 
@@ -197,7 +198,7 @@ namespace Picard.Lib
             }
         }
 
-        public void Handle(EliteJournalEntry e)
+        public override void HandleUnknown(EliteJournalEntry e)
         {
         }
     }

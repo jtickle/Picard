@@ -20,5 +20,10 @@ namespace Picard.Lib.JournalEntry
         public int MissionID { get; internal set; }
 
         public MissionAccepted(JObject json) : base(json) { }
+
+        public override void Accept(EliteJournalHandler handler)
+        {
+            handler.Handle(this);
+        }
     }
 }

@@ -30,7 +30,7 @@ namespace Picard.Lib
 
             // I had started on a switch statement but just decided to
             // convert the string to type, shoot me
-            var type = Type.GetType((string)jObject["event"]);
+            var type = Type.GetType("Picard.Lib.JournalEntry." + (string)jObject["event"]);
             
             if(type == null)
             {

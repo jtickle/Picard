@@ -11,7 +11,7 @@ namespace Picard.NormalRun
     {
         protected InaraApi api;
         protected PersistentState state;
-        protected EliteLogs logs;
+        protected EliteJournalParser logs;
         protected DataMangler dm;
 
         protected MatUpdateForm form;
@@ -37,7 +37,7 @@ namespace Picard.NormalRun
         public NormalRunController(
             InaraApi api,
             PersistentState state,
-            EliteLogs logs,
+            EliteJournalParser logs,
             DataMangler dm)
         {
             this.api = api;
@@ -219,13 +219,10 @@ namespace Picard.NormalRun
 
             // Parse logs and get the changes to material counts
             // The filtering function adds unrecognized materials to unknown list
-            var matHandler = new EliteLogMaterialHandler(
+            var matHandler = new EliteJournalMaterialHandler(
                 dm.EliteMatsLookup, dm.IgnoreCommodities,
                 dm.EngineerCostLookup);
-            foreach (var entry in logs.GetLogEntries())
-            {
-                matHandler.Handle(entry);
-            }
+            logs.HandleLogEntries(matHandler);
             deltas = matHandler.FilterOnlyInaraMats(matHandler.Deltas,
                 unknown);
 

@@ -11,5 +11,10 @@ namespace Picard.Lib.JournalEntry
         public int AvgPricePaid { get; internal set; }
 
         public MarketSell(JObject json) : base(json) { }
+
+        public override void Accept(EliteJournalHandler handler)
+        {
+            handler.Handle(this);
+        }
     }
 }

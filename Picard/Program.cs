@@ -30,7 +30,7 @@ namespace Picard
             InaraApi api = new InaraApi();
 
             // Elite: Dangerous Gameplay Logs
-            EliteLogs logs = new EliteLogs();
+            EliteJournalParser logs = new EliteJournalParser();
 
             // Show a login dialog box and handle user authentication with Inara
             AuthenticationController authCtrl = new AuthenticationController(api, state);

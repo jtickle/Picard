@@ -73,8 +73,9 @@
     <Compile Include="FirstRun\FirstRunController.cs" />
     <Compile Include="Lib\DataMangler.cs" />
     <Compile Include="Lib\DeltaTools.cs" />
-    <Compile Include="Lib\EliteLogMaterialHandler.cs" />
-    <Compile Include="Lib\EliteLogs.cs" />
+    <Compile Include="Lib\EliteJournalHandler.cs" />
+    <Compile Include="Lib\EliteJournalMaterialHandler.cs" />
+    <Compile Include="Lib\EliteJournalParser.cs" />
     <Compile Include="Lib\InaraApi.cs" />
     <Compile Include="Lib\JournalEntry\EliteJournalEntry.cs" />
     <Compile Include="Lib\JournalEntry\EngineerCraft.cs" />

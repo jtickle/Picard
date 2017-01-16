@@ -9,5 +9,10 @@ namespace Picard.Lib.JournalEntry
         public IDictionary<string, int> Materials { get; internal set; }
 
         public Synthesis(JObject json) : base(json) { }
+
+        public override void Accept(EliteJournalHandler handler)
+        {
+            handler.Handle(this);
+        }
     }
 }

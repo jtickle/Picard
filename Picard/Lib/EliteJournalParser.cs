@@ -8,7 +8,7 @@ using Picard.Lib.JournalEntry;
 
 namespace Picard.Lib
 {
-    public class EliteLogs
+    public class EliteJournalParser
     {
         /// <summary>
         /// The absolute path to the Elite log files
@@ -20,7 +20,7 @@ namespace Picard.Lib
         /// </summary>
         protected JsonSerializer Serializer;
 
-        public EliteLogs()
+        public EliteJournalParser()
         {
             // Get User Profile Folder
             string profile = Environment.GetFolderPath(
@@ -97,46 +97,17 @@ namespace Picard.Lib
             return GetLogEntries(SortLogFiles(GetLogFiles()));
         }
 
-        public void HandleLogEntries(EliteLogMaterialHandler handler)
+        public void HandleLogEntries(EliteJournalHandler handler)
         {
-            foreach(var entry in GetLogEntries())
+            HandleLogEntries(handler, GetLogEntries());
+        }
+
+        public void HandleLogEntries(EliteJournalHandler handler,
+            IEnumerable<EliteJournalEntry> logEntries)
+        {
+            foreach(var entry in logEntries)
             {
-                if(entry.GetType() == typeof(EngineerCraft))
-                {
-                    handler.Handle((EngineerCraft)entry);
-                }
-                else if (entry.GetType() == typeof(EngineerProgress))
-                {
-                    handler.Handle((EngineerProgress)entry);
-                }
-                else if (entry.GetType() == typeof(MarketBuy))
-                {
-                    handler.Handle((MarketBuy)entry);
-                }
-                else if (entry.GetType() == typeof(MarketSell))
-                {
-                    handler.Handle((MarketSell)entry);
-                }
-                else if (entry.GetType() == typeof(MaterialCollected))
-                {
-                    handler.Handle((MaterialCollected)entry);
-                }
-                else if (entry.GetType() == typeof(MaterialDiscarded))
-                {
-                    handler.Handle((MaterialDiscarded)entry);
-                }
-                else if (entry.GetType() == typeof(MissionAccepted))
-                {
-                    handler.Handle((MissionAccepted)entry);
-                }
-                else if (entry.GetType() == typeof(MissionCompleted))
-                {
-                    handler.Handle((MissionCompleted)entry);
-                }
-                else if (entry.GetType() == typeof(Synthesis))
-                {
-                    handler.Handle((Synthesis)entry);
-                }
+                entry.Accept(handler);
             }
         }
     }

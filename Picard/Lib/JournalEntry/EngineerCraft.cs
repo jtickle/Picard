@@ -11,5 +11,10 @@ namespace Picard.Lib.JournalEntry
         public IDictionary<string, int> Ingredients { get; internal set; }
 
         public EngineerCraft(JObject json) : base(json) { }
+
+        public override void Accept(EliteJournalHandler handler)
+        {
+            handler.Handle(this);
+        }
     }
 }

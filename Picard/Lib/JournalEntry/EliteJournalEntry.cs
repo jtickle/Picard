@@ -27,5 +27,10 @@ namespace Picard.Lib.JournalEntry
         {
             jObject = json;
         }
+
+        public virtual void Accept(EliteJournalHandler handler)
+        {
+            handler.HandleUnknown(this);
+        }
     }
 }
