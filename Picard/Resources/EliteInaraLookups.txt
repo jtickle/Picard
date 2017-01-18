@@ -194,3 +194,9 @@ syntheticreagents                        Irrelevant Commodity                   
 bootlegliquor                            Irrelevant Commodity                                  0
 powergenerators                          Irrelevant Commodity                                  0
 Biowaste                                 Irrelevant Commodity                                  0
+ancientcasket                            Irrelevant Commodity                                  0
+ancientorb                               Irrelevant Commodity                                  0
+ancientrelic                             Irrelevant Commodity                                  0
+ancienttablet                            Irrelevant Commodity                                  0
+ancienttotem                             Irrelevant Commodity                                  0
+ancienturn                               Irrelevant Commodity                                  0
