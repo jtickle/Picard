@@ -37,6 +37,35 @@ namespace Picard.Lib
             return INSTANCE;
         }
 
+        /// <summary>
+        /// Filters only known material names in EliteMatsLookup
+        /// and also translates them into a localized material name
+        /// </summary>
+        /// <param name="deltas">The dict to filter and translate</param>
+        /// <param name="removed">Will add removed materials to this
+        /// dictionary if they are not in the IgnoreCommdoties list</param>
+        /// <returns>The filtered and translated dict</returns>
+        public IDictionary<string, int> FilterAndTranslateMats(IDictionary<string, int> deltas, IDictionary<string, int> removed)
+        {
+            // TODO: This should really be looking at the data just pulled
+            // from Inara
+            var ret = new Dictionary<string, int>();
+
+            foreach (var mat in deltas)
+            {
+                if (EliteMatsLookup.ContainsKey(mat.Key.ToLower()))
+                {
+                    DeltaTools.AddMat(ret, EliteMatsLookup[mat.Key.ToLower()], mat.Value);
+                }
+                else if (!IgnoreCommodities.Contains(mat.Key))
+                {
+                    DeltaTools.AddMat(removed, mat.Key, mat.Value);
+                }
+            }
+
+            return ret;
+        }
+
         private DataMangler()
         {
             MaterialTypes = new List<string>();

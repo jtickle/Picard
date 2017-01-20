@@ -4,9 +4,9 @@ namespace Picard.Lib.JournalEntry
 {
     public class MaterialCollected : EliteJournalEntry
     {
-        public string Category { get; internal set; }
-        public string Name { get; internal set; }
-        public int Count { get; internal set; }
+        public string Category;
+        public string Name;
+        public int Count;
 
         public MaterialCollected(JObject json) : base(json) { }
 

@@ -5,8 +5,8 @@ namespace Picard.Lib.JournalEntry
 {
     public class Synthesis : EliteJournalEntry
     {
-        public string Name { get; internal set; }
-        public IDictionary<string, int> Materials { get; internal set; }
+        public string Name;
+        public IDictionary<string, int> Materials;
 
         public Synthesis(JObject json) : base(json) { }
 

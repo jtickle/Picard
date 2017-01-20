@@ -77,6 +77,7 @@
     <Compile Include="Lib\EliteJournalMaterialHandler.cs" />
     <Compile Include="Lib\EliteJournalParser.cs" />
     <Compile Include="Lib\InaraApi.cs" />
+    <Compile Include="Lib\JournalEntry\EntryHelper\CommodityMapping.cs" />
     <Compile Include="Lib\JournalEntry\EliteJournalEntry.cs" />
     <Compile Include="Lib\JournalEntry\EngineerCraft.cs" />
     <Compile Include="Lib\JournalEntry\EngineerProgress.cs" />

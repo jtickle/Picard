@@ -4,11 +4,11 @@ namespace Picard.Lib.JournalEntry
 {
     public class MarketSell : EliteJournalEntry
     {
-        public string Type { get; internal set; }
-        public int Count { get; internal set; }
-        public int SellPrice { get; internal set; }
-        public int TotalSale { get; internal set; }
-        public int AvgPricePaid { get; internal set; }
+        public string Type;
+        public int Count;
+        public int SellPrice;
+        public int TotalSale;
+        public int AvgPricePaid;
 
         public MarketSell(JObject json) : base(json) { }
 

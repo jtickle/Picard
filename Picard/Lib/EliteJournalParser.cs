@@ -97,18 +97,51 @@ namespace Picard.Lib
             return GetLogEntries(SortLogFiles(GetLogFiles()));
         }
 
-        public void HandleLogEntries(EliteJournalHandler handler)
+        protected void AcceptHandlers(EliteJournalEntry entry,
+            IList<EliteJournalHandler> handlers)
         {
-            HandleLogEntries(handler, GetLogEntries());
-        }
-
-        public void HandleLogEntries(EliteJournalHandler handler,
-            IEnumerable<EliteJournalEntry> logEntries)
-        {
-            foreach(var entry in logEntries)
+            foreach(var handler in handlers)
             {
                 entry.Accept(handler);
             }
+        }
+
+        public void HandleLogEntries(IList<EliteJournalHandler> handlers)
+        {
+            HandleLogEntries(GetLogEntries(), handlers);
+        }
+
+        public void HandleLogEntries(
+            IEnumerable<EliteJournalEntry> logEntries,
+            IList<EliteJournalHandler> handlers)
+        {
+            foreach(var entry in logEntries)
+            {
+                AcceptHandlers(entry, handlers);
+            }
+        }
+
+        public static IEnumerable<EliteJournalEntry> EntriesSinceFilter(
+            IEnumerable<EliteJournalEntry> logEntries,
+            DateTime onlySince)
+        {
+            foreach (var entry in logEntries)
+            {
+                if (entry.Timestamp > onlySince)
+                {
+                    yield return entry;
+                }
+            }
+        }
+
+        public void HandleLogEntries(
+            DateTime since,
+            IList<EliteJournalHandler> handlers)
+        {
+            HandleLogEntries(
+                EntriesSinceFilter(
+                    GetLogEntries(), since),
+                handlers);
         }
     }
 }

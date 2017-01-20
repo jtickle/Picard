@@ -6,83 +6,67 @@ namespace Picard.Lib
 {
     public class EliteJournalMaterialHandler : EliteJournalHandler
     {
-        public IDictionary<string, int> Deltas { get; protected set; }
+        public IDictionary<string, int>
+            Deltas { get; protected set; }
 
-        /// <summary>
-        /// Translation table from Elite to Inara
-        /// </summary>
-        protected IDictionary<string, string> EliteMatsLookup;
+        public IDictionary<string, IList<EliteJournalEntry>>
+            MatSeen { get; protected set; }
 
-        /// <summary>
-        /// Commodities that we know are not materials
-        /// </summary>
-        protected IList<string> IgnoreCommodities;
+        public IList<string>
+            UnknownEngineers { get; protected set; }
 
         /// <summary>
         /// Costs of unlocking the Engineers
         /// </summary>
-        protected IDictionary<string, IDictionary<string, int>> EngineerCostLookup;
+        protected IDictionary<string, IDictionary<string, int>> 
+            EngineerCostLookup;
 
         public EliteJournalMaterialHandler(
-            IDictionary<string, string> EliteMatsLookup,
-            IList<string> IgnoreCommodities,
-            IDictionary<string, IDictionary<string, int>> EngineerCostLookup)
+            IDictionary<string, IDictionary<string, int>>
+                EngineerCostLookup)
         {
             Deltas = new Dictionary<string, int>();
-            this.EliteMatsLookup = EliteMatsLookup;
-            this.IgnoreCommodities = IgnoreCommodities;
+            MatSeen = new Dictionary<string, IList<EliteJournalEntry>>();
+            UnknownEngineers = new List<string>();
+
             this.EngineerCostLookup = EngineerCostLookup;
         }
 
         public EliteJournalMaterialHandler(
             IDictionary<string, int> deltas,
-            IDictionary<string, string> EliteMatsLookup,
-            IList<string> IgnoreCommodities,
-            IDictionary<string, IDictionary<string, int>> EngineerCostLookup)
+            IDictionary<string, IDictionary<string, int>>
+                EngineerCostLookup)
         {
             Deltas = deltas;
+            this.EngineerCostLookup = EngineerCostLookup;
         }
 
-        public IDictionary<string, int> FilterOnlyInaraMats(IDictionary<string, int> deltas, IDictionary<string, int> removed)
+        protected void AddMatSeen(string mat, EliteJournalEntry entry)
         {
-            // TODO: This should really be looking at the data just pulled
-            // from Inara
-            var ret = new Dictionary<string, int>();
-
-            foreach (var mat in deltas)
+            if(!MatSeen.ContainsKey(mat))
             {
-                if (EliteMatsLookup.Values.Contains(mat.Key))
-                {
-                    ret.Add(mat.Key, mat.Value);
-                }
-                else if (!IgnoreCommodities.Contains(mat.Key))
-                {
-                    removed.Add(mat.Key, mat.Value);
-                }
+                MatSeen[mat] = new List<EliteJournalEntry>();
             }
-
-            return ret;
+            MatSeen[mat].Add(entry);
         }
 
-        /// <summary>
-        /// Uses internal lookup table to translate an Elite: Dangerous material
-        /// name into an Inara.cz material name
-        /// </summary>
-        /// <param name="eliteMat">The Elite material name</param>
-        /// <returns>The Inara.cz material name</returns>
-        public string TranslateMat(string eliteMat)
+        protected void AddMat(string mat, int count, EliteJournalEntry entry)
         {
-            // Sometimes the case changes on these mat names in the log files,
-            // so just force them all to lower case and look them up in our
-            // look up table
-            if (EliteMatsLookup.ContainsKey(eliteMat.ToLower()))
-            {
-                return EliteMatsLookup[eliteMat.ToLower()];
-            }
+            DeltaTools.AddMat(Deltas, mat, count);
+            AddMatSeen(mat, entry);
+        }
 
-            // TODO: This should prompt the user to enter the correct information and
-            // potentially send it on back to me for inclusion in the official list
-            return eliteMat;
+        protected void AddMats(
+            IDictionary<string, int> mats,
+            EliteJournalEntry entry,
+            bool subtract = false)
+        {
+            foreach (var mat in mats)
+            {
+                AddMat(mat.Key,
+                    (subtract ? -1 : 0) + mat.Value,
+                    entry);
+            }
         }
 
         /// <summary>
@@ -92,7 +76,7 @@ namespace Picard.Lib
         {
             foreach (var mat in e.Ingredients)
             {
-                DeltaTools.AddMat(Deltas, TranslateMat(mat.Key), -mat.Value);
+                AddMat(mat.Key, -mat.Value, e);
             }
         }
 
@@ -110,20 +94,22 @@ namespace Picard.Lib
             // up in a table.
             if (EngineerCostLookup.ContainsKey(e.Engineer))
             {
-                Deltas = DeltaTools.Add(Deltas,
-                    EngineerCostLookup[e.Engineer]);
+                AddMats(EngineerCostLookup[e.Engineer], e, true);
             }
-            // TODO: Log something if there is a new engineer
+            else
+            {
+                UnknownEngineers.Add(e.Engineer);
+            }
         }
 
         public override void Handle(MarketBuy e)
         {
-            DeltaTools.AddMat(Deltas, TranslateMat(e.Type), e.Count);
+            AddMat(e.Type, e.Count, e);
         }
 
         public override void Handle(MarketSell e)
         {
-            DeltaTools.AddMat(Deltas, TranslateMat(e.Type), -e.Count);
+            AddMat(e.Type, -e.Count, e);
         }
 
         /// <summary>
@@ -131,7 +117,7 @@ namespace Picard.Lib
         /// </summary>
         public override void Handle(MaterialCollected e)
         {
-            DeltaTools.AddMat(Deltas, TranslateMat(e.Name), e.Count);
+            AddMat(e.Name, e.Count, e);
         }
 
         /// <summary>
@@ -139,17 +125,17 @@ namespace Picard.Lib
         /// </summary>
         public override void Handle(MaterialDiscarded e)
         {
-            DeltaTools.AddMat(Deltas, TranslateMat(e.Name), -e.Count);
+            AddMat(e.Name, -e.Count, e);
         }
 
         public override void Handle(MissionAccepted e)
         {
-            if (e.Name.StartsWith("Mission_Delivery"))
+            if (e.Name != null && e.Name.StartsWith("Mission_Delivery"))
                 return;
-
+            
             if(e.CommodityLocalised != null)
             {
-                DeltaTools.AddMat(Deltas, e.CommodityLocalised, e.Count);
+                AddMat(e.CommodityLocalised, e.Count, e);
             }
         }
 
@@ -167,7 +153,7 @@ namespace Picard.Lib
                 // Handle gaining a material or data through completing a mission
                 foreach (var mat in e.Ingredients)
                 {
-                    DeltaTools.AddMat(Deltas, TranslateMat(mat.Key), mat.Value);
+                    AddMat(mat.Key, mat.Value, e);
                 }
             }
             // If a "CommodityReward" property is set, it is commodities
@@ -176,7 +162,7 @@ namespace Picard.Lib
                 // Handle gaining a commodity through completing a mission
                 foreach (var mat in e.CommodityReward)
                 {
-                    DeltaTools.AddMat(Deltas, TranslateMat(mat.Key), mat.Value);
+                    AddMat(mat.Name, mat.Count, e);
                 }
             }
 
@@ -184,7 +170,7 @@ namespace Picard.Lib
             {
                 // Handle losing a commodity as the result of completing
                 // a mission
-                DeltaTools.AddMat(Deltas, e.CommodityLocalised, -e.Count);
+                AddMat(e.CommodityLocalised, -e.Count, e);
             }
         }
 
@@ -194,7 +180,7 @@ namespace Picard.Lib
 
             foreach(var mat in e.Materials)
             {
-                DeltaTools.AddMat(Deltas, TranslateMat(mat.Key), -mat.Value);
+                AddMat(mat.Key, -mat.Value, e);
             }
         }
 

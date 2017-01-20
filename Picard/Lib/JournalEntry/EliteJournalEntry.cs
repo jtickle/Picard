@@ -12,16 +12,16 @@ namespace Picard.Lib.JournalEntry
     public class EliteJournalEntry
     {
         [JsonProperty("timestamp")]
-        public DateTime Timestamp { get; internal set; }
+        public DateTime Timestamp;
 
         [JsonProperty("event")]
-        public string EventName { get; internal set; }
+        public string EventName;
 
         [JsonIgnore]
-        public string JournalFile { get; internal set; }
+        public string JournalFile;
 
         [JsonIgnore]
-        public JObject jObject { get; internal set; }
+        public JObject jObject;
 
         public EliteJournalEntry(JObject json)
         {

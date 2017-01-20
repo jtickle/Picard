@@ -219,11 +219,14 @@ namespace Picard.NormalRun
 
             // Parse logs and get the changes to material counts
             // The filtering function adds unrecognized materials to unknown list
-            var matHandler = new EliteJournalMaterialHandler(
-                dm.EliteMatsLookup, dm.IgnoreCommodities,
-                dm.EngineerCostLookup);
-            logs.HandleLogEntries(matHandler);
-            deltas = matHandler.FilterOnlyInaraMats(matHandler.Deltas,
+            var handler = new EliteJournalMaterialHandler(dm.EngineerCostLookup);
+            var handlers = new List<EliteJournalHandler>() { handler };
+            logs.HandleLogEntries(
+                state.GetLastUpdateTimestamp(),
+                handlers
+                );
+            deltas = dm.FilterAndTranslateMats(
+                handler.Deltas,
                 unknown);
 
             // Apply changes to material counts

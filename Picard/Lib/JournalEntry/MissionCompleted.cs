@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using Picard.Lib.JournalEntry.EntryHelper;
 
 namespace Picard.Lib.JournalEntry
 {
     public class MissionCompleted : EliteJournalEntry
     {
-        public string Faction { get; internal set; }
-        public string Name { get; internal set; }
-        public int MissionID { get; internal set; }
-        public string Commodity { get; internal set; }
-        public string CommodityLocalised { get; internal set; }
-        public int Count { get; internal set; }
-        public string DestinationSystem { get; internal set; }
-        public string DestinationStation { get; internal set; }
-        public int Reward { get; internal set; }
-        public IDictionary<string, int> Ingredients { get; internal set; }
-        public IDictionary<string, int> CommodityReward { get; internal set; }
+        public string Faction;
+        public string Name;
+        public int MissionID;
+        public string Commodity;
+        public string CommodityLocalised;
+        public int Count;
+        public string DestinationSystem;
+        public string DestinationStation;
+        public int Reward;
+        public IList<CommodityMapping> CommodityReward;
+        public IDictionary<string, int> Ingredients;
 
         public MissionCompleted(JObject json) : base(json) { }
 

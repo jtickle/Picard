@@ -4,9 +4,9 @@ namespace Picard.Lib.JournalEntry
 {
     public class EngineerProgress : EliteJournalEntry
     {
-        public string Engineer { get; internal set; }
-        public string Progress { get; internal set; }
-        public int Rank { get; internal set; }
+        public string Engineer;
+        public string Progress;
+        public int Rank;
 
         public EngineerProgress(JObject json) : base(json) { }
 
