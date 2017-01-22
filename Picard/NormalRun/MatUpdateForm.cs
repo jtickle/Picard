@@ -96,18 +96,18 @@ namespace Picard.NormalRun
             i.SubItems.Add(delta.ToString());
             i.SubItems.Add(result.ToString());
             
-            if(delta != 0)
+            if(delta != 0 || correction != 0)
             {
                 // Bold if there was a change
                 i.Font = new Font(i.Font, FontStyle.Bold);
             }
 
-            if(delta > 0)
+            if(delta > 0 || correction > 0)
             {
                 // Blue background if there was an increase
                 i.BackColor = Color.LightBlue;
             }
-            else if(delta < 0)
+            else if(delta < 0 || correction < 0)
             {
                 // Red background if there was a decrease
                 i.BackColor = Color.Pink;

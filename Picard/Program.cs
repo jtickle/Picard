@@ -4,6 +4,7 @@ using Picard.Authentication;
 using Picard.FirstRun;
 using Picard.NormalRun;
 using Picard.Lib;
+using LibEDJournal;
 
 namespace Picard
 {
@@ -30,10 +31,7 @@ namespace Picard
             InaraApi api = new InaraApi();
 
             // Elite: Dangerous Gameplay Logs
-            EliteLogs logs = new EliteLogs(
-                dm.EliteMatsLookup,
-                dm.IgnoreCommodities,
-                dm.EngineerCostLookup);
+            EliteJournalParser logs = new EliteJournalParser();
 
             // Show a login dialog box and handle user authentication with Inara
             AuthenticationController authCtrl = new AuthenticationController(api, state);

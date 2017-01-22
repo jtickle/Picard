@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using LibEDJournal.State;
 
 namespace Picard.Lib
 {
-    using HistorySet = Dictionary<DateTime, IDictionary<string, int>>;
-    using IHistorySet = IDictionary<DateTime, IDictionary<string, int>>;
+    using HistorySet = Dictionary<DateTime, InventorySet>;
+    using IHistorySet = IDictionary<DateTime, InventorySet>;
 
     public class State
     {

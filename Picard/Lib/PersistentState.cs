@@ -3,11 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using LibEDJournal;
+using LibEDJournal.State;
 
 namespace Picard.Lib
 {
     public class PersistentState
     {
+        public string StatePath { get; protected set; }
         public string StateFile { get; protected set; }
         protected JsonSerializer Serializer;
 
@@ -20,8 +23,10 @@ namespace Picard.Lib
             // have Elite installed
             string local = Environment.GetFolderPath(
                 Environment.SpecialFolder.LocalApplicationData);
-            string file = @"TickleSoft\picard.state";
-            StateFile = Path.Combine(local, file);
+            string path = @"TickleSoft";
+            StatePath = Path.Combine(local, path);
+            string file = @"picard.state";
+            StateFile = Path.Combine(StatePath, file);
        
             // Set us up a serializer to use
             Serializer = new JsonSerializer();
@@ -105,25 +110,25 @@ namespace Picard.Lib
         /// A dictionary of all the materials and changes that have been recorded
         /// in the Picard state file
         /// </returns>
-        public IDictionary<string, int> CalculateCurrentInventory()
+        public InventorySet CalculateCurrentInventory()
         {
-            IDictionary<string, int> result = new Dictionary<string, int>();
+            InventorySet result = new InventorySet();
 
             foreach(var time in CurrentState.History)
             {
-                result = DeltaTools.Add(result, time.Value);
+                result = result + time.Value;
             }
 
             return result;
         }
 
-        public void ApplyUpdates(IDictionary<string, int> result)
+        public void ApplyUpdates(InventorySet result)
         {
             var dm = DataMangler.GetInstance();
 
             var cshk = CurrentState.History.Keys;
 
-            IDictionary<string, int> patch =
+            InventorySet patch =
                 CurrentState.History[cshk.Max()];
 
             foreach (var update in dm.GetUpdates(result,
@@ -204,9 +209,17 @@ namespace Picard.Lib
         /// <param name="d">
         /// The current set of materials from this run
         /// </param>
-        public void AddHistory(IDictionary<string, int> d)
+        public void AddHistory(InventorySet d)
         {
-            CurrentState.History.Add(DateTime.UtcNow, d);
+            var now = DateTime.UtcNow;
+            if(CurrentState.History.ContainsKey(now))
+            {
+                CurrentState.History[now] += d;
+            }
+            else
+            {
+                CurrentState.History.Add(DateTime.UtcNow, d);
+            }
         }
     }
 }

@@ -71,9 +71,6 @@
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationController.cs" />
     <Compile Include="FirstRun\FirstRunController.cs" />
-    <Compile Include="Lib\DataMangler.cs" />
-    <Compile Include="Lib\DeltaTools.cs" />
-    <Compile Include="Lib\EliteLogs.cs" />
     <Compile Include="Lib\InaraApi.cs" />
     <Compile Include="NormalRun\MatUpdateForm.cs">
       <SubType>Form</SubType>
@@ -166,6 +163,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\EliteInaraLookups.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LibEDJournal\LibEDJournal.csproj">
+      <Project>{a00a6006-d07e-4093-91d6-0164bcf09594}</Project>
+      <Name>LibEDJournal</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

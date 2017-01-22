@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Picard.Lib;
+using LibEDJournal.State;
 
 namespace Picard.FirstRun
 {
@@ -11,7 +12,7 @@ namespace Picard.FirstRun
         protected PersistentState state;
 
         protected MatInitialVerifyForm form;
-        protected IDictionary<string, int> InitialMats;
+        protected InventorySet InitialMats;
 
         public FirstRunController(InaraApi api, PersistentState state)
         {
@@ -72,7 +73,7 @@ namespace Picard.FirstRun
         /// <param name="e">e.Cancel can be used to prevent window close</param>
         protected void OnCloseAndSave(object sender, CancelEventArgs e)
         {
-            if (DeltaTools.IsZero(InitialMats))
+            if (InitialMats.IsZero)
             {
                 // If the data is all zero, that is a little unusual.
                 // Warn the user that it is going to save all zeroes.

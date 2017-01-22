@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using LibEDJournal.State;
 
 namespace Picard.Lib
 {
@@ -44,7 +45,7 @@ namespace Picard.Lib
         /// There are some places where it is convenient to get the Materials without
         /// making unnecessary requests, and we will store them here.
         /// </summary>
-        public IDictionary<string, int> MaterialsCache;
+        public InventorySet MaterialsCache;
 
         /// <summary>
         /// The HTTPClient instance used to speak with Inara
@@ -222,9 +223,9 @@ namespace Picard.Lib
             });
         }
 
-        protected async Task<IDictionary<string, int>> parseMaterialsSheet(HttpResponseMessage response)
+        protected async Task<InventorySet> parseMaterialsSheet(HttpResponseMessage response)
         {
-            var found = new Dictionary<string, int>();
+            var found = new InventorySet();
 
             var dom = await ParseHtml(response);
 
@@ -367,7 +368,7 @@ namespace Picard.Lib
         /// Loads the Materials Sheet from Inara.cz
         /// </summary>
         /// <returns>A dictionary of materials and counts</returns>
-        public async Task<IDictionary<string, int>> GetMaterialsSheet()
+        public async Task<InventorySet> GetMaterialsSheet()
         {
             // If this is cached, return it
             if(MaterialsCache != null)
@@ -390,7 +391,7 @@ namespace Picard.Lib
             MaterialsCache = null;
         }
 
-        public async Task<IDictionary<string, int>> PostMaterialsSheet(IDictionary<string, int> totals)
+        public async Task<InventorySet> PostMaterialsSheet(InventorySet totals)
         {
             // Invalidate the Cache
             MaterialsCache = null;
