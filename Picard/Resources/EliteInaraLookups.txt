@@ -107,11 +107,11 @@ Irregular Emission Data                  Data                   archivedemission
 Modified Consumer Firmware               Data                   consumerfirmware               0
 Modified Embedded Firmware               Data                   embeddedfirmware               0
 Open Symmetric Keys                      Data                   symmetrickeys                  0
-Pattern Alpha Obelisk Data               Data                   patternalphaobeliskdata        1
-Pattern Beta Obelisk Data                Data                   patternbetaobeliskdata         1
-Pattern Delta Obelisk Data               Data                   patterndeltaobeliskdata        1
-Pattern Epsilon Obelisk Data             Data                   patternepsilonobeliskdata      1
-Pattern Gamma Obelisk Data               Data                   patterngammaobeliskdata        1
+Pattern Alpha Obelisk Data               Data                   ancientbiologicaldata          1
+Pattern Beta Obelisk Data                Data                   ancientculturaldata            1
+Pattern Delta Obelisk Data               Data                   ancientlanguagedata            1
+Pattern Epsilon Obelisk Data             Data                   ancienttechnologicaldata       1
+Pattern Gamma Obelisk Data               Data                   ancienthistoricaldata          1
 Peculiar Shield Frequency Data           Data                   shieldfrequencydata            0
 Security Firmware Patch                  Data                   securityfirmware               0
 Specialised Legacy Firmware              Data                   legacyfirmware                 0
@@ -193,3 +193,10 @@ nerveagents                              Irrelevant Commodity                   
 syntheticreagents                        Irrelevant Commodity                                  0
 bootlegliquor                            Irrelevant Commodity                                  0
 powergenerators                          Irrelevant Commodity                                  0
+Biowaste                                 Irrelevant Commodity                                  0
+ancientcasket                            Irrelevant Commodity                                  0
+ancientorb                               Irrelevant Commodity                                  0
+ancientrelic                             Irrelevant Commodity                                  0
+ancienttablet                            Irrelevant Commodity                                  0
+ancienttotem                             Irrelevant Commodity                                  0
+ancienturn                               Irrelevant Commodity                                  0
