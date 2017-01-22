@@ -1,12 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿///
+/// This file is based upon a response on the JSON.NET CodePlex forums:
+///     http://json.codeplex.com/discussions/56031
+/// Internet Archive Link of the particular page viewed:
+///     http://web.archive.org/web/20160429192643/http://json.codeplex.com/discussions/56031
+/// It is from the third response by the user "nonplus" on that page.
+/// 
+/// This file is part of LibEDJournal.
+/// 
+/// This file is assumed to be in the Public Domain.
+///
+
+using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Picard.Lib
+namespace LibEDJournal
 {
     public abstract class JsonCreationConverter<T> : JsonConverter
     {

@@ -4,6 +4,7 @@ using Picard.Authentication;
 using Picard.FirstRun;
 using Picard.NormalRun;
 using Picard.Lib;
+using LibEDJournal;
 
 namespace Picard
 {

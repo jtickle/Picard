@@ -1,12 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using Picard.Lib.JournalEntry;
+﻿///
+/// Copyright 2017 Jeff Tickle "CMDR VirtualPaper"
+/// 
+/// This file is part of LibEDJournal.
+///
+/// LibEDJournal is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+///
+/// LibEDJournal is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License
+/// along with LibEDJournal.  If not, see<http://www.gnu.org/licenses/>.
+///
 
-namespace Picard.Lib
+using System.Collections.Generic;
+using LibEDJournal.Entry;
+using LibEDJournal.State;
+
+namespace LibEDJournal
 {
     public class EliteJournalMaterialHandler : EliteJournalHandler
     {
-        public IDictionary<string, int>
+        public InventorySet
             Deltas { get; protected set; }
 
         public IDictionary<string, IList<EliteJournalEntry>>
@@ -18,14 +37,14 @@ namespace Picard.Lib
         /// <summary>
         /// Costs of unlocking the Engineers
         /// </summary>
-        protected IDictionary<string, IDictionary<string, int>> 
+        protected IDictionary<string, InventorySet> 
             EngineerCostLookup;
 
         public EliteJournalMaterialHandler(
-            IDictionary<string, IDictionary<string, int>>
+            IDictionary<string, InventorySet>
                 EngineerCostLookup)
         {
-            Deltas = new Dictionary<string, int>();
+            Deltas = new InventorySet();
             MatSeen = new Dictionary<string, IList<EliteJournalEntry>>();
             UnknownEngineers = new List<string>();
 
@@ -33,8 +52,8 @@ namespace Picard.Lib
         }
 
         public EliteJournalMaterialHandler(
-            IDictionary<string, int> deltas,
-            IDictionary<string, IDictionary<string, int>>
+            InventorySet deltas,
+            IDictionary<string, InventorySet>
                 EngineerCostLookup)
         {
             Deltas = deltas;
@@ -52,12 +71,12 @@ namespace Picard.Lib
 
         protected void AddMat(string mat, int count, EliteJournalEntry entry)
         {
-            DeltaTools.AddMat(Deltas, mat, count);
+            Deltas.AddMat(mat, count);
             AddMatSeen(mat, entry);
         }
 
         protected void AddMats(
-            IDictionary<string, int> mats,
+            InventorySet mats,
             EliteJournalEntry entry,
             bool subtract = false)
         {
@@ -172,6 +191,11 @@ namespace Picard.Lib
                 // a mission
                 AddMat(e.CommodityLocalised, -e.Count, e);
             }
+        }
+
+        public override void Handle(ScientificResearch e)
+        {
+            AddMat(e.Name, -e.Count, e);
         }
 
         public override void Handle(Synthesis e)

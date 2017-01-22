@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Xml.Serialization;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using LibEDJournal.State;
 
-namespace Picard.Lib
+namespace LibEDJournal
 {
     public class DataMangler
     {
@@ -15,6 +13,8 @@ namespace Picard.Lib
         public List<string>
             MaterialTypes;
         public List<string>
+            MaterialOrder;
+        public List<string>
             IgnoreCommodities;
         public IDictionary<string, int>
             VersionAdded;
@@ -22,7 +22,7 @@ namespace Picard.Lib
             EliteMatsLookup;
         public IDictionary<string, string>
             MaterialTypeLookup;
-        public IDictionary<string, IDictionary<string, int>>
+        public IDictionary<string, InventorySet>
             EngineerCostLookup;
 
         private static DataMangler INSTANCE = null;
@@ -45,21 +45,21 @@ namespace Picard.Lib
         /// <param name="removed">Will add removed materials to this
         /// dictionary if they are not in the IgnoreCommdoties list</param>
         /// <returns>The filtered and translated dict</returns>
-        public IDictionary<string, int> FilterAndTranslateMats(IDictionary<string, int> deltas, IDictionary<string, int> removed)
+        public InventorySet FilterAndTranslateMats(InventorySet deltas, InventorySet removed)
         {
             // TODO: This should really be looking at the data just pulled
             // from Inara
-            var ret = new Dictionary<string, int>();
+            var ret = new InventorySet();
 
             foreach (var mat in deltas)
             {
                 if (EliteMatsLookup.ContainsKey(mat.Key.ToLower()))
                 {
-                    DeltaTools.AddMat(ret, EliteMatsLookup[mat.Key.ToLower()], mat.Value);
+                    ret.AddMat(EliteMatsLookup[mat.Key.ToLower()], mat.Value);
                 }
                 else if (!IgnoreCommodities.Contains(mat.Key))
                 {
-                    DeltaTools.AddMat(removed, mat.Key, mat.Value);
+                    removed.AddMat(mat.Key, mat.Value);
                 }
             }
 
@@ -69,10 +69,11 @@ namespace Picard.Lib
         private DataMangler()
         {
             MaterialTypes = new List<string>();
+            MaterialOrder = new List<string>();
             IgnoreCommodities = new List<string>();
             EliteMatsLookup = new Dictionary<string, string>();
             MaterialTypeLookup = new Dictionary<string, string>();
-            EngineerCostLookup = new Dictionary<string, IDictionary<string, int>>();
+            EngineerCostLookup = new Dictionary<string, InventorySet>();
             VersionAdded = new Dictionary<string, int>();
 
             // Possible Material Types
@@ -132,6 +133,7 @@ namespace Picard.Lib
                     }
                     else
                     {
+                        MaterialOrder.Add(name);
                         EliteMatsLookup.Add(journal, name);
                         MaterialTypeLookup.Add(name, type);
                         VersionAdded.Add(name, version);
@@ -141,76 +143,77 @@ namespace Picard.Lib
                 DataVersion = VersionAdded.Values.Max();
             }
 
+            InventorySet mats;
             // Logs do not reflect the cost of unlocking an engineer,
             // so we look them up
-            var mats = new Dictionary<string, int>();
+            mats = new InventorySet();
             EngineerCostLookup.Add("Felicity Farseer", mats);
 
-            mats = new Dictionary<string, int>();
+            mats = new InventorySet();
             EngineerCostLookup.Add("Elvira Martuuk", mats);
 
-            mats = new Dictionary<string, int>();
+            mats = new InventorySet();
             EngineerCostLookup.Add("The Dweller", mats);
 
-            mats = new Dictionary<string, int>();
+            mats = new InventorySet();
             EngineerCostLookup.Add("Liz Ryder", mats);
 
-            mats = new Dictionary<string, int>();
+            mats = new InventorySet();
             EngineerCostLookup.Add("Tod McQuinn", mats);
 
-            mats = new Dictionary<string, int>();
+            mats = new InventorySet();
             EngineerCostLookup.Add("Zacariah Nemo", mats);
 
-            mats = new Dictionary<string, int>();
+            mats = new InventorySet();
             EngineerCostLookup.Add("Lei Cheung", mats);
 
-            mats = new Dictionary<string, int>();
+            mats = new InventorySet();
             EngineerCostLookup.Add("Hera Tani", mats);
 
-            mats = new Dictionary<string, int>();
+            mats = new InventorySet();
             EngineerCostLookup.Add("Juri Ishmaak", mats);
 
-            mats = new Dictionary<string, int>();
+            mats = new InventorySet();
             EngineerCostLookup.Add("Selene Jean", mats);
 
-            mats = new Dictionary<string, int>();
-            mats.Add("Modular Terminals", -25);
+            mats = new InventorySet();
+            mats.AddMat("Modular Terminals", -25);
             EngineerCostLookup.Add("Marco Qwent", mats);
 
-            mats = new Dictionary<string, int>();
-            mats.Add("Classified Scan Databanks", -50);
+            mats = new InventorySet();
+            mats.AddMat("Classified Scan Databanks", -50);
             EngineerCostLookup.Add("Ram Tah", mats);
 
-            mats = new Dictionary<string, int>();
+            mats = new InventorySet();
             EngineerCostLookup.Add("Broo Tarquin", mats);
 
-            mats = new Dictionary<string, int>();
+            mats = new InventorySet();
             EngineerCostLookup.Add("Colonel Bris Dekker", mats);
 
-            mats = new Dictionary<string, int>();
+            mats = new InventorySet();
             EngineerCostLookup.Add("Didi Vatermann", mats);
 
-            mats = new Dictionary<string, int>();
-            mats.Add("Unknown Fragment", -25);
+            mats = new InventorySet();
+            mats.AddMat("Unknown Fragment", -25);
             EngineerCostLookup.Add("Professor Palin", mats);
 
-            mats = new Dictionary<string, int>();
+            mats = new InventorySet();
             EngineerCostLookup.Add("Lori Jameson", mats);
 
-            mats = new Dictionary<string, int>();
-            mats.Add("Decoded Emission Data", -50);
+            mats = new InventorySet();
+            mats.AddMat("Decoded Emission Data", -50);
             EngineerCostLookup.Add("Tiana Fortune", mats);
 
-            mats = new Dictionary<string, int>();
-            mats.Add("Aberrant Shield Pattern", -50);
+            mats = new InventorySet();
+            mats.AddMat("Aberrant Shield Pattern", -50);
             EngineerCostLookup.Add("The Sarge", mats);
 
-            mats = new Dictionary<string, int>();
-            mats.Add("Bromellite", -50);
+            mats = new InventorySet();
+            mats.AddMat("Bromellite", -50);
             EngineerCostLookup.Add("Bill Turner", mats);
         }
 
-        public IEnumerable<string> GetUpdates(IDictionary<string, int> data, int ver)
+        public IEnumerable<string> GetUpdates(InventorySet data, int ver)
         {
             return from version in VersionAdded
                    where version.Value > ver

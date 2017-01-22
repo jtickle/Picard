@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Picard.Lib;
-using Picard.Lib.JournalEntry;
+using LibEDJournal;
+using LibEDJournal.Entry;
+using LibEDJournal.State;
 
 namespace MatVerifier
 {
@@ -36,14 +34,14 @@ namespace MatVerifier
 
             #region Show confirmed material names
 
-            var deltas = new Dictionary<string, int>();
+            var deltas = new InventorySet();
             var seen = new Dictionary<string, IList<EliteJournalEntry>>();
 
             // Normalize the names to lowercase
             foreach(var mat in mhandler.Deltas)
             {
                 var name = mat.Key.ToLower();
-                DeltaTools.AddMat(deltas, name, mat.Value);
+                deltas.AddMat(name, mat.Value);
 
                 if(!seen.ContainsKey(name))
                 {

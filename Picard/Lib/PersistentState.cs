@@ -3,11 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using LibEDJournal;
+using LibEDJournal.State;
 
 namespace Picard.Lib
 {
     public class PersistentState
     {
+        public string StatePath { get; protected set; }
         public string StateFile { get; protected set; }
         protected JsonSerializer Serializer;
 
@@ -20,8 +23,10 @@ namespace Picard.Lib
             // have Elite installed
             string local = Environment.GetFolderPath(
                 Environment.SpecialFolder.LocalApplicationData);
-            string file = @"TickleSoft\picard.state";
-            StateFile = Path.Combine(local, file);
+            string path = @"TickleSoft";
+            StatePath = Path.Combine(local, path);
+            string file = @"picard.state";
+            StateFile = Path.Combine(StatePath, file);
        
             // Set us up a serializer to use
             Serializer = new JsonSerializer();
@@ -35,6 +40,23 @@ namespace Picard.Lib
             else
             {
                 create();
+            }
+
+            // Fix Last Post Timestamp if necessary
+            if (CurrentState.History.Count > 0)
+            {
+                // If null and has history, set to last update
+                if(CurrentState.LastPost == DateTime.MinValue)
+                {
+                    CurrentState.LastPost = GetLastUpdateTimestamp();
+                }
+
+                // If not null and has history, leave it alone
+            }
+            else
+            {
+                // Otherwise, set it to the minimum DateTime
+                CurrentState.LastPost = DateTime.MinValue;
             }
         }
 
@@ -73,7 +95,7 @@ namespace Picard.Lib
         /// <summary>
         /// Save State data to the State file
         /// </summary>
-        protected void persist()
+        public void Persist()
         {
             using (JsonWriter writer = new JsonTextWriter(new StreamWriter(StateFile)))
             {
@@ -83,46 +105,45 @@ namespace Picard.Lib
 
         /// <summary>
         /// Gets the current inventory from the perspective of the Picard state file
-        /// As a side-effect, adds any updates available from DataMangler
         /// </summary>
         /// <returns>
         /// A dictionary of all the materials and changes that have been recorded
         /// in the Picard state file
         /// </returns>
-        public IDictionary<string, int> CalculateCurrentInventory()
+        public InventorySet CalculateCurrentInventory()
         {
-            IDictionary<string, int> result = new Dictionary<string, int>();
-
-            // Doing updates first prevents values from being blown away
-            // and hurts nothing
-
-            ApplyUpdates(result);
+            InventorySet result = new InventorySet();
 
             foreach(var time in CurrentState.History)
             {
-                result = DeltaTools.Add(result, time.Value);
+                result = result + time.Value;
             }
 
             return result;
         }
 
-        public void ApplyUpdates(IDictionary<string, int> result)
+        public void ApplyUpdates(InventorySet result)
         {
             var dm = DataMangler.GetInstance();
 
-            IDictionary<string, int> patch = new Dictionary<string, int>();
+            var cshk = CurrentState.History.Keys;
+
+            InventorySet patch =
+                CurrentState.History[cshk.Max()];
+
             foreach (var update in dm.GetUpdates(result,
                 CurrentState.DataVersion))
             {
-                result[update] = 0;
-                patch[update] = 0;
+                if(!result.ContainsKey(update))
+                    result[update] = 0;
+                if(!patch.ContainsKey(update))
+                    patch[update] = 0;
             }
 
             if (patch.Count == 0)
                 return;
 
             CurrentState.DataVersion = dm.DataVersion;
-            AddHistory(patch);
         }
 
         /// <summary>
@@ -156,6 +177,14 @@ namespace Picard.Lib
             return CurrentState.History.Last().Key;
         }
 
+        public void UpdateLastPostToCurrent()
+        {
+            if (CurrentState.History.Keys.Count > 0) {
+                CurrentState.LastPost =
+                    CurrentState.History.Keys.Last();
+            }
+        }
+
         /// <summary>
         /// Updates the Inara credentials stored in the state
         /// </summary>
@@ -172,7 +201,6 @@ namespace Picard.Lib
             CurrentState.InaraU = user;
             CurrentState.InaraP = pass;
             CurrentState.CmdrName = name;
-            persist();
         }
 
         /// <summary>
@@ -181,10 +209,17 @@ namespace Picard.Lib
         /// <param name="d">
         /// The current set of materials from this run
         /// </param>
-        public void AddHistory(IDictionary<string, int> d)
+        public void AddHistory(InventorySet d)
         {
-            CurrentState.History.Add(DateTime.UtcNow, d);
-            persist();
+            var now = DateTime.UtcNow;
+            if(CurrentState.History.ContainsKey(now))
+            {
+                CurrentState.History[now] += d;
+            }
+            else
+            {
+                CurrentState.History.Add(DateTime.UtcNow, d);
+            }
         }
     }
 }

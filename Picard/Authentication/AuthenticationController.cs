@@ -32,6 +32,7 @@ namespace Picard.Authentication
                     form.User,
                     form.Pass,
                     api.cmdrName);
+                state.Persist();
                 form.Close();
             }
             else

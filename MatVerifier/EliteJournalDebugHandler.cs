@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Picard.Lib;
-using Picard.Lib.JournalEntry;
+﻿using System.Collections.Generic;
+using LibEDJournal;
+using LibEDJournal.Entry;
 
 namespace MatVerifier
 {
@@ -51,6 +47,10 @@ namespace MatVerifier
         }
 
         public override void Handle(MissionCompleted e)
+        {
+        }
+
+        public override void Handle(ScientificResearch e)
         {
         }
 

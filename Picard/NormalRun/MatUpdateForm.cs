@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Picard.NormalRun
 {
@@ -40,9 +42,11 @@ namespace Picard.NormalRun
             }
         }
 
-        public MatUpdateForm()
+        public MatUpdateForm(IList<string> MaterialOrder)
         {
             InitializeComponent();
+
+            MatsView.ListViewItemSorter = new MatSorter(MaterialOrder);
         }
 
         /// <summary>
@@ -92,24 +96,25 @@ namespace Picard.NormalRun
             i.SubItems.Add(delta.ToString());
             i.SubItems.Add(result.ToString());
             
-            if(delta != 0)
+            if(delta != 0 || correction != 0)
             {
                 // Bold if there was a change
                 i.Font = new Font(i.Font, FontStyle.Bold);
             }
 
-            if(delta > 0)
+            if(delta > 0 || correction > 0)
             {
                 // Blue background if there was an increase
                 i.BackColor = Color.LightBlue;
             }
-            else if(delta < 0)
+            else if(delta < 0 || correction < 0)
             {
                 // Red background if there was a decrease
                 i.BackColor = Color.Pink;
             }
 
             MatsView.Items.Add(i);
+            MatsView.Sort();
         }
 
         /// <summary>
@@ -185,6 +190,39 @@ namespace Picard.NormalRun
         private void MatUpdateForm_FormClosing(object sender, CancelEventArgs e)
         {
             CloseWithoutSave(sender, e);
+        }
+
+        private class MatSorter : IComparer
+        {
+            internal IList<string> MaterialOrder;
+
+            internal MatSorter(IList<string> materialOrder)
+            {
+                MaterialOrder = materialOrder;
+            }
+
+            public int Compare(object x, object y)
+            {
+                ListViewItem a = x as ListViewItem;
+                ListViewItem b = y as ListViewItem;
+
+                if (a != null)
+                {
+                    if (b != null)
+                    {
+                        return MaterialOrder.IndexOf(a.Text) -
+                            MaterialOrder.IndexOf(b.Text);
+                    }
+
+                    return 1;
+                }
+                else if (b != null)
+                {
+                    return -1;
+                }
+
+                return 0;
+            }
         }
     }
 }
