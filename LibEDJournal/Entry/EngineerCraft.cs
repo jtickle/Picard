@@ -22,13 +22,35 @@ using Newtonsoft.Json.Linq;
 
 namespace LibEDJournal.Entry
 {
+
+    /// <summary>
+    /// This event is recorded when an engineer crafts a modification.
+    /// 
+    /// When this happens, certain player materials are used with a
+    /// blueprint of a certain level in order to modify ship hardware.
+    /// </summary>
     public class EngineerCraft : EliteJournalEntry
     {
+        /// <summary>
+        /// The engineer that did the crafting
+        /// </summary>
         public string Engineer;
-        public string Blueprint;
-        public int Level;
-        public IDictionary<string, int> Ingredients;
 
+        /// <summary>
+        /// The blueprint that was used
+        /// </summary>
+        public string Blueprint;
+
+        /// <summary>
+        /// The level of the blueprint
+        /// </summary>
+        public int Level;
+
+        /// <summary>
+        /// The ingredients that were consumed
+        /// </summary>
+        public IDictionary<string, int> Ingredients;
+        
         public EngineerCraft(JObject json) : base(json) { }
 
         public override void Accept(EliteJournalHandler handler)

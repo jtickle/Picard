@@ -21,10 +21,30 @@ using Newtonsoft.Json.Linq;
 
 namespace LibEDJournal.Entry
 {
+    /// <summary>
+    /// This event is recorded when the player collects a material in
+    /// open space.
+    /// 
+    /// A player scoops up a material with their cargo scoop, which adds
+    /// a count of material to their inventory.
+    /// </summary>
     public class MaterialCollected : EliteJournalEntry
     {
+        /// <summary>
+        /// Either "Encoded" or "Manufactured"
+        /// TODO: Enum
+        /// TODO: I have no idea what this means
+        /// </summary>
         public string Category;
+
+        /// <summary>
+        /// The material name
+        /// </summary>
         public string Name;
+
+        /// <summary>
+        /// The number of materials collected
+        /// </summary>
         public int Count;
 
         public MaterialCollected(JObject json) : base(json) { }

@@ -23,6 +23,25 @@ using LibEDJournal.Entry.Helper;
 
 namespace LibEDJournal.Entry
 {
+    /// <summary>
+    /// This event is recorded when the player completes a mission or
+    /// passenger.
+    /// 
+    /// TODO: Break up into additional subclasses
+    /// 
+    /// TODO: Further research on functionality
+    /// 
+    /// If the Ingredients property is set, the reward is materials or
+    /// data.
+    /// 
+    /// If the CommodityReward property is set, the reward is commodities.
+    /// 
+    /// Also, if CommodityLocalised is set, either the reward is a
+    /// commodity, or a commodity was removed in the completion of a
+    /// mission.  Either way, it should balance out with the commodities
+    /// gained in the corresponding MissionAccepted event.
+    /// 
+    /// </summary>
     public class MissionCompleted : EliteJournalEntry
     {
         public string Faction;

@@ -21,10 +21,30 @@ using Newtonsoft.Json.Linq;
 
 namespace LibEDJournal.Entry
 {
+    /// <summary>
+    /// This event is recorded when the player discards a material in
+    /// open space.
+    /// 
+    /// A player ejects a material from their cargo hold, which removes
+    /// a count of material from their inventory.
+    /// </summary>
     public class MaterialDiscarded : EliteJournalEntry
     {
+        /// <summary>
+        /// Either "Encoded" or "Manufactured"
+        /// TODO: Enum
+        /// TODO: I have no idea what this means
+        /// </summary>
         public string Category;
+
+        /// <summary>
+        /// The material name
+        /// </summary>
         public string Name;
+
+        /// <summary>
+        /// The number of materials discarded
+        /// </summary>
         public int Count;
 
         public MaterialDiscarded(JObject json) : base(json) { }

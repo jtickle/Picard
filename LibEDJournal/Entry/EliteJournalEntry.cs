@@ -72,6 +72,11 @@ namespace LibEDJournal.Entry
             jObject = json;
         }
 
+        /// <summary>
+        /// All subclasses must declare an appropriate override of
+        /// Accept for their particular type.
+        /// </summary>
+        /// <param name="handler">A visitor object that can iterate over this entry</param>
         public abstract void Accept(EliteJournalHandler handler);
     }
 }
