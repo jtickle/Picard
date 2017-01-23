@@ -208,7 +208,7 @@ namespace LibEDJournal
             }
         }
 
-        public override void HandleUnknown(EliteJournalEntry e)
+        public override void Handle(Unknown e)
         {
         }
     }

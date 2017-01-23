@@ -23,29 +23,55 @@ using Newtonsoft.Json;
 
 namespace LibEDJournal.Entry
 {
+    /// <summary>
+    /// The abstract Elite: Dangerous Journal Entry.  It keeps track
+    /// of timestamp and event name, as well as a non-serialized
+    /// journal file source and the orignial dynamic JSON from the
+    /// parser.
+    /// </summary>
     [JsonConverter(typeof(EliteJournalEntryConverter))]
-    public class EliteJournalEntry
+    public abstract class EliteJournalEntry
     {
+        /// <summary>
+        /// The timestamp of the journal entry
+        /// </summary>
         [JsonProperty("timestamp")]
         public DateTime Timestamp;
 
+        /// <summary>
+        /// The event name, used to determine subclass in deserialization
+        /// </summary>
         [JsonProperty("event")]
         public string EventName;
 
+        /// <summary>
+        /// The original file source of this journal entry
+        /// </summary>
         [JsonIgnore]
         public string JournalFile;
 
+        /// <summary>
+        /// The original file line number of this journal entry
+        /// </summary>
+        [JsonIgnore]
+        public int JournalLine;
+
+        /// <summary>
+        /// The original JSON data from the event log
+        /// </summary>
         [JsonIgnore]
         public JObject jObject;
 
+        /// <summary>
+        /// All subclasses must be instiantiated with their orignial
+        /// JSON data
+        /// </summary>
+        /// <param name="json"></param>
         public EliteJournalEntry(JObject json)
         {
             jObject = json;
         }
 
-        public virtual void Accept(EliteJournalHandler handler)
-        {
-            handler.HandleUnknown(this);
-        }
+        public abstract void Accept(EliteJournalHandler handler);
     }
 }

@@ -13,7 +13,7 @@ namespace MatVerifier
             UnknownEvents = new HashSet<string>();
         }
 
-        public override void HandleUnknown(EliteJournalEntry e)
+        public override void Handle(Unknown e)
         {
             UnknownEvents.Add(e.EventName);
         }

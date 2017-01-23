@@ -17,22 +17,17 @@
 /// along with LibEDJournal.  If not, see<http://www.gnu.org/licenses/>.
 ///
 
-using LibEDJournal.Entry;
+using Newtonsoft.Json.Linq;
 
-namespace LibEDJournal
+namespace LibEDJournal.Entry
 {
-    public abstract class EliteJournalHandler
+    public class Unknown : EliteJournalEntry
     {
-        public abstract void Handle(Unknown e);
-        public abstract void Handle(EngineerCraft e);
-        public abstract void Handle(EngineerProgress e);
-        public abstract void Handle(MarketBuy e);
-        public abstract void Handle(MarketSell e);
-        public abstract void Handle(MaterialCollected e);
-        public abstract void Handle(MaterialDiscarded e);
-        public abstract void Handle(MissionAccepted e);
-        public abstract void Handle(MissionCompleted e);
-        public abstract void Handle(ScientificResearch e);
-        public abstract void Handle(Synthesis e);
+        public Unknown(JObject json) : base(json) { }
+
+        public override void Accept(EliteJournalHandler handler)
+        {
+            handler.Handle(this);
+        }
     }
 }

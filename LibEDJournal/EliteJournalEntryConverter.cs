@@ -50,7 +50,7 @@ namespace LibEDJournal
             if(type == null)
             {
                 // If we didn't find the type, we don't know that one yet
-                return typeof(EliteJournalEntry);
+                return typeof(Unknown);
             }
 
             // Found the type
