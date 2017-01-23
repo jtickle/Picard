@@ -57,7 +57,7 @@ namespace LibEDJournal
                 {
                     ret.AddMat(EliteMatsLookup[mat.Key.ToLower()], mat.Value);
                 }
-                else if (!IgnoreCommodities.Contains(mat.Key))
+                else if (!IgnoreCommodities.Contains(mat.Key.ToLower()))
                 {
                     removed.AddMat(mat.Key.ToLower(), mat.Value);
                 }
