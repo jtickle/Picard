@@ -87,6 +87,13 @@ namespace Picard.NormalRun
             }
         }
 
+        public void SetBrokenState()
+        {
+            refreshButton.Enabled = true;
+            okButton.Enabled = true;
+            okButton.Text = "Bad News...";
+        }
+
         public void AddMaterial(string name, int last, int correction,
             int delta, int result)
         {

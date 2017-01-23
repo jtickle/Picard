@@ -247,6 +247,15 @@ namespace Picard.NormalRun
             // If deltas are not empty or there is a corretion, we have stuff to save
             form.SetReadyState(
                 !deltas.IsZero || inaraCorrection != null);
+
+            // If there are unknown materials, tell the user the
+            // bad news, and prevent the window close.
+            if (unknown.Count > 0)
+            {
+                var ackForm = new UnrecognizedMaterials(unknown);
+                ackForm.ShowDialog();
+                form.SetBrokenState();
+            }
         }
 
         protected void SaveDataAndClose()
@@ -290,9 +299,9 @@ namespace Picard.NormalRun
             // bad news, and prevent the window close.
             if (unknown.Count > 0)
             {
+                e.Cancel = true;
                 var ackForm = new UnrecognizedMaterials(unknown);
                 ackForm.ShowDialog();
-                e.Cancel = true;
             }
 
             // If there are negative values in the result dictionary,
