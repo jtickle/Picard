@@ -105,12 +105,18 @@ namespace LibEDJournal
                             yield return
                                 Serializer.Deserialize<EliteJournalEntry>(jsonReader);
 
+                            Serializer.Error += Serializer_Error;
                         }
                     }
                 }
             }
         }
-        
+
+        private void Serializer_Error(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<EliteJournalEntry> GetLogEntries()
         {
             return GetLogEntries(SortLogFiles(GetLogFiles()));

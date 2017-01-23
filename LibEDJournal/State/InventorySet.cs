@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace LibEDJournal.State
 {
+    [Serializable]
     public class InventorySet : Dictionary<string, int>
     {
         public InventorySet() : base()

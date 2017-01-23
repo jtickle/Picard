@@ -59,7 +59,7 @@ namespace LibEDJournal
                 }
                 else if (!IgnoreCommodities.Contains(mat.Key))
                 {
-                    removed.AddMat(mat.Key, mat.Value);
+                    removed.AddMat(mat.Key.ToLower(), mat.Value);
                 }
             }
 
