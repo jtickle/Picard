@@ -45,11 +45,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataMangler.cs" />
+    <Compile Include="Entry\Resurrect.cs" />
+    <Compile Include="Handler\CharacterHandler.cs" />
     <Compile Include="EliteJournalEntryConverter.cs" />
     <Compile Include="EliteJournalHandler.cs" />
-    <Compile Include="EliteJournalMaterialHandler.cs" />
+    <Compile Include="Handler\ResurrectEventArgs.cs" />
+    <Compile Include="Handler\DeathEventArgs.cs" />
+    <Compile Include="Handler\InventoryHandler.cs" />
     <Compile Include="EliteJournalParser.cs" />
-    <Compile Include="Entry\EliteJournalEntry.cs" />
+    <Compile Include="Entry\Died.cs" />
+    <Compile Include="EliteJournalEntry.cs" />
     <Compile Include="Entry\EngineerCraft.cs" />
     <Compile Include="Entry\EngineerProgress.cs" />
     <Compile Include="Entry\Helper\CommodityMapping.cs" />
@@ -62,6 +67,7 @@
     <Compile Include="Entry\ScientificResearch.cs" />
     <Compile Include="Entry\Synthesis.cs" />
     <Compile Include="Entry\Unknown.cs" />
+    <Compile Include="Handler\InventoryEventArgs.cs" />
     <Compile Include="JsonCreationConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

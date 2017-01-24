@@ -1,4 +1,6 @@
-﻿///
+﻿
+using System;
+///
 /// Copyright 2017 Jeff Tickle "CMDR VirtualPaper"
 /// 
 /// This file is part of LibEDJournal.
@@ -16,14 +18,16 @@
 /// You should have received a copy of the GNU General Public License
 /// along with LibEDJournal.  If not, see<http://www.gnu.org/licenses/>.
 ///
-
 using System.Collections.Generic;
 using LibEDJournal.Entry;
 using LibEDJournal.State;
 
-namespace LibEDJournal
+namespace LibEDJournal.Handler
 {
-    public class EliteJournalMaterialHandler : EliteJournalHandler
+    public delegate void InventoryChangedHandler(object sender,
+        InventoryEventArgs e);
+
+    public class InventoryHandler : EliteJournalHandler
     {
         public InventorySet
             Deltas { get; protected set; }
@@ -34,13 +38,15 @@ namespace LibEDJournal
         public IList<string>
             UnknownEngineers { get; protected set; }
 
+        public event InventoryChangedHandler InventoryChanged;
+
         /// <summary>
         /// Costs of unlocking the Engineers
         /// </summary>
         protected IDictionary<string, InventorySet> 
             EngineerCostLookup;
 
-        public EliteJournalMaterialHandler(
+        public InventoryHandler(
             IDictionary<string, InventorySet>
                 EngineerCostLookup)
         {
@@ -51,7 +57,7 @@ namespace LibEDJournal
             this.EngineerCostLookup = EngineerCostLookup;
         }
 
-        public EliteJournalMaterialHandler(
+        public InventoryHandler(
             InventorySet deltas,
             IDictionary<string, InventorySet>
                 EngineerCostLookup)
@@ -69,9 +75,14 @@ namespace LibEDJournal
             MatSeen[mat].Add(entry);
         }
 
-        protected void AddMat(string mat, int count, EliteJournalEntry entry)
+        protected void NotifyInventory(string mat, int delta, EliteJournalEntry entry)
         {
-            Deltas.AddMat(mat, count);
+            // Notify any watchers
+            var e = new InventoryEventArgs(mat, delta, entry);
+            InventoryChanged(this, e);
+
+
+            Deltas.AddMat(mat, delta);
             AddMatSeen(mat, entry);
         }
 
@@ -82,10 +93,14 @@ namespace LibEDJournal
         {
             foreach (var mat in mats)
             {
-                AddMat(mat.Key,
+                NotifyInventory(mat.Key,
                     (subtract ? -1 : 0) + mat.Value,
                     entry);
             }
+        }
+
+        public override void Handle(Died e)
+        {
         }
 
         /// <summary>
@@ -95,7 +110,7 @@ namespace LibEDJournal
         {
             foreach (var mat in e.Ingredients)
             {
-                AddMat(mat.Key, -mat.Value, e);
+                NotifyInventory(mat.Key, -mat.Value, e);
             }
         }
 
@@ -123,12 +138,12 @@ namespace LibEDJournal
 
         public override void Handle(MarketBuy e)
         {
-            AddMat(e.Type, e.Count, e);
+            NotifyInventory(e.Type, e.Count, e);
         }
 
         public override void Handle(MarketSell e)
         {
-            AddMat(e.Type, -e.Count, e);
+            NotifyInventory(e.Type, -e.Count, e);
         }
 
         /// <summary>
@@ -136,7 +151,7 @@ namespace LibEDJournal
         /// </summary>
         public override void Handle(MaterialCollected e)
         {
-            AddMat(e.Name, e.Count, e);
+            NotifyInventory(e.Name, e.Count, e);
         }
 
         /// <summary>
@@ -144,7 +159,7 @@ namespace LibEDJournal
         /// </summary>
         public override void Handle(MaterialDiscarded e)
         {
-            AddMat(e.Name, -e.Count, e);
+            NotifyInventory(e.Name, -e.Count, e);
         }
 
         public override void Handle(MissionAccepted e)
@@ -154,7 +169,7 @@ namespace LibEDJournal
             
             if(e.CommodityLocalised != null)
             {
-                AddMat(e.CommodityLocalised, e.Count, e);
+                NotifyInventory(e.CommodityLocalised, e.Count, e);
             }
         }
 
@@ -172,7 +187,7 @@ namespace LibEDJournal
                 // Handle gaining a material or data through completing a mission
                 foreach (var mat in e.Ingredients)
                 {
-                    AddMat(mat.Key, mat.Value, e);
+                    NotifyInventory(mat.Key, mat.Value, e);
                 }
             }
             // If a "CommodityReward" property is set, it is commodities
@@ -181,7 +196,7 @@ namespace LibEDJournal
                 // Handle gaining a commodity through completing a mission
                 foreach (var mat in e.CommodityReward)
                 {
-                    AddMat(mat.Name, mat.Count, e);
+                    NotifyInventory(mat.Name, mat.Count, e);
                 }
             }
 
@@ -189,13 +204,17 @@ namespace LibEDJournal
             {
                 // Handle losing a commodity as the result of completing
                 // a mission
-                AddMat(e.CommodityLocalised, -e.Count, e);
+                NotifyInventory(e.CommodityLocalised, -e.Count, e);
             }
+        }
+
+        public override void Handle(Resurrect e)
+        {
         }
 
         public override void Handle(ScientificResearch e)
         {
-            AddMat(e.Name, -e.Count, e);
+            NotifyInventory(e.Name, -e.Count, e);
         }
 
         public override void Handle(Synthesis e)
@@ -204,7 +223,7 @@ namespace LibEDJournal
 
             foreach(var mat in e.Materials)
             {
-                AddMat(mat.Key, -mat.Value, e);
+                NotifyInventory(mat.Key, -mat.Value, e);
             }
         }
 

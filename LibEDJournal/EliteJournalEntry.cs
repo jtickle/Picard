@@ -21,7 +21,7 @@ using System;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
-namespace LibEDJournal.Entry
+namespace LibEDJournal
 {
     /// <summary>
     /// The abstract Elite: Dangerous Journal Entry.  It keeps track

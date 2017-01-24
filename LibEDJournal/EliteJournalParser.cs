@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data;
 using Newtonsoft.Json;
-using LibEDJournal.Entry;
 
 namespace LibEDJournal
 {

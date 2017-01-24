@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Picard.Lib;
 using LibEDJournal;
 using LibEDJournal.State;
+using LibEDJournal.Handler;
 
 namespace Picard.NormalRun
 {
@@ -207,8 +208,11 @@ namespace Picard.NormalRun
             // Indicate that we are loading something
             form.SetLoadingState();
 
-            // Initialize empty dictionary of unknown "materials"
+            // Initialize empty InventorySet of unknown "materials"
             unknown = new InventorySet();
+
+            // Initialize empty InventorySet of deltas from log files
+            deltas = new InventorySet();
 
             // Get last run materials from Picard State
             last = state.CalculateCurrentInventory();
@@ -221,15 +225,52 @@ namespace Picard.NormalRun
 
             // Parse logs and get the changes to material counts
             // The filtering function adds unrecognized materials to unknown list
-            var handler = new EliteJournalMaterialHandler(dm.EngineerCostLookup);
-            var handlers = new List<EliteJournalHandler>() { handler };
+            var MatHandler = new InventoryHandler(dm.EngineerCostLookup);
+            MatHandler.InventoryChanged +=
+                (object invSender, InventoryEventArgs ie) =>
+                {
+                    var mat = ie.Name.ToLower();
+                    if (dm.EliteMatsLookup.ContainsKey(mat))
+                    {
+                        deltas.AddMat(mat, ie.Delta);
+                    }
+                    else if (!dm.IgnoreCommodities.Contains(mat))
+                    {
+                        unknown.AddMat(mat, ie.Delta);
+                    }
+                };
+
+            var ChHandler = new CharacterHandler();
+            ChHandler.CharacterDied +=
+                (object chSender, DeathEventArgs de) =>
+                {
+                    Console.WriteLine("OHES NOES");
+                    foreach (var comm in dm.MaterialTypeLookup)
+                    {
+                        if (comm.Value != "Commodities")
+                            continue;
+
+                        var c = comm.Key;
+
+                        if (deltas.ContainsKey(c))
+                        {
+                            deltas[c] = 0;
+                        }
+                        if (last.ContainsKey(c))
+                        {
+                            deltas[c] = -last[c];
+                        }
+                    }
+                };
+            var handlers = new List<EliteJournalHandler>() {
+                MatHandler, ChHandler };
             logs.HandleLogEntries(
                 state.GetLastUpdateTimestamp(),
                 handlers
                 );
-            deltas = dm.FilterAndTranslateMats(
-                handler.Deltas,
-                    unknown);
+            /*deltas = dm.FilterAndTranslateMats(
+                MatHandler.Deltas,
+                    unknown);*/
 
             // Apply changes to material counts
             result = last + deltas;

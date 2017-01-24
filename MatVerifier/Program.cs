@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using LibEDJournal;
 using LibEDJournal.Entry;
 using LibEDJournal.State;
+using LibEDJournal.Handler;
 
 namespace MatVerifier
 {
@@ -16,8 +17,8 @@ namespace MatVerifier
             EliteJournalDebugHandler dhandler
                 = new EliteJournalDebugHandler();
 
-            EliteJournalMaterialHandler mhandler
-                = new EliteJournalMaterialHandler(dm.EngineerCostLookup);
+            InventoryHandler mhandler
+                = new InventoryHandler(dm.EngineerCostLookup);
 
             var handlers = new List<EliteJournalHandler>() { dhandler, mhandler };
             

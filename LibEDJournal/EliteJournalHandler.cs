@@ -24,6 +24,7 @@ namespace LibEDJournal
     public abstract class EliteJournalHandler
     {
         public abstract void Handle(Unknown e);
+        public abstract void Handle(Died e);
         public abstract void Handle(EngineerCraft e);
         public abstract void Handle(EngineerProgress e);
         public abstract void Handle(MarketBuy e);
@@ -32,6 +33,7 @@ namespace LibEDJournal
         public abstract void Handle(MaterialDiscarded e);
         public abstract void Handle(MissionAccepted e);
         public abstract void Handle(MissionCompleted e);
+        public abstract void Handle(Resurrect e);
         public abstract void Handle(ScientificResearch e);
         public abstract void Handle(Synthesis e);
     }

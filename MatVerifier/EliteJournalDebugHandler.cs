@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using LibEDJournal;
 using LibEDJournal.Entry;
 
@@ -16,6 +17,10 @@ namespace MatVerifier
         public override void Handle(Unknown e)
         {
             UnknownEvents.Add(e.EventName);
+        }
+
+        public override void Handle(Died e)
+        {
         }
 
         public override void Handle(EngineerCraft e)
@@ -47,6 +52,10 @@ namespace MatVerifier
         }
 
         public override void Handle(MissionCompleted e)
+        {
+        }
+
+        public override void Handle(Resurrect e)
         {
         }
 
