@@ -244,7 +244,6 @@ namespace Picard.NormalRun
             ChHandler.CharacterDied +=
                 (object chSender, DeathEventArgs de) =>
                 {
-                    Console.WriteLine("OHES NOES");
                     foreach (var comm in dm.MaterialTypeLookup)
                     {
                         if (comm.Value != "Commodities")

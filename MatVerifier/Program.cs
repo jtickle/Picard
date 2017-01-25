@@ -13,12 +13,25 @@ namespace MatVerifier
         {
             EliteJournalParser logs = new EliteJournalParser();
             DataMangler dm = DataMangler.GetInstance();
+            InventorySet Deltas = new InventorySet();
+            IDictionary<string, IList<EliteJournalEntry>> MatSeen =
+                new Dictionary<string, IList<EliteJournalEntry>>();
 
             EliteJournalDebugHandler dhandler
                 = new EliteJournalDebugHandler();
 
             InventoryHandler mhandler
                 = new InventoryHandler(dm.EngineerCostLookup);
+
+            mhandler.InventoryChanged += (object sender, InventoryEventArgs e) =>
+            {
+                Deltas.AddMat(e.Name, e.Delta);
+                if (!MatSeen.ContainsKey(e.Name))
+                {
+                    MatSeen[e.Name] = new List<EliteJournalEntry>();
+                }
+                MatSeen[e.Name].Add(e.JournalEntry);
+            };
 
             var handlers = new List<EliteJournalHandler>() { dhandler, mhandler };
             
@@ -39,7 +52,7 @@ namespace MatVerifier
             var seen = new Dictionary<string, IList<EliteJournalEntry>>();
 
             // Normalize the names to lowercase
-            foreach(var mat in mhandler.Deltas)
+            foreach(var mat in Deltas)
             {
                 var name = mat.Key.ToLower();
                 deltas.AddMat(name, mat.Value);
@@ -51,7 +64,7 @@ namespace MatVerifier
 
                 // Insert seen events in the appropriate order
                 var i = 0;
-                foreach (var e in mhandler.MatSeen[mat.Key])
+                foreach (var e in MatSeen[mat.Key])
                 {
                     bool wasInserted = false;
 

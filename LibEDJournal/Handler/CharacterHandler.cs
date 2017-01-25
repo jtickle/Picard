@@ -65,12 +65,18 @@ namespace LibEDJournal.Handler
         /// <param name="e"></param>
         public override void Handle(Died e)
         {
-            CharacterDied(this, new DeathEventArgs(e));
+            if(CharacterDied != null)
+            {
+                CharacterDied(this, new DeathEventArgs(e));
+            }
         }
 
         public override void Handle(Resurrect e)
         {
-            CharacterResurrected(this, new ResurrectEventArgs(e));
+            if(CharacterResurrected != null)
+            {
+                CharacterResurrected(this, new ResurrectEventArgs(e));
+            }
         }
 
         public override void Handle(Unknown e)

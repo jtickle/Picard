@@ -29,11 +29,6 @@ namespace LibEDJournal.Handler
 
     public class InventoryHandler : EliteJournalHandler
     {
-        public InventorySet
-            Deltas { get; protected set; }
-
-        public IDictionary<string, IList<EliteJournalEntry>>
-            MatSeen { get; protected set; }
 
         public IList<string>
             UnknownEngineers { get; protected set; }
@@ -50,40 +45,19 @@ namespace LibEDJournal.Handler
             IDictionary<string, InventorySet>
                 EngineerCostLookup)
         {
-            Deltas = new InventorySet();
-            MatSeen = new Dictionary<string, IList<EliteJournalEntry>>();
             UnknownEngineers = new List<string>();
 
             this.EngineerCostLookup = EngineerCostLookup;
         }
 
-        public InventoryHandler(
-            InventorySet deltas,
-            IDictionary<string, InventorySet>
-                EngineerCostLookup)
-        {
-            Deltas = deltas;
-            this.EngineerCostLookup = EngineerCostLookup;
-        }
-
-        protected void AddMatSeen(string mat, EliteJournalEntry entry)
-        {
-            if(!MatSeen.ContainsKey(mat))
-            {
-                MatSeen[mat] = new List<EliteJournalEntry>();
-            }
-            MatSeen[mat].Add(entry);
-        }
-
         protected void NotifyInventory(string mat, int delta, EliteJournalEntry entry)
         {
             // Notify any watchers
-            var e = new InventoryEventArgs(mat, delta, entry);
-            InventoryChanged(this, e);
-
-
-            Deltas.AddMat(mat, delta);
-            AddMatSeen(mat, entry);
+            if (InventoryChanged != null)
+            {
+                var e = new InventoryEventArgs(mat, delta, entry);
+                InventoryChanged(this, e);
+            }
         }
 
         protected void AddMats(

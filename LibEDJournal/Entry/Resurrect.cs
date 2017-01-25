@@ -25,7 +25,7 @@ namespace LibEDJournal.Entry
     {
         public string Option;
         public int Cost;
-        public string Bankrupt;
+        public bool Bankrupt;
 
         public Resurrect(JObject json) : base(json) { }
 
