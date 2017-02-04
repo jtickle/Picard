@@ -24,7 +24,7 @@ namespace Picard.Lib
             string local = Environment.GetFolderPath(
                 Environment.SpecialFolder.LocalApplicationData);
             string path = @"TickleSoft";
-            StatePath = Path.Combine(local, path);
+            StatePath = Path.Combine(local, path); 
             string file = @"picard.state";
             StateFile = Path.Combine(StatePath, file);
        

@@ -232,7 +232,7 @@ namespace Picard.NormalRun
                     var mat = ie.Name.ToLower();
                     if (dm.EliteMatsLookup.ContainsKey(mat))
                     {
-                        deltas.AddMat(mat, ie.Delta);
+                        deltas.AddMat(dm.EliteMatsLookup[mat], ie.Delta);
                     }
                     else if (!dm.IgnoreCommodities.Contains(mat))
                     {
@@ -251,13 +251,13 @@ namespace Picard.NormalRun
 
                         var c = comm.Key;
 
-                        if (deltas.ContainsKey(c))
-                        {
-                            deltas[c] = 0;
-                        }
-                        if (last.ContainsKey(c))
+                        if(last.ContainsKey(c))
                         {
                             deltas[c] = -last[c];
+                        }
+                        else if (deltas.ContainsKey(c))
+                        {
+                            deltas[c] = 0;
                         }
                     }
                 };
