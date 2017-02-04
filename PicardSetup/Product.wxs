@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	<Product Id="7f6054bd-c6d5-40b0-b3b0-3f96a6df14f0" Name="Picard" Language="1033" Version="1.0.0.0" Manufacturer="TickleSoft" UpgradeCode="7f6054bd-c6d5-40b0-b3b0-3f96a6df14f0">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <UIRef Id="WixUI_Minimal" />
+    <WixVariable Id="WixUILicenseRtf" Value="..\COPYING.rtf"/>
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate />
+
+    <PropertyRef Id="WIX_IS_NETFRAMEWORK_452_OR_LATER_INSTALLED" />
+
+    <Condition Message="Picard requires .NET framework 4.5.2.  Please install the .NET framework then run this installer again.">
+      <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_452_OR_LATER_INSTALLED]]>
+    </Condition>
+
+    <Icon Id="Picard.ico" SourceFile="..\Picard\picard.ico" />
+    <Property Id="ARPPRODUCTICON" Value="Picard.ico" />
+    
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="Picard" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="Picard" />
+      </Directory>
+    </Directory>
+
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="PicardExecutable">
+        <File Id="Picard.exe" Source="$(var.Picard.TargetPath)" />
+      </Component>
+      <Component Id="HtmlAgilityPack">
+        <File Source="$(var.Picard.TargetDir)\HtmlAgilityPack.dll" />
+      </Component>
+      <Component Id="LibEDJournal">
+        <File Source="$(var.Picard.TargetDir)\LibEDJournal.dll" />
+      </Component>
+      <Component Id="NewtonsoftJson">
+        <File Source="$(var.Picard.TargetDir)\Newtonsoft.Json.dll" />
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="ApplicationProgramsFolder">
+      <Component Id="ApplicationShortcut" Guid="E6BE6636-A5C0-48F8-B245-174002804DA4">
+        <Shortcut Id="ApplicationStartMenuShortcut"
+                  Name="Picard"
+                  Description="Synchronize Elite: Dangerous with Inara.cz"
+                  Target="[#Picard.exe]"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY"/>
+        <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\TickleSoft\Picard" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+		<Feature Id="ProductFeature" Title="Picard" Level="1">
+      <ComponentRef Id="PicardExecutable" />
+      <ComponentRef Id="HtmlAgilityPack" />
+      <ComponentRef Id="LibEDJournal" />
+      <ComponentRef Id="NewtonsoftJson" />
+      <ComponentRef Id="ApplicationShortcut" />
+		</Feature>
+  </Product>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			
+		</ComponentGroup>
+	</Fragment>
+</Wix>

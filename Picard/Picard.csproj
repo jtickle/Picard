@@ -48,7 +48,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>picard[1].ico</ApplicationIcon>
+    <ApplicationIcon>picard.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
@@ -158,7 +158,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="picard[1].ico" />
+    <Content Include="picard.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

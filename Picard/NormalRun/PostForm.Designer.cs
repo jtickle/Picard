@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostForm));
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.okButton = new System.Windows.Forms.Button();
             this.statusLabel = new System.Windows.Forms.Label();
@@ -73,6 +74,7 @@
             this.ClientSize = new System.Drawing.Size(278, 261);
             this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.flowLayoutPanel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PostForm";
             this.Text = "Updating Inara.cz...";
             this.flowLayoutPanel1.ResumeLayout(false);

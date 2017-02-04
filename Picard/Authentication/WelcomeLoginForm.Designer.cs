@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WelcomeLoginForm));
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.LoginFormPanel = new System.Windows.Forms.Panel();
@@ -157,6 +158,7 @@
             this.Controls.Add(this.errorLabel);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "WelcomeLoginForm";
             this.Text = "Picard - Elite: Dangerous Log Loader";
             this.Load += new System.EventHandler(this.WelcomeLoginForm_Load);

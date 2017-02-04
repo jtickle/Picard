@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UnrecognizedMaterials));
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.button1 = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
@@ -111,6 +112,7 @@
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "UnrecognizedMaterials";
             this.Text = "Unrecognized Materials/Commodities";
             this.Load += new System.EventHandler(this.UnrecognizedMaterials_Load);

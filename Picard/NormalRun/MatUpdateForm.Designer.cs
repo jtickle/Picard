@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MatUpdateForm));
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.okButton = new System.Windows.Forms.Button();
             this.refreshButton = new System.Windows.Forms.Button();
@@ -147,6 +148,7 @@
             this.Controls.Add(this.MatsView);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MatUpdateForm";
             this.Text = "Update Inara.cz From Elite Logs";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MatUpdateForm_FormClosing);
