@@ -95,6 +95,7 @@
             // MatName
             // 
             this.MatName.Text = "Material";
+            this.MatName.Width = 300;
             // 
             // MatCount
             // 

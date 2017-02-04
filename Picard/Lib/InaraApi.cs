@@ -214,7 +214,7 @@ namespace Picard.Lib
             {
                 foreach (var attr in node.Attributes.AttributesWithName(key))
                 {
-                    if(attr.Value.Contains(value))
+                    if (attr.Value.Contains(value))
                     {
                         return true;
                     }
@@ -326,7 +326,7 @@ namespace Picard.Lib
                     }
                     else
                     {
-                        lastError = "Unknown";
+                        lastError = "Invalid username or password.  You can also use your email address as username.";
                     }
                 }
                 else
