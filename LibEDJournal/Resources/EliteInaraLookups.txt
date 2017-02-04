@@ -200,3 +200,4 @@ ancientrelic                             Irrelevant Commodity                   
 ancienttablet                            Irrelevant Commodity                                  0
 ancienttotem                             Irrelevant Commodity                                  0
 ancienturn                               Irrelevant Commodity                                  0
+wine                                     Irrelevant Commodity                                  0
