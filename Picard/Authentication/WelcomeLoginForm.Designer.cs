@@ -161,7 +161,7 @@
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "WelcomeLoginForm";
-            this.Text = "Picard - Elite: Dangerous Log Loader";
+            this.Text = "Picard - Elite Dangerous Log Loader";
             this.Load += new System.EventHandler(this.WelcomeLoginForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.LoginFormPanel.ResumeLayout(false);

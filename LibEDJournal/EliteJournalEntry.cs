@@ -24,7 +24,7 @@ using Newtonsoft.Json;
 namespace LibEDJournal
 {
     /// <summary>
-    /// The abstract Elite: Dangerous Journal Entry.  It keeps track
+    /// The abstract Elite Dangerous Journal Entry.  It keeps track
     /// of timestamp and event name, as well as a non-serialized
     /// journal file source and the orignial dynamic JSON from the
     /// parser.

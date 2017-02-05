@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Picard")]
-[assembly: AssemblyDescription("Loads data from your Elite: Dangerous log files and updates your Inara.cz profile.")]
+[assembly: AssemblyDescription("Loads data from your Elite Dangerous: Horizons log files and updates your Inara.cz profile.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Jeff Tickle Enterprises")]
 [assembly: AssemblyProduct("Picard")]

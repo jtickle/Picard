@@ -30,7 +30,7 @@ namespace Picard
             // Inara.cz API
             InaraApi api = new InaraApi();
 
-            // Elite: Dangerous Gameplay Logs
+            // Elite Dangerous Gameplay Logs
             EliteJournalParser logs = new EliteJournalParser();
 
             // Show a login dialog box and handle user authentication with Inara

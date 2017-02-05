@@ -6,10 +6,10 @@
     <UIRef Id="WixUI_Minimal" />
     <WixVariable Id="WixUILicenseRtf" Value="..\COPYING.rtf"/>
 
-    <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="PLEASE READ THIS BECAUSE PICARD WILL NOT WORK IF YOU DON'T DO A LITTLE SETUP.  Before you run Picard for the first time, you must MANUALLY update Inara.cz with your CURRENT Elite: Dangerous materials inventory.  Then, run Picard, and it will create an initial snapshot.  From then on, every time you need to update your materials inventory on Inara.cz, just run Picard." />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="PLEASE READ THIS BECAUSE PICARD WILL NOT WORK IF YOU DON'T DO A LITTLE SETUP.  Before you run Picard for the first time, you must MANUALLY update Inara.cz with your CURRENT Elite Dangerous: Horizons materials inventory.  Then, run Picard, and it will create an initial snapshot.  From then on, every time you need to update your materials inventory on Inara.cz, just run Picard." />
               
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-		<MediaTemplate />
+		<MediaTemplate EmbedCab="yes"/>
 
     <PropertyRef Id="WIX_IS_NETFRAMEWORK_452_OR_LATER_INSTALLED" />
 
@@ -48,7 +48,7 @@
       <Component Id="ApplicationShortcut" Guid="E6BE6636-A5C0-48F8-B245-174002804DA4">
         <Shortcut Id="ApplicationStartMenuShortcut"
                   Name="Picard"
-                  Description="Synchronize Elite: Dangerous with Inara.cz"
+                  Description="Synchronize Elite Dangerous: Horizons with Inara.cz"
                   Target="[#Picard.exe]"
                   WorkingDirectory="APPLICATIONROOTDIRECTORY"/>
         <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />

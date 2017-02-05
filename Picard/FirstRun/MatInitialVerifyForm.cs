@@ -74,9 +74,9 @@ namespace Picard.FirstRun
         public bool IsUserOKWithNoMats()
         {
             var ret = MessageBox.Show(
-                "According to Inara, you have no materials.  If your Elite: Dangerous " +
+                "According to Inara, you have no materials.  If your Elite Dangerous: Horizons " +
                 "character actually has no materials, then this is fine.  However, if " +
-                "your Elite: Dangerous character does have any engineering materials, " +
+                "your Elite Dangerous character does have any engineering materials, " +
                 "you need to enter your current balances into Inara manually, and then " +
                 "Picard will update those balances in future runs.",
                 "No Materials in Inara!",
