@@ -43,13 +43,6 @@
       <Name>WixNetFxExtension</Name>
     </WixExtension>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\" />
-    <Folder Include="bin\Release\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="bin\Release\PicardSetup.msi" />
-  </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
