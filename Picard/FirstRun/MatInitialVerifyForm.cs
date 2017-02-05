@@ -7,10 +7,16 @@ namespace Picard.FirstRun
     public sealed partial class MatInitialVerifyForm : Form
     {
         /// <summary>
-        /// Fired when the form first shows and when the user requests
-        /// a reload.  The expectation is that new data will be refreshed
-        /// from Inara and the list of materials will be cleared and
-        /// repopulated.
+        /// Fired when the form first shows.  The expectation is that
+        /// the list of materials will be populated with current data
+        /// from Inara.
+        /// </summary>
+        public event EventHandler<EventArgs> FirstLoadMats;
+
+        /// <summary>
+        /// Fired when the user requests a reload.  The expectation is
+        /// that the list of materials will be cleared and populated
+        /// with current data from Inara.
         /// </summary>
         public event EventHandler<EventArgs> ReloadMats;
 
@@ -26,6 +32,8 @@ namespace Picard.FirstRun
         /// </summary>
         public event EventHandler<CancelEventArgs> CloseAndSave;
 
+        private ListViewItem LoadingItem;
+
         public MatInitialVerifyForm()
         {
             InitializeComponent();
@@ -37,6 +45,24 @@ namespace Picard.FirstRun
         public void ClearList()
         {
             MatsView.Items.Clear();
+        }
+
+        public void SetLoadingState()
+        {
+            MatsView.Items.Clear();
+            LoadingItem = new ListViewItem("Loading...");
+            MatsView.Items.Add(LoadingItem);
+            refreshButton.Enabled = false;
+            okButton.Enabled = false;
+        }
+
+        public void SetReadyState()
+        {
+            if (LoadingItem != null) {
+                MatsView.Items.Remove(LoadingItem);
+            }
+            refreshButton.Enabled = true;
+            okButton.Enabled = true;
         }
 
         /// <summary>
@@ -92,7 +118,7 @@ namespace Picard.FirstRun
         /// <param name="e">Ignored</param>
         private void Form1_Load(object sender, EventArgs e)
         {
-            ReloadMats(this, new EventArgs());
+            FirstLoadMats(this, new EventArgs());
         }
 
         /// <summary>

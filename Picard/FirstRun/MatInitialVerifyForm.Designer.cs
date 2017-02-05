@@ -84,10 +84,10 @@
             this.MatCount});
             this.MatsView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MatsView.GridLines = true;
-            this.MatsView.Location = new System.Drawing.Point(0, 32);
+            this.MatsView.Location = new System.Drawing.Point(0, 45);
             this.MatsView.MultiSelect = false;
             this.MatsView.Name = "MatsView";
-            this.MatsView.Size = new System.Drawing.Size(521, 548);
+            this.MatsView.Size = new System.Drawing.Size(521, 535);
             this.MatsView.TabIndex = 1;
             this.MatsView.UseCompatibleStateImageBehavior = false;
             this.MatsView.View = System.Windows.Forms.View.Details;
@@ -107,18 +107,17 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(521, 32);
+            this.panel1.Size = new System.Drawing.Size(521, 45);
             this.panel1.TabIndex = 2;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 9);
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(426, 13);
+            this.label1.Size = new System.Drawing.Size(521, 45);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Please give this the ol\' once-over and compare it with what you have in Elite: Da" +
-    "ngerous.";
+            this.label1.Text = resources.GetString("label1.Text");
             // 
             // MatInitialVerifyForm
             // 
@@ -135,7 +134,6 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
