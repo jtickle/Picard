@@ -22,10 +22,28 @@ namespace Picard.FirstRun
             // Set up main form and event handlers
             form = new MatInitialVerifyForm();
             form.ReloadMats += OnReloadMats;
+            form.FirstLoadMats += OnFirstLoadMats;
             form.CloseWithoutSaving += OnCloseWithoutSaving;
             form.CloseAndSave += OnCloseAndSave;
 
             InitialMats = null;
+        }
+
+        protected void UpdateMaterialsList()
+        {
+            foreach (var mat in InitialMats)
+            {
+                // Add each material to the big list
+                form.AddMaterial(mat.Key, mat.Value);
+            }
+        }
+
+        protected async void OnFirstLoadMats(object sender, EventArgs e)
+        {
+            form.SetLoadingState();
+            InitialMats = await api.GetMaterialsSheet();
+            UpdateMaterialsList();
+            form.SetReadyState();
         }
 
         /// <summary>
@@ -35,20 +53,12 @@ namespace Picard.FirstRun
         /// <param name="e">Ignored</param>
         protected async void OnReloadMats(object sender, EventArgs e)
         {
-            // TODO: ReloadEventArgs that can tell me if we need to
-            // clear the InaraApi MaterialsCache
-
             // Get Materials, potentially cached from login
+            form.SetLoadingState();
+            api.ClearMaterialsCache();
             InitialMats = await api.GetMaterialsSheet();
-
-            // Clear current materials list, if any
-            form.ClearList();
-
-            foreach (var mat in InitialMats)
-            {
-                // Add each material to the big list
-                form.AddMaterial(mat.Key, mat.Value);
-            }
+            UpdateMaterialsList();
+            form.SetReadyState();
         }
 
         /// <summary>
