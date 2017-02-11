@@ -52,6 +52,10 @@ namespace Picard.Lib
         /// </summary>
         private HttpClient http;
 
+        private string Username;
+        private string Password;
+        private bool HasAuthenticated = false;
+
         /// <summary>
         /// The location to which to post Authentication credentials
         /// </summary>
@@ -214,7 +218,7 @@ namespace Picard.Lib
             {
                 foreach (var attr in node.Attributes.AttributesWithName(key))
                 {
-                    if (attr.Value.Contains(value))
+                    if (Regex.Match(attr.Value, @"\b" + value + @"\b").Success)
                     {
                         return true;
                     }
@@ -240,7 +244,7 @@ namespace Picard.Lib
 
                 // The count is in a form input
                 var value = node.Descendants("input").First().GetAttributeValue("value", 0);
-                
+
                 // Add the material to be returned
                 found.Add(mat, value);
 
@@ -285,6 +289,16 @@ namespace Picard.Lib
             MaterialsCache = found;
             
             return found;
+        }
+
+        private async Task<bool> Reauthenticate()
+        {
+            if(!HasAuthenticated)
+            {
+                throw new Exception("Tried to reauthenticate without ever having authenticated");
+            }
+
+            return await Authenticate(Username, Password);
         }
 
         /// <summary>
@@ -340,6 +354,9 @@ namespace Picard.Lib
             {
                 // Otherwise, we're logged in!
                 isAuthenticated = true;
+                HasAuthenticated = true;
+                Username = user;
+                Password = pass;
                 await parseMaterialsSheet(response);
                 return true;
             }
@@ -375,6 +392,12 @@ namespace Picard.Lib
             {
                 return MaterialsCache;
             }
+
+            if (!await Reauthenticate())
+            {
+                throw new Exception("Username or Password changed since last login.  Please restart Picard.");
+            }
+
             // Perform the GET to retrieve the materisl page
             var response = await DoGet(MatsSheetURL + GetEliteSheet());
 

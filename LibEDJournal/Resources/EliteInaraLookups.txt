@@ -185,7 +185,7 @@ gold                                     Irrelevant Commodity                   
 gallium                                  Irrelevant Commodity                                  0
 beryllium                                Irrelevant Commodity                                  0
 computercomponents                       Irrelevant Commodity                                  0
-Cobalt                                   Irrelevant Commodity                                  0
+cobalt                                   Irrelevant Commodity                                  0
 bertrandite                              Irrelevant Commodity                                  0
 gallite                                  Irrelevant Commodity                                  0
 mineral Extractors                       Irrelevant Commodity                                  0
