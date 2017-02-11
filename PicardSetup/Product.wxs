@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
-	<Product Id="7f6054bd-c6d5-40b0-b3b0-3f96a6df14f0" Name="Picard" Language="1033" Version="1.0.0.0" Manufacturer="TickleSoft" UpgradeCode="7f6054bd-c6d5-40b0-b3b0-3f96a6df14f0">
+	<Product Id="ed00f5b2-de7c-49ad-bc04-0c0304bc0e9c" Name="Picard" Language="1033" Version="1.0.1" Manufacturer="Tickle Laboratories" UpgradeCode="7f6054bd-c6d5-40b0-b3b0-3f96a6df14f0">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+    
+    <MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
+    
 
     <UIRef Id="WixUI_Minimal" />
     <WixVariable Id="WixUILicenseRtf" Value="..\COPYING.rtf"/>
 
-    <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="PLEASE READ THIS BECAUSE PICARD WILL NOT WORK IF YOU DON'T DO A LITTLE SETUP.  Before you run Picard for the first time, you must MANUALLY update Inara.cz with your CURRENT Elite Dangerous: Horizons materials inventory.  Then, run Picard, and it will create an initial snapshot.  From then on, every time you need to update your materials inventory on Inara.cz, just run Picard." />
-              
-		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="PLEASE READ THIS IF YOU ARE INSTALLING FOR THE FIRST TIME.  Ignore if you have used Picard before.  Before you run Picard for the first time, you must MANUALLY update Inara.cz with your CURRENT Elite Dangerous: Horizons materials inventory.  Then, run Picard, and it will create an initial snapshot.  From then on, every time you need to update your materials inventory on Inara.cz, just run Picard." />
 		<MediaTemplate EmbedCab="yes"/>
 
     <PropertyRef Id="WIX_IS_NETFRAMEWORK_452_OR_LATER_INSTALLED" />

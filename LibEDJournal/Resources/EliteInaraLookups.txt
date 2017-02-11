@@ -92,7 +92,7 @@ Adaptive Encryptors Capture              Data                   adaptiveencrypto
 Anomalous Bulk Scan Data                 Data                   bulkscandata                   0
 Anomalous FSD Telemetry                  Data                   fsdtelemetry                   0
 Atypical Disrupted Wake Echoes           Data                   disruptedwakeechoes            0
-Atypical Encryption Archives             Data                   atypicalencryptionarchives     0
+Atypical Encryption Archives             Data                   encryptionarchives             0
 Classified Scan Databanks                Data                   scandatabanks                  0
 Classified Scan Fragment                 Data                   classifiedscandata             0
 Cracked Industrial Firmware              Data                   industrialfirmware             0
@@ -201,3 +201,11 @@ ancienttablet                            Irrelevant Commodity                   
 ancienttotem                             Irrelevant Commodity                                  0
 ancienturn                               Irrelevant Commodity                                  0
 wine                                     Irrelevant Commodity                                  0
+usscargoancientartefact                  Irrelevant Commodity                                  0
+usscargorareartwork                      Irrelevant Commodity                                  0
+usscargorebeltransmissions               Irrelevant Commodity                                  0
+usscargotechnicalblueprints              Irrelevant Commodity                                  0
+wreckagecomponents                       Irrelevant Commodity                                  0
+esusekucaviar                            Irrelevant Commodity                                  0
+indite                                   Irrelevant Commodity                                  0
+uraninite                                Irrelevant Commodity                                  0
