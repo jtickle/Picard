@@ -4,6 +4,7 @@ using Picard.Authentication;
 using Picard.FirstRun;
 using Picard.NormalRun;
 using Picard.Lib;
+using Picard.CheapHack;
 using LibEDJournal;
 
 namespace Picard
@@ -41,21 +42,30 @@ namespace Picard
             // Just exit without error, don't write anything
             if (!api.isAuthenticated)
                 return;
-            
-            if(!state.HasHistory())
+
+            if(!state.HasEliteCmdrName())
             {
-                // If there is no stored history, perform an initial
-                // import and then exit
-                FirstRunController firstRunCtrl = new FirstRunController(
-                    api, state);
-                firstRunCtrl.Run();
+                CheapHackController drat = new CheapHackController(logs, state);
+                drat.Run();
             }
-            else
+
+            if (state.HasEliteCmdrName())
             {
-                // If there is stored history, run the main program.
-                NormalRunController normalRunCtrl = new NormalRunController(
-                    api, state, logs, dm);
-                normalRunCtrl.Run();
+                if (!state.HasHistory())
+                {
+                    // If there is no stored history, perform an initial
+                    // import and then exit
+                    FirstRunController firstRunCtrl = new FirstRunController(
+                        api, state);
+                    firstRunCtrl.Run();
+                }
+                else
+                {
+                    // If there is stored history, run the main program.
+                    NormalRunController normalRunCtrl = new NormalRunController(
+                        api, state, logs, dm);
+                    normalRunCtrl.Run();
+                }
             }
         }
     }

@@ -73,6 +73,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationController.cs" />
+    <Compile Include="CheapHack\CheapHackController.cs" />
+    <Compile Include="CheapHack\ChooseCmdrForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CheapHack\ChooseCmdrForm.Designer.cs">
+      <DependentUpon>ChooseCmdrForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FirstRun\FirstRunController.cs" />
     <Compile Include="Lib\InaraApi.cs" />
     <Compile Include="NormalRun\MatUpdateForm.cs">
@@ -110,6 +117,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CheapHack\ChooseCmdrForm.resx">
+      <DependentUpon>ChooseCmdrForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FirstRun\MatInitialVerifyForm.resx">
       <DependentUpon>MatInitialVerifyForm.cs</DependentUpon>
     </EmbeddedResource>

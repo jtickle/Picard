@@ -9,7 +9,8 @@ namespace Picard.Lib
 
     public class State
     {
-        public string CmdrName = "";
+        public string EliteCmdrName = "";
+        public string InaraCmdrName = "";
         public string InaraU = "";
         public string InaraP = "";
         public int DataVersion = 0;

@@ -229,6 +229,13 @@ namespace Picard.NormalRun
             MatHandler.InventoryChanged +=
                 (object invSender, InventoryEventArgs ie) =>
                 {
+                    // If it's not for the Picard commander, ignore
+                    if(MatHandler.CurrentCmdr !=
+                        state.CurrentState.EliteCmdrName)
+                    {
+                        return;
+                    }
+
                     var mat = ie.Name.ToLower();
                     if (dm.EliteMatsLookup.ContainsKey(mat))
                     {

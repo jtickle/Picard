@@ -14,8 +14,11 @@ namespace LibEDJournal.Handler
         public event DeathHandler CharacterDied;
         public event ResurrectHandler CharacterResurrected;
 
+        public ISet<string> Cmdrs;
+
         public CharacterHandler()
         {
+            Cmdrs = new HashSet<string>();
         }
 
         public override void Handle(EngineerCraft e)
@@ -77,6 +80,11 @@ namespace LibEDJournal.Handler
             {
                 CharacterResurrected(this, new ResurrectEventArgs(e));
             }
+        }
+
+        public override void Handle(LoadGame e)
+        {
+            Cmdrs.Add(e.Commander);
         }
 
         public override void Handle(Unknown e)

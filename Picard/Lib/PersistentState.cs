@@ -185,6 +185,12 @@ namespace Picard.Lib
             }
         }
 
+        public bool HasEliteCmdrName()
+        {
+            return CurrentState.EliteCmdrName != null &&
+                CurrentState.EliteCmdrName != "";
+        }
+
         /// <summary>
         /// Updates the Inara credentials stored in the state
         /// </summary>
@@ -195,12 +201,12 @@ namespace Picard.Lib
         {
             if (user == CurrentState.InaraU
                 && pass == CurrentState.InaraP
-                && name == CurrentState.CmdrName)
+                && name == CurrentState.InaraCmdrName)
                 return;
 
             CurrentState.InaraU = user;
             CurrentState.InaraP = pass;
-            CurrentState.CmdrName = name;
+            CurrentState.InaraCmdrName = name;
         }
 
         /// <summary>

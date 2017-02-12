@@ -29,7 +29,7 @@ namespace LibEDJournal.Handler
 
     public class InventoryHandler : EliteJournalHandler
     {
-
+        public string CurrentCmdr = "";
         public IList<string>
             UnknownEngineers { get; protected set; }
 
@@ -46,7 +46,6 @@ namespace LibEDJournal.Handler
                 EngineerCostLookup)
         {
             UnknownEngineers = new List<string>();
-
             this.EngineerCostLookup = EngineerCostLookup;
         }
 
@@ -55,7 +54,7 @@ namespace LibEDJournal.Handler
             // Notify any watchers
             if (InventoryChanged != null)
             {
-                var e = new InventoryEventArgs(mat, delta, entry);
+                var e = new InventoryEventArgs(CurrentCmdr, mat, delta, entry);
                 InventoryChanged(this, e);
             }
         }
@@ -199,6 +198,11 @@ namespace LibEDJournal.Handler
             {
                 NotifyInventory(mat.Key, -mat.Value, e);
             }
+        }
+
+        public override void Handle(LoadGame e)
+        {
+            
         }
 
         public override void Handle(Unknown e)

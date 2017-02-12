@@ -27,6 +27,7 @@ namespace LibEDJournal
         public abstract void Handle(Died e);
         public abstract void Handle(EngineerCraft e);
         public abstract void Handle(EngineerProgress e);
+        public abstract void Handle(LoadGame e);
         public abstract void Handle(MarketBuy e);
         public abstract void Handle(MarketSell e);
         public abstract void Handle(MaterialCollected e);

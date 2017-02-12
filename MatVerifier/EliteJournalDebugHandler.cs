@@ -66,5 +66,9 @@ namespace MatVerifier
         public override void Handle(Synthesis e)
         {
         }
+
+        public override void Handle(LoadGame e)
+        {
+        }
     }
 }

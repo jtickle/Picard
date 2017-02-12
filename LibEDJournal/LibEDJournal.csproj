@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataMangler.cs" />
+    <Compile Include="Entry\LoadGame.cs" />
     <Compile Include="Entry\Resurrect.cs" />
     <Compile Include="Handler\CharacterHandler.cs" />
     <Compile Include="EliteJournalEntryConverter.cs" />

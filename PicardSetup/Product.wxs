@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
-	<Product Id="ed00f5b2-de7c-49ad-bc04-0c0304bc0e9c" Name="Picard" Language="1033" Version="1.0.1" Manufacturer="Tickle Laboratories" UpgradeCode="7f6054bd-c6d5-40b0-b3b0-3f96a6df14f0">
+	<Product Id="329B2D58-9F52-42F4-A1F6-6CE132FB6B70" Name="Picard" Language="1033" Version="1.0.2" Manufacturer="Tickle Laboratories" UpgradeCode="7f6054bd-c6d5-40b0-b3b0-3f96a6df14f0">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     
     <MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
