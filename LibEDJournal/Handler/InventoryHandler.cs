@@ -202,7 +202,7 @@ namespace LibEDJournal.Handler
 
         public override void Handle(LoadGame e)
         {
-            
+            CurrentCmdr = e.Commander;
         }
 
         public override void Handle(Unknown e)

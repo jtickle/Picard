@@ -53,7 +53,6 @@ namespace Picard.NormalRun
             MaterialTypeLookup = dm.MaterialTypeLookup;
 
             MaterialTypes = new List<string>(dm.MaterialTypes);
-            MaterialTypes.Add("DebugUnknown");
             MaterialTypes.Add("Grand");
 
             MaterialOrder = new List<string>(dm.MaterialOrder);
@@ -126,9 +125,7 @@ namespace Picard.NormalRun
 
         private void AddToTotal(InventorySet totes, string key, int delta)
         {
-            var t = MaterialTypeLookup.ContainsKey(key)
-                ? MaterialTypeLookup[key]
-                : "DebugUnknown";
+            var t = MaterialTypeLookup[key];
 
             totes["Grand"] += delta;
             totes[t] += delta;
@@ -191,8 +188,6 @@ namespace Picard.NormalRun
 
         protected void UpdateFormWithCurrentTotals()
         {
-            totalsDeltas["DebugUnknown"] = unknown.Count;
-
             foreach (var type in MaterialTypes)
             {
                 form.AddMaterial(type + " Total",
@@ -274,9 +269,6 @@ namespace Picard.NormalRun
                 state.GetLastUpdateTimestamp(),
                 handlers
                 );
-            /*deltas = dm.FilterAndTranslateMats(
-                MatHandler.Deltas,
-                    unknown);*/
 
             // Apply changes to material counts
             result = last + deltas;
@@ -301,7 +293,10 @@ namespace Picard.NormalRun
             {
                 var ackForm = new UnrecognizedMaterials(unknown);
                 ackForm.ShowDialog();
-                form.SetBrokenState();
+
+                dm.AddIgnore(unknown);
+
+                OnReloadMats(sender, e);
             }
         }
 

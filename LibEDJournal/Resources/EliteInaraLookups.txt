@@ -212,3 +212,7 @@ uraninite                                Irrelevant Commodity                   
 domesticappliances                       Irrelevant Commodity                                  0
 water                                    Irrelevant Commodity                                  0
 progenitorcells                          Irrelevant Commodity                                  0
+indium                                   Irrelevant Commodity                                  0
+jadeite                                  Irrelevant Commodity                                  0
+moissanite                               Irrelevant Commodity                                  0
+uncutfocuscrystals                       Irrelevant Commodity                                  0

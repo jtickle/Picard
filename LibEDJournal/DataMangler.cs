@@ -25,6 +25,8 @@ namespace LibEDJournal
         public IDictionary<string, InventorySet>
             EngineerCostLookup;
 
+        private string IgnoreFile;
+
         private static DataMangler INSTANCE = null;
 
         public static DataMangler GetInstance()
@@ -80,13 +82,14 @@ namespace LibEDJournal
             MaterialTypes.Add("Materials");
             MaterialTypes.Add("Data");
             MaterialTypes.Add("Commodities");
-            
+
+            // Load from Confirmed Types
             using (StringReader r = new StringReader(
                 Properties.Resources.EliteInaraLookups))
             {
                 string line = "";
 
-                int[] begins  = { -1, -1, -1, -1 };
+                int[] begins = { -1, -1, -1, -1 };
                 int[] lengths = { -1, -1, -1 };
                 string name, type, journal;
                 int version;
@@ -101,17 +104,17 @@ namespace LibEDJournal
                     if (line[0] == ';')
                     {
                         int i = 0, prev = 0, next = 1;
-                        while(i < 3)
+                        while (i < 3)
                         {
                             begins[i] = prev;
                             next = line.IndexOf(';', next);
                             lengths[i] = next - prev - 1;
                             prev = next;
-                            next++;  i++;
+                            next++; i++;
                         }
 
                         begins[i] = prev;
-                        
+
                         continue;
                     }
 
@@ -141,6 +144,23 @@ namespace LibEDJournal
                 }
 
                 DataVersion = VersionAdded.Values.Max();
+            }
+
+            // Load from Local Ignore
+            string local = Environment.GetFolderPath(
+                Environment.SpecialFolder.LocalApplicationData);
+            string path = @"TickleSoft";
+            string file = @"ignore";
+            IgnoreFile = Path.Combine(local, path, file);
+            if (File.Exists(IgnoreFile)) {
+                string[] ignores = System.IO.File.ReadAllLines(IgnoreFile);
+                foreach(var i in ignores)
+                {
+                    if(!IgnoreCommodities.Contains(i))
+                    {
+                        IgnoreCommodities.Add(i);
+                    }
+                }
             }
 
             InventorySet mats;
@@ -211,6 +231,22 @@ namespace LibEDJournal
             mats = new InventorySet();
             mats.AddMat("Bromellite", -50);
             EngineerCostLookup.Add("Bill Turner", mats);
+        }
+
+        public void AddIgnore(InventorySet inv)
+        {
+            using (StreamWriter w = File.AppendText(IgnoreFile))
+            {
+                foreach (var i in inv.Keys)
+                {
+                    if (!IgnoreCommodities.Contains(i))
+                    {
+                        IgnoreCommodities.Add(i);
+                    }
+
+                    w.WriteLine(i);
+                }
+            }
         }
 
         public IEnumerable<string> GetUpdates(InventorySet data, int ver)
