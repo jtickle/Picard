@@ -209,3 +209,6 @@ wreckagecomponents                       Irrelevant Commodity                   
 esusekucaviar                            Irrelevant Commodity                                  0
 indite                                   Irrelevant Commodity                                  0
 uraninite                                Irrelevant Commodity                                  0
+domesticappliances                       Irrelevant Commodity                                  0
+water                                    Irrelevant Commodity                                  0
+progenitorcells                          Irrelevant Commodity                                  0
