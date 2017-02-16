@@ -216,3 +216,8 @@ indium                                   Irrelevant Commodity                   
 jadeite                                  Irrelevant Commodity                                  0
 moissanite                               Irrelevant Commodity                                  0
 uncutfocuscrystals                       Irrelevant Commodity                                  0
+landmines                                Irrelevant Commodity                                  0
+kamitracigars                            Irrelevant Commodity                                  0
+fujintea                                 Irrelevant Commodity                                  0
+witchhaulkobebeef                        Irrelevant Commodity                                  0
+taurichimes                              Irrelevant Commodity                                  0
