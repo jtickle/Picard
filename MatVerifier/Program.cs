@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using LibEDJournal;
-using LibEDJournal.Entry;
 using LibEDJournal.State;
 using LibEDJournal.Handler;
 

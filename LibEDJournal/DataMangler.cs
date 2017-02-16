@@ -153,7 +153,7 @@ namespace LibEDJournal
             string file = @"ignore";
             IgnoreFile = Path.Combine(local, path, file);
             if (File.Exists(IgnoreFile)) {
-                string[] ignores = System.IO.File.ReadAllLines(IgnoreFile);
+                string[] ignores = File.ReadAllLines(IgnoreFile);
                 foreach(var i in ignores)
                 {
                     if(!IgnoreCommodities.Contains(i))

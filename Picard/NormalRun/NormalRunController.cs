@@ -65,6 +65,7 @@ namespace Picard.NormalRun
             form.ReloadMats += OnReloadMats;
             form.PostAndSave += OnPostAndSave;
             form.CloseWithoutSave += OnCloseWithoutSave;
+            form.Activated += OnReloadMats;
         }
 
         private async Task<InventorySet> FigureOutInaraCorrection()

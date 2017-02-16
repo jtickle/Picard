@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using Picard.Lib;
 using LibEDJournal.State;
@@ -25,6 +24,7 @@ namespace Picard.FirstRun
             form.FirstLoadMats += OnFirstLoadMats;
             form.CloseWithoutSaving += OnCloseWithoutSaving;
             form.CloseAndSave += OnCloseAndSave;
+            form.Activated += OnReloadMats;
 
             InitialMats = null;
         }

@@ -53,6 +53,21 @@ namespace LibEDJournal
             // Initialize our serializer which can be reused
             Serializer = new JsonSerializer();
         }
+
+        public DateTime GetMostRecentLogWrite()
+        {
+            DateTime largest = DateTime.MinValue;
+            foreach(var f in Directory.EnumerateFiles(LogFilePath, "*.log"))
+            {
+                var current = File.GetLastWriteTime(f);
+                if(current > largest)
+                {
+                    largest = current;
+                }
+            }
+
+            return largest;
+        }
         /// <summary>
         /// Get the absolute paths of all log files
         /// </summary>

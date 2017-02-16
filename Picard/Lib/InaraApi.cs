@@ -266,10 +266,8 @@ namespace Picard.Lib
                         Console.WriteLine(match.ToString());
                         continue;
                     }
-                    Console.WriteLine("Matched: " + match.Groups[1].Captures[0].ToString());
                     var num = int.Parse(match.Groups[1].Captures[0].ToString());
-
-                    Console.WriteLine("Storing: Lookup[" + mat + "] = " + num);
+                    
                     if(MaterialInaraIDLookup.ContainsKey(mat))
                     {
                         MaterialInaraIDLookup[mat] = num;
@@ -435,11 +433,6 @@ namespace Picard.Lib
 
             postData.Add(LocField, PostLocation);
             postData.Add(ActField, PostAction);
-
-            foreach(var entry in postData)
-            {
-                Console.Write("Would POST:\t" + entry.Key + "\t" + entry.Value + "\n");
-            }
 
             // POST the form
             var response = await FormPost(MatsSheetURL + GetEliteSheet(), postData);
