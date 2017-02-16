@@ -27,12 +27,12 @@ Conductive Ceramics                      Materials              conductivecerami
 Conductive Components                    Materials              conductivecomponents           0
 Conductive Polymers                      Materials              conductivepolymers             0
 Configurable Components                  Materials              configurablecomponents         0
-Core Dynamics Composites                 Materials              coredynamicscomposites         0
+Core Dynamics Composites                 Materials              fedcorecomposites              0
 Crystal Shards                           Materials              crystalshards                  0
 Electrochemical Arrays                   Materials              electrochemicalarrays          0
 Exquisite Focus Crystals                 Materials              exquisitefocuscrystals         0
 Filament Composites                      Materials              filamentcomposites             0
-Flawed Focus Crystals                    Materials              flawedfocuscrystals            0
+Flawed Focus Crystals                    Materials              uncutfocuscrystals             0
 Focus Crystals                           Materials              focuscrystals                  0
 Galvanising Alloys                       Materials              galvanisingalloys              0
 Germanium                                Materials              germanium                      0
