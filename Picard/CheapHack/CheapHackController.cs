@@ -26,8 +26,11 @@ namespace Picard.CheapHack
         public void Run()
         {
             var ChHandler = new CharacterHandler();
-            var handlers = new List<EliteJournalHandler>() { ChHandler };
-            Logs.HandleLogEntries(DateTime.MinValue, handlers);
+
+            foreach (var entry in Logs.GetLogEntries())
+            {
+                entry.Accept(ChHandler);
+            }
 
             if(ChHandler.Cmdrs.Count < 1)
             {

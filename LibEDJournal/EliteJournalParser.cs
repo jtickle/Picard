@@ -144,43 +144,5 @@ namespace LibEDJournal
                 entry.Accept(handler);
             }
         }
-
-        public void HandleLogEntries(IList<EliteJournalHandler> handlers)
-        {
-            HandleLogEntries(GetLogEntries(), handlers);
-        }
-
-        public void HandleLogEntries(
-            IEnumerable<EliteJournalEntry> logEntries,
-            IList<EliteJournalHandler> handlers)
-        {
-            foreach(var entry in logEntries)
-            {
-                AcceptHandlers(entry, handlers);
-            }
-        }
-
-        public static IEnumerable<EliteJournalEntry> EntriesSinceFilter(
-            IEnumerable<EliteJournalEntry> logEntries,
-            DateTime onlySince)
-        {
-            foreach (var entry in logEntries)
-            {
-                if (entry.Timestamp > onlySince)
-                {
-                    yield return entry;
-                }
-            }
-        }
-
-        public void HandleLogEntries(
-            DateTime since,
-            IList<EliteJournalHandler> handlers)
-        {
-            HandleLogEntries(
-                EntriesSinceFilter(
-                    GetLogEntries(), since),
-                handlers);
-        }
     }
 }

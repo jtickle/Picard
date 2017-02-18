@@ -33,8 +33,12 @@ namespace MatVerifier
             };
 
             var handlers = new List<EliteJournalHandler>() { dhandler, mhandler };
-            
-            logs.HandleLogEntries(handlers);
+
+            foreach(var entry in logs.GetLogEntries())
+            {
+                entry.Accept(dhandler);
+                entry.Accept(mhandler);
+            }
 
             #region Show unknown log entries
 

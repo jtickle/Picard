@@ -49,6 +49,12 @@ namespace LibEDJournal.Handler
             this.EngineerCostLookup = EngineerCostLookup;
         }
 
+        protected string NormalizeLocalisableCommodity(string commodity)
+        {
+            // Sometimes, Commodity names are formatted like this: "$Commodity_name"
+            return commodity.Substring(1, commodity.Length - 7).ToLower();
+        }
+
         protected void NotifyInventory(string mat, int delta, EliteJournalEntry entry)
         {
             // Notify any watchers
@@ -140,9 +146,9 @@ namespace LibEDJournal.Handler
             if (e.Name != null && e.Name.StartsWith("Mission_Delivery"))
                 return;
             
-            if(e.CommodityLocalised != null)
+            if(e.Commodity != null)
             {
-                NotifyInventory(e.CommodityLocalised, e.Count, e);
+                NotifyInventory(NormalizeLocalisableCommodity(e.Commodity), e.Count, e);
             }
         }
 
@@ -173,11 +179,11 @@ namespace LibEDJournal.Handler
                 }
             }
 
-            if (e.CommodityLocalised != null)
+            if (e.Commodity != null)
             {
                 // Handle losing a commodity as the result of completing
                 // a mission
-                NotifyInventory(e.CommodityLocalised, -e.Count, e);
+                NotifyInventory(NormalizeLocalisableCommodity(e.Commodity), -e.Count, e);
             }
         }
 

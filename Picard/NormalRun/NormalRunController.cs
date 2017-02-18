@@ -219,12 +219,17 @@ namespace Picard.NormalRun
             // Get Inara corrections, if any
             inaraCorrection = await FigureOutInaraCorrection();
 
+            var lastUpdate = state.GetLastUpdateTimestamp();
+
             // Parse logs and get the changes to material counts
             // The filtering function adds unrecognized materials to unknown list
             var MatHandler = new InventoryHandler(dm.EngineerCostLookup);
             MatHandler.InventoryChanged +=
                 (object invSender, InventoryEventArgs ie) =>
                 {
+                    if (ie.JournalEntry.Timestamp < lastUpdate)
+                        return;
+
                     // If it's not for the Picard commander, ignore
                     if(MatHandler.CurrentCmdr !=
                         state.CurrentState.EliteCmdrName)
@@ -247,6 +252,10 @@ namespace Picard.NormalRun
             ChHandler.CharacterDied +=
                 (object chSender, DeathEventArgs de) =>
                 {
+                    if (de.JournalEntry.Timestamp < lastUpdate)
+                        return;
+
+
                     foreach (var comm in dm.MaterialTypeLookup)
                     {
                         if (comm.Value != "Commodities")
@@ -264,12 +273,12 @@ namespace Picard.NormalRun
                         }
                     }
                 };
-            var handlers = new List<EliteJournalHandler>() {
-                MatHandler, ChHandler };
-            logs.HandleLogEntries(
-                state.GetLastUpdateTimestamp(),
-                handlers
-                );
+
+            foreach (var entry in logs.GetLogEntries())
+            {
+                entry.Accept(ChHandler);
+                entry.Accept(MatHandler);
+            }
 
             // Apply changes to material counts
             result = last + deltas;

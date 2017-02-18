@@ -174,7 +174,7 @@ namespace Picard.Lib
         /// </returns>
         public DateTime GetLastUpdateTimestamp()
         {
-            return CurrentState.History.Last().Key;
+            return CurrentState.LastPost;
         }
 
         public void UpdateLastPostToCurrent()
