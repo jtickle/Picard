@@ -221,3 +221,8 @@ kamitracigars                            Irrelevant Commodity                   
 fujintea                                 Irrelevant Commodity                                  0
 witchhaulkobebeef                        Irrelevant Commodity                                  0
 taurichimes                              Irrelevant Commodity                                  0
+fedproprietarycomposites                 Irrelevant Commodity                                  0
+robotics                                 Irrelevant Commodity                                  0
+fedcorecomposites                        Irrelevant Commodity                                  0
+datacore                                 Irrelevant Commodity                                  0
+usscargomilitaryplans                    Irrelevant Commodity                                  0
