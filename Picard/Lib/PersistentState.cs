@@ -10,23 +10,14 @@ namespace Picard.Lib
 {
     public class PersistentState
     {
-        public string StatePath { get; protected set; }
-        public string StateFile { get; protected set; }
+        public string StateFile;
         protected JsonSerializer Serializer;
 
         public State CurrentState = null;
 
-        public PersistentState()
+        public PersistentState(string StateFile)
         {
-            // Set up state file name
-            // Local data because it only matters on the system where you
-            // have Elite installed
-            string local = Environment.GetFolderPath(
-                Environment.SpecialFolder.LocalApplicationData);
-            string path = @"TickleSoft";
-            StatePath = Path.Combine(local, path); 
-            string file = @"picard.state";
-            StateFile = Path.Combine(StatePath, file);
+            this.StateFile = StateFile;
        
             // Set us up a serializer to use
             Serializer = new JsonSerializer();

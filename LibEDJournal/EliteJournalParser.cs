@@ -38,17 +38,10 @@ namespace LibEDJournal
         /// </summary>
         protected JsonSerializer Serializer;
 
-        public EliteJournalParser()
+        public EliteJournalParser(string LogFilePath)
         {
-            // Get User Profile Folder
-            string profile = Environment.GetFolderPath(
-                Environment.SpecialFolder.UserProfile);
-
-            // Elite Log Path relative to User Profile Folder
-            string eliteLogPath = @"Saved Games\Frontier Developments\Elite Dangerous";
-
-            // Combine to get the log file path
-            LogFilePath = Path.Combine(profile, eliteLogPath);
+            // Set the log file path
+            this.LogFilePath = LogFilePath;
             
             // Initialize our serializer which can be reused
             Serializer = new JsonSerializer();

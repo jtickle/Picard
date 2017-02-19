@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using LibEDJournal;
 using LibEDJournal.State;
 using LibEDJournal.Handler;
+using Picard;
 
 namespace MatVerifier
 {
@@ -10,7 +11,7 @@ namespace MatVerifier
     {
         static void Main(string[] args)
         {
-            EliteJournalParser logs = new EliteJournalParser();
+            EliteJournalParser logs = new EliteJournalParser("");
             DataMangler dm = DataMangler.GetInstance();
             InventorySet Deltas = new InventorySet();
             IDictionary<string, IList<EliteJournalEntry>> MatSeen =

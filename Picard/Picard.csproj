@@ -80,7 +80,16 @@
     <Compile Include="CheapHack\ChooseCmdrForm.Designer.cs">
       <DependentUpon>ChooseCmdrForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CmdrChooser\ChooseCmdrController.cs" />
+    <Compile Include="CmdrChooser\ChooseCmdrForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CmdrChooser\ChooseCmdrForm.Designer.cs">
+      <DependentUpon>ChooseCmdrForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Lib\Configuration.cs" />
     <Compile Include="FirstRun\FirstRunController.cs" />
+    <Compile Include="Lib\Filesystem.cs" />
     <Compile Include="Lib\InaraApi.cs" />
     <Compile Include="NormalRun\MatUpdateForm.cs">
       <SubType>Form</SubType>
@@ -118,6 +127,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CheapHack\ChooseCmdrForm.resx">
+      <DependentUpon>ChooseCmdrForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CmdrChooser\ChooseCmdrForm.resx">
       <DependentUpon>ChooseCmdrForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FirstRun\MatInitialVerifyForm.resx">

@@ -37,23 +37,22 @@
             // 
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(260, 57);
+            this.label1.Size = new System.Drawing.Size(260, 43);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Due to a lack of foresight, Picard only supports one commander.  We\'re working on" +
-    " it, but for now, please choose which commander you would like to synchroinze wi" +
-    "th Inara.";
+            this.label1.Text = "In order to upgrade to Multi-Commander Picard, please select the commander you ha" +
+    "ve been using with Inara.";
             // 
             // CommanderList
             // 
             this.CommanderList.FormattingEnabled = true;
-            this.CommanderList.Location = new System.Drawing.Point(42, 86);
+            this.CommanderList.Location = new System.Drawing.Point(42, 69);
             this.CommanderList.Name = "CommanderList";
             this.CommanderList.Size = new System.Drawing.Size(202, 21);
             this.CommanderList.TabIndex = 1;
             // 
             // okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(155, 134);
+            this.okButton.Location = new System.Drawing.Point(155, 126);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(117, 23);
             this.okButton.TabIndex = 2;
@@ -65,7 +64,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 169);
+            this.ClientSize = new System.Drawing.Size(284, 161);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.CommanderList);
             this.Controls.Add(this.label1);
