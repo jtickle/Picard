@@ -30,6 +30,8 @@ namespace Picard.NormalRun
         private InventorySet totalsResult = null;
         private InventorySet totalsCorrection = null;
 
+        private DateTime LastMTime = DateTime.MinValue;
+
         /// <summary>
         /// The type of each material, for accounting
         /// </summary>
@@ -65,7 +67,7 @@ namespace Picard.NormalRun
             form.ReloadMats += OnReloadMats;
             form.PostAndSave += OnPostAndSave;
             form.CloseWithoutSave += OnCloseWithoutSave;
-            form.Activated += OnReloadMats;
+            form.Activated += ReloadMatsIfNecessary;
         }
 
         private async Task<InventorySet> FigureOutInaraCorrection()
@@ -199,6 +201,15 @@ namespace Picard.NormalRun
             }
         }
 
+        protected void ReloadMatsIfNecessary(object sender, EventArgs e)
+        {
+            var mtime = logs.GetMostRecentLogWrite();
+            if (mtime > LastMTime)
+            {
+                OnReloadMats(sender, e);
+            }
+        }
+
         protected async void OnReloadMats(object sender, EventArgs e)
         {
             // Indicate that we are loading something
@@ -308,6 +319,8 @@ namespace Picard.NormalRun
 
                 OnReloadMats(sender, e);
             }
+
+            LastMTime = logs.GetMostRecentLogWrite();
         }
 
         protected void SaveDataAndClose()
