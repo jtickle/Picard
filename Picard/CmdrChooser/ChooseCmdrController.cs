@@ -82,7 +82,12 @@ namespace Picard.CmdrChooser
             Form.Load += (o, e) => Form.FirstLoad = false;
             Form.LocationSelected += PathChanged;
             Form.CmdrSelected += OnCmdrSelected;
-            return Form.ShowDialog() == DialogResult.OK;
+
+            var ret = Form.ShowDialog() == DialogResult.OK;
+
+            Config.JournalPath = Form.JournalPath;
+
+            return ret;
         }
 
         public void OnCmdrSelected(object o, EventArgs e)
