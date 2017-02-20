@@ -73,6 +73,7 @@ namespace Picard.NormalRun
         private async Task<InventorySet> FigureOutInaraCorrection()
         {
             // Get current inventory as represented on Inara.cz
+            api.ClearMaterialsCache();
             var inaraMats = await api.GetMaterialsSheet();
             
             // If everything matches, there are no corrections
@@ -212,6 +213,8 @@ namespace Picard.NormalRun
 
         protected async void OnReloadMats(object sender, EventArgs e)
         {
+            LastMTime = logs.GetMostRecentLogWrite();
+
             // Indicate that we are loading something
             form.SetLoadingState();
 
@@ -319,8 +322,6 @@ namespace Picard.NormalRun
 
                 OnReloadMats(sender, e);
             }
-
-            LastMTime = logs.GetMostRecentLogWrite();
         }
 
         protected void SaveDataAndClose()

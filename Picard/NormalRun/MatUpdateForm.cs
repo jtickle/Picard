@@ -173,7 +173,7 @@ namespace Picard.NormalRun
 
         private void MatUpdateForm_Load(object sender, EventArgs e)
         {
-            ReloadMats(sender, new EventArgs());
+            //ReloadMats(sender, new EventArgs());
         }
 
         private void refreshButton_Click(object sender, EventArgs e)
