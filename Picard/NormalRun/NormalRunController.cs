@@ -393,7 +393,7 @@ namespace Picard.NormalRun
 
         protected void OnCloseWithoutSave(object sender, CancelEventArgs e)
         {
-            form.ShowCloseWithoutSave();
+            //form.ShowCloseWithoutSave();
         }
 
         /// <summary>

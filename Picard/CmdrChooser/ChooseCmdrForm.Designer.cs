@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChooseCmdrForm));
             this.label1 = new System.Windows.Forms.Label();
             this.JournalPathEntry = new System.Windows.Forms.TextBox();
             this.BrowseButton = new System.Windows.Forms.Button();
@@ -119,8 +120,9 @@
             this.Controls.Add(this.BrowseButton);
             this.Controls.Add(this.JournalPathEntry);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ChooseCmdrForm";
-            this.Text = "Choose Commander";
+            this.Text = "Picard - Choose Commander";
             this.ResumeLayout(false);
             this.PerformLayout();
 
