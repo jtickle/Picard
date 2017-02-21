@@ -197,11 +197,11 @@ namespace LibEDJournal
             EngineerCostLookup.Add("Selene Jean", mats);
 
             mats = new InventorySet();
-            mats.AddMat("Modular Terminals", -25);
+            mats.AddMat("modularterminals", -25);
             EngineerCostLookup.Add("Marco Qwent", mats);
 
             mats = new InventorySet();
-            mats.AddMat("Classified Scan Databanks", -50);
+            mats.AddMat("scandatabanks", -50);
             EngineerCostLookup.Add("Ram Tah", mats);
 
             mats = new InventorySet();
@@ -214,22 +214,22 @@ namespace LibEDJournal
             EngineerCostLookup.Add("Didi Vatermann", mats);
 
             mats = new InventorySet();
-            mats.AddMat("Unknown Fragment", -25);
+            mats.AddMat("unknownenergysource", -25);
             EngineerCostLookup.Add("Professor Palin", mats);
 
             mats = new InventorySet();
             EngineerCostLookup.Add("Lori Jameson", mats);
 
             mats = new InventorySet();
-            mats.AddMat("Decoded Emission Data", -50);
+            mats.AddMat("decodedemissiondata", -50);
             EngineerCostLookup.Add("Tiana Fortune", mats);
 
             mats = new InventorySet();
-            mats.AddMat("Aberrant Shield Pattern", -50);
+            mats.AddMat("shieldpatternanalysis", -50);
             EngineerCostLookup.Add("The Sarge", mats);
 
             mats = new InventorySet();
-            mats.AddMat("Bromellite", -50);
+            mats.AddMat("bromellite", -50);
             EngineerCostLookup.Add("Bill Turner", mats);
         }
 
