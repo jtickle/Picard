@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using Microsoft.Win32;
 using Picard.Authentication;
 using Picard.FirstRun;
 using Picard.NormalRun;
@@ -42,6 +41,11 @@ namespace Picard
                 // Picard Persistent State
                 PersistentState state = new PersistentState(
                     Filesystem.GetStatePath(choose.CmdrName));
+
+                // This needs to be refactored out entirely since the 
+                // name is basically chosen on startup.  But for now
+                // this should solve the problem.
+                state.CurrentState.EliteCmdrName = choose.CmdrName;
 
                 // Inara.cz API
                 InaraApi api = new InaraApi();
