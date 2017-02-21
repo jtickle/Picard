@@ -87,10 +87,16 @@ namespace LibEDJournal
             using (StringReader r = new StringReader(
                 Properties.Resources.EliteInaraLookups))
             {
+                // Current Line will be stored here
                 string line = "";
 
+                // Beginnings of columns, marked by ; character
                 int[] begins = { -1, -1, -1, -1 };
+
+                // Lengths of columns
                 int[] lengths = { -1, -1, -1 };
+
+                // Column Values
                 string name, type, journal;
                 int version;
 
@@ -124,12 +130,13 @@ namespace LibEDJournal
                         throw new Exception("Data Manglement Exception - Lookup Table Corrupted");
                     }
 
+                    // Parse the Column Values
                     name = line.Substring(begins[0], lengths[0]).Trim();
                     type = line.Substring(begins[1], lengths[1]).Trim();
                     journal = line.Substring(begins[2], lengths[2]).Trim();
-                    var derp = line.Substring(begins[3]).Trim();
-                    version = int.Parse(derp);
+                    version = int.Parse(line.Substring(begins[3]).Trim());
 
+                    // Store the Column Values
                     if (type == "Irrelevant Commodity")
                     {
                         IgnoreCommodities.Add(name);
@@ -142,11 +149,11 @@ namespace LibEDJournal
                         VersionAdded.Add(name, version);
                     }
                 }
-
+                
                 DataVersion = VersionAdded.Values.Max();
             }
 
-            // Load from Local Ignore
+            // Load from Local Ignore File
             string local = Environment.GetFolderPath(
                 Environment.SpecialFolder.LocalApplicationData);
             string path = @"TickleSoft";

@@ -1,4 +1,4 @@
-﻿
+﻿    
 using System;
 ///
 /// Copyright 2017 Jeff Tickle "CMDR VirtualPaper"
@@ -67,14 +67,11 @@ namespace LibEDJournal.Handler
 
         protected void AddMats(
             InventorySet mats,
-            EliteJournalEntry entry,
-            bool subtract = false)
+            EliteJournalEntry entry)
         {
             foreach (var mat in mats)
             {
-                NotifyInventory(mat.Key,
-                    (subtract ? -1 : 0) + mat.Value,
-                    entry);
+                NotifyInventory(mat.Key, mat.Value, entry);
             }
         }
 
@@ -107,7 +104,7 @@ namespace LibEDJournal.Handler
             // up in a table.
             if (EngineerCostLookup.ContainsKey(e.Engineer))
             {
-                AddMats(EngineerCostLookup[e.Engineer], e, true);
+                AddMats(EngineerCostLookup[e.Engineer], e);
             }
             else
             {
