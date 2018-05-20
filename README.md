@@ -2,7 +2,8 @@
 
 This was a tool for updating Inara.cz with materials and data from your Elite Dangerous logfiles.
 
-**Picard no longer works and will not be fixed.  Thank you for your interest!**  Read "Story of This Project" below
+**Picard no longer works and will not be fixed.  Thank you for your interest!**  Inara now allows you to directly
+upload your commander journal.  The next section covers how to do that, or Read "Story of This Project" below
 if you want to know more.
 
 # How to upload your game journals to Inara.cz
