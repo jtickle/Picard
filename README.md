@@ -15,17 +15,18 @@ The files you want to upload are in
 C:\Users\YourName\Saved Games\Frontier Developments\Elite Dangerous\.  If you play Elite Dangerous in a language
 other than English, some of these directory names will be localised to your language.
 
-# Alternative
+# Alternative - [EDEngineer](https://github.com/msarilar/EDEngineer)
 
-If you don't want to use Inara.cz, or if you just don't like The Cloud, consider trying
+If you don't want to use Inara.cz, or if you just don't like
+[The Cloud](https://twitter.com/stickermule/status/671792871083741185), consider trying
 [EDEngineer](https://github.com/msarilar/EDEngineer).  It is an active project with a beautiful user interface
 and integrates with the game nicely.
 
 # Story of This Project
 
-Me and my buddy were annoyed with having to manually update Inara with our materials.  For a long time, we talked
-of how silly it was, and how easy it would be to automatically update Inara if we could just find out how many
-materials a user has from the game itself.
+Me and [my buddy](https://nordicpc.com) were annoyed with having to manually update Inara with our materials.
+For a long time, we talked of how silly it was, and how easy it would be to automatically update Inara if we
+could just find out how many materials a user has from the game itself.
 
 We figured out that the Commander Journal files in Saved Games\Frontier Developments\Elite Dangerous did not
 contain a count of materials, but that it would log every event in which you gained or lost a material.  That means
